@@ -27,16 +27,66 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'devices' %}">Devices</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'home_client' %}">client</a>
+           
+            <li class="nav-item active dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'home_client' %}">Clients</a>
+                 <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                                                
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_target' %}">Client target</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a>
+                    </li>             
+            </ul>
             </li>
-            
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'routes' %}">Routes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'promotions' %}">Promotion</a>
-            </li>
+            <li class="nav-item  dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'routes' %}" aria-expanded="false">Routes</a>
+                                <ul class="dropdown-menu">
+                                                                     <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
+                           <li><hr class="dropdown-divider"></li>
+                
+                                             <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                
+                                             <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
+                                </ul>
+                            </li>
+                                <li class="nav-item active dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'promotions' %}">Promotions</a>
+                                     <ul class="dropdown-menu">
+                                                                      <li><a class="dropdown-item" href="{% url 'promotions' %}">Promotions</a></li>
+                
+                           <li><hr class="dropdown-divider"></li>
+                                                                     <li><a class="dropdown-item" href="{% url 'assign_promotions' %}">Assign Promotions</a></li>
+                
+                                                <li><hr class="dropdown-divider"></li>
+                
+                                             <li><a class="dropdown-item" href="{% url 'define_basket' %}">Define Basket</a></li>
+                                </ul>
+                                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login' %}">Login</a>

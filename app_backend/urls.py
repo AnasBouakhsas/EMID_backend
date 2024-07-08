@@ -47,12 +47,20 @@ urlpatterns = [
     path('user_parameters/<str:user_code>/', views.user_parameters, name='user_parameters'),
     path('devices/', devices, name='devices'),
     path('devices/load/', load_devices, name='load_devices'),
+
+
     path('users/<str:user_code>/parameters/', views.user_parameters, name='user_parameters'),
+
+
     path('client/<int:client_id>/', views.clients, name='Clients'),
     path('client/', views.clients, name='Clients'),
     path('clients/<int:client_id>/edit/', views.edit_client, name='edit_client'),
     path('client/home_client/', views.home_client, name='home_client'),
     path('clients/<int:client_id>/delete/', views.delete_client, name='delete_client'),
+    path('search_client/', views.search_client, name='search_client'),
+    path('upload_excel/', views.upload_excel, name='upload_excel'),
+
+
 
 
 
@@ -65,4 +73,15 @@ urlpatterns = [
     path('client_discounts/<str:Client_Code>/edit/', views.edit_client_discounts, name='client_discounts_edit'),
     path('client_discounts/<str:Client_Code>/delete/', views.delete_discounts, name='delete_discounts'),
 
+    
+    path('client/home_client_target/', views.home_client_target, name='home_target'),
+    path('client/client_target/', views.client_target, name='client_target'),
+    path('client_target/<str:Client_Code>/edit/', views.edit_client_target, name='client_target_edit'),
+    path('client_target/<str:Client_Code>/delete/', views.delete_target, name='delete_target'),
+
+
+    path('channels/Add/', views.channels, name='channels'),
+    path('modifier_channel/<str:channel_code>/edit/', views.edit_channel, name='edit_channel'),
+    path('channels/home_channel/', views.home_channel, name='home_channel'),
+    path('channel/<str:channel_code>/delete/', views.delete_channel, name='delete_channel'),
 ]

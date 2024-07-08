@@ -6,9 +6,10 @@ from django.contrib import messages
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from .models import Client_Statut, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
-from .forms import PromotionSearchForm, NewPromotionForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
+from django.http import HttpResponse, JsonResponse
+import openpyxl
+from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
+from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
 
@@ -1005,7 +1006,7 @@ def load_devices(request):
 
     return JsonResponse({'devices': devices_list})
 
-
+#client
 def clients(request):
     if request.method == 'POST':
         form = clientForm(request.POST)
@@ -1036,7 +1037,37 @@ def delete_client(request, client_id):
     client = get_object_or_404(Clients, Client_Code=client_id)
     client.delete()
     return redirect('home_client')  
+
+def search_client(request):
+    clients = None
+    query = ''
+    if request.method == 'POST':
+        query = request.POST.get('client_code', '')
+        if query:
+            clients = Clients.objects.filter(Client_Code=query)
+        else:
+            clients = Clients.objects.all()
+    return render(request, 'client/home_client.html', {'clients': clients, 'query': query})
     
+def upload_excel(request):
+    if request.method == 'POST' and request.FILES['xlxfile']:
+        excel_file = request.FILES['xlxfile']
+        
+        # Charger le fichier Excel avec openpyxl
+        wb = openpyxl.load_workbook(excel_file)
+        sheet = wb.active
+        
+        # Lire les données de la première cellule pour vérification
+        cell_value = sheet['A1'].value
+        print(f"Value in cell A1: {cell_value}")
+        
+        # Vous pouvez ajouter votre logique de traitement ici
+
+        return HttpResponse("File uploaded and processed successfully.")
+    
+    return render(request, 'client/upload_excel.html')
+
+
 #statut client
 def statut_client(request):
     if request.method == 'POST':
@@ -1047,7 +1078,7 @@ def statut_client(request):
     else:
         form = client_statutForm()
     
-    return render(request, 'client/home.html', {'form': form})
+    return render(request, 'client/status_client.html', {'form': form})
  
 def edit_statut_client(request, client_statut_id):
     client = get_object_or_404(Client_Statut, Client_Statut_ID=client_statut_id)
@@ -1081,7 +1112,7 @@ def client_discounts(request):
             form = client_discountsForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('home')
+                return redirect('home_discounts')
             
         else:
             error_message = "Aucun client ne correspond à ce code client."
@@ -1100,7 +1131,7 @@ def edit_client_discounts(request, Client_Code):
         if form.is_valid():
             client.Client_Code = Client_Code
             form.save()
-            return redirect('home') 
+            return redirect('home_discounts') 
     else:
         form = client_discountsForm(instance=client)
         form.fields['Client_Code'].widget.attrs['readonly'] = True
@@ -1109,4 +1140,85 @@ def edit_client_discounts(request, Client_Code):
 def delete_discounts(request, Client_Code):
     client = get_object_or_404(Client_Discounts, Client_Code=Client_Code)
     client.delete()
-    return redirect('home_client') 
+    return redirect('home_discounts') 
+
+
+#client target
+
+def home_client_target(request):
+    clients = Client_Target.objects.all()  
+    return render(request, 'client/home_client_target.html', {'clients': clients})
+
+def client_target(request):
+    error_message = None
+    if request.method == "POST":
+        client_code = request.POST.get("Client_Code")
+        clients = Clients.objects.filter(Client_Code=client_code)
+        
+        if clients.exists():
+            form = Client_TargetForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('home_target')
+            
+        else:
+            error_message = "Aucun client ne correspond à ce code client."
+            form = Client_TargetForm()
+            return render(request, 'client/client_target.html', {'form': form, 'error_message': error_message})
+    else:
+        form = Client_TargetForm()
+
+    return render(request, 'client/client_target.html', {'form': form, 'error_message': error_message})
+
+
+def edit_client_target(request, Client_Code):
+    client = get_object_or_404(Client_Target, Client_Code=Client_Code)
+    if request.method == "POST":
+        form = Client_TargetForm(request.POST, instance=client)
+        if form.is_valid():
+            client.Client_Code = Client_Code
+            form.save()
+            return redirect('home_target') 
+    else:
+        form = Client_TargetForm(instance=client)
+        form.fields['Client_Code'].widget.attrs['readonly'] = True
+    return render(request, 'client/client_target_edit.html', {'form': form, 'client': client})
+
+def delete_target(request, Client_Code):
+    client = get_object_or_404(Client_Target, Client_Code=Client_Code)
+    client.delete()
+    return redirect('home_target') 
+
+
+#channels
+def channels(request):
+    if request.method == 'POST':
+        form = ChannelsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home_channel')  
+    else:
+        form = ChannelsForm()
+    
+    return render(request, 'client/channel.html', {'form': form})
+
+
+def edit_channel(request, channel_code):
+    client = get_object_or_404(Channels, channel_code=channel_code)
+    if request.method == "POST":
+        form = ChannelsForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect('home_channel') 
+    else:
+        form = ChannelsForm(instance=client)
+    return render(request, 'client/modifier_channel.html', {'form': form, 'client': client})
+
+def home_channel(request):
+    clients = Channels.objects.all()
+    return render(request, 'client/home_channel.html', {'clients': clients})
+
+def delete_channel(request, channel_code):
+    client = get_object_or_404(Channels, channel_code=channel_code)
+    client.delete()
+    return redirect('home_channel')  

@@ -11,5 +11,8 @@
         
         <button type="submit">Enregistrer</button>
     </form>
+    {% if error_message %}
+    <div class="alert alert-danger mt-3">{{ error_message }}</div>
+    {% endif %}
 </body>
 </html>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Client_Discounts, Client_Statut, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders
+from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders
 from django.db import connection
 
 
@@ -154,3 +154,27 @@ class client_discountsForm(forms.ModelForm):
             super(clientForm, self).__init__(*args, **kwargs)
             for field_name, field in self.fields.items():
                 field.widget.attrs['class'] = 'form-control'
+
+class Client_TargetForm(forms.ModelForm):
+    class Meta:
+        model = Client_Target
+        fields  = [
+            'Client_Code',
+            'Month',
+            'years',
+            'Targed_Achieved',
+            'Target_value',
+            'Stamp_Date'
+            ]
+        def __init__(self, *args, **kwargs):
+            super(clientForm, self).__init__(*args, **kwargs)
+            for field_name, field in self.fields.items():
+                field.widget.attrs['class'] = 'form-control'
+
+class ChannelsForm(forms.ModelForm):
+    class Meta:
+        model = Channels
+        fields  = [
+            'channel_code',
+            'Channel_description',
+        ]

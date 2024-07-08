@@ -1,13 +1,29 @@
 {% include 'promotions/navbar.html' %}
 
 <body>
-    <div class="container-fluid">
-        <!-- Search Form -->
-        <form method="GET" action="" class="mb-4">
-            <!-- Vos champs de recherche ici -->
-        </form>
 
-        <h1>Liste des Clients</h1>
+    <div class="container-fluid">
+
+        <a href="{% url 'Clients' %}" class="btn btn-primary">Ajouter</a>
+        <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
+        <a href="{% url 'upload_excel' %}" class="btn btn-secondary float-right">upload from excel</a>
+        <div class="container-fluid">
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <form method="post" action="{% url 'search_client' %}" class="form-inline">
+                    {% csrf_token %}
+                    <input type="text" class="form-control mr-2" name="client_code" placeholder="Rechercher client">
+                    <button type="submit" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if clients %}
+        <div class="mt-4">
+            <h2>Résultats de la recherche</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -23,7 +39,8 @@
                     <th>Numéro de Téléphone</th>
                     <th>Code Barre</th>
                     <th>Statut du Client</th>
-                    <th>Actions</th>
+                    <th>action</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -49,14 +66,26 @@
                 {% endfor %}
             </tbody>
         </table>
-        
-        <a href="{% url 'Clients' %}" class="btn btn-primary">Ajouter</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
-        <div class="float-right">
-            <a class="btn btn-secondary" href="{% url 'home_client_status' %}">Afficher les status clients</a>
-            <a class="btn btn-secondary" href="{% url 'home_discounts' %}">Afficher les clients discounts</a>
-        </div>    
+    </div>
+    {% elif query %}
+    <div class="mt-4">
+        <p>Aucun client ne correspond à ce code client.</p>
+    </div>
+    {% endif %}
     </div>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

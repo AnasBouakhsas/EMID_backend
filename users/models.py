@@ -134,7 +134,7 @@ class Clients(models.Model):
     Phone_Number = models.CharField(max_length=50, blank=True, default='')
     Barcode = models.CharField(max_length=50, blank=True, default='')
     Client_Status_ID = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(2)])
-       
+     
 
     class Meta:
         
@@ -219,7 +219,7 @@ class Client_Target(models.Model):
 class Channels(models.Model):
     channel_code = models.CharField(max_length=50)
     Channel_description = models.CharField(max_length=255)
-    delivery_system = models.IntegerField()
-    related_price_list_code = models.CharField(max_length=50)
-    return_price_list_code = models.CharField(max_length=50)
+    delivery_system = models.IntegerField(default=0)
+    related_price_list_code = models.CharField(max_length=50, null=True)
+    return_price_list_code = models.CharField(max_length=50, null=True)
 
