@@ -1058,9 +1058,29 @@ def upload_excel(request):
         sheet = wb.active
         
         # Lire les données de la première cellule pour vérification
-        cell_value = sheet['A1'].value
-        print(f"Value in cell A1: {cell_value}")
-        
+      # Récupérer toutes les lignes du fichier
+        # Itérer sur toutes les lignes en commençant par la deuxième (pour ignorer les en-têtes)
+    for row in sheet.iter_rows(min_row=2, values_only=True):
+        client = Clients(
+            Client_Code=row[0],
+            Area_Code=row[1],
+            Client_Description=row[2],
+            Client_Alt_Description=row[3],
+            Payment_Term_Code=row[4],
+            Email=row[5],
+            Address=row[6],
+            Alt_Address=row[7],
+            Contact_Person=row[8],
+            Phone_Number=row[9],
+            Barcode=row[10],
+            Client_Status_ID=row[11]
+        )
+        client.save()  # Sauvegarder l'instance dans la base de données
+        print(f"Client {client.Client_Code} ajouté")
+
+# Afficher toutes les lignes
+    for row in sheet.iter_rows(min_row=2, values_only=True):
+        print(row)
         # Vous pouvez ajouter votre logique de traitement ici
 
         return HttpResponse("File uploaded and processed successfully.")

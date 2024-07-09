@@ -62,8 +62,6 @@ urlpatterns = [
 
 
 
-
-
     path('client/statut_Add/', views.statut_client, name='client_status'),
     path('client_status/<int:client_statut_id>/edit/', views.edit_statut_client, name='edit_statut_client'),
     path('client/home_client_status/', views.home_client_status, name='home_client_status'),
