@@ -12,7 +12,13 @@
             <div class="d-flex justify-content-center align-items-center mb-4">
                 <form method="post" action="{% url 'search_client' %}" class="form-inline">
                     {% csrf_token %}
-                    <input type="text" class="form-control mr-2" name="client_code" placeholder="Search client">
+                    <div class="form-group mr-2">
+                        <select class="form-control" name="search_type">
+                            <option value="client_code">Client Code</option>
+                            <option value="description">Description</option>
+                        </select>
+                    </div>
+                    <input type="text" class="form-control mr-2" name="query" placeholder="Search client">
                     <button type="submit" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -21,10 +27,13 @@
                 </form>
             </div>
         </div>
+        
+        </div>
 
         {% if clients %}
         <div class="mt-4">
             <h2>Search results</h2>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -78,16 +87,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

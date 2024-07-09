@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+
 # Custom user manager for users_customers
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
