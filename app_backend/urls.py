@@ -62,15 +62,17 @@ urlpatterns = [
 
 
 
+
     path('client/statut_Add/', views.statut_client, name='client_status'),
     path('client_status/<int:client_statut_id>/edit/', views.edit_statut_client, name='edit_statut_client'),
     path('client/home_client_status/', views.home_client_status, name='home_client_status'),
+    
 
     path('client/home_client_discount/', views.home_client_discounts, name='home_discounts'),
     path('client/client_discounts/', views.client_discounts, name='client_discounts'),
     path('client_discounts/<str:Client_Code>/edit/', views.edit_client_discounts, name='client_discounts_edit'),
     path('client_discounts/<str:Client_Code>/delete/', views.delete_discounts, name='delete_discounts'),
-
+    path('upload_excel_discount/', views.upload_excel_discount, name='upload_excel_discount'),
     
     path('client/home_client_target/', views.home_client_target, name='home_target'),
     path('client/client_target/', views.client_target, name='client_target'),

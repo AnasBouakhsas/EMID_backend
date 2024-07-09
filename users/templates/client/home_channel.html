@@ -7,11 +7,11 @@
             <!-- Vos champs de recherche ici -->
         </form>
 
-        <h1>Liste des status clients</h1>
+        <h1>List of Channel</h1>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>channel_code</th>
+                    <th>Channel Code</th>
                     <th>Description</th>
                     <th>Actions</th>
                 </tr>
@@ -23,16 +23,16 @@
                     <td>{{ client.Channel_description }}</td>
                     
                     <td>
-                        <a href="{% url 'edit_channel' client.channel_code %}" class="btn btn-warning btn-sm">Modifier</a>
-                        <a href="{% url 'delete_channel' client.channel_code %}" class="btn btn-danger">Supprimer</a>
+                        <a href="{% url 'edit_channel' client.channel_code %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_channel' client.channel_code %}" class="btn btn-danger">Delete</a>
 
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'channels' %}" class="btn btn-primary">Ajouter</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
+        <a href="{% url 'channels' %}" class="btn btn-primary">Add</a>
+        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
     </div>
 </body>
 </html>

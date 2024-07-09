@@ -122,7 +122,7 @@ class Route_Users(models.Model):
         unique_together = ('Route_ID', 'User_Code', 'Org_ID')
 
 class Clients(models.Model):
-    Client_Code = models.AutoField(primary_key=True)
+    Client_Code = models.TextField(primary_key=True)
     Area_Code = models.CharField(max_length=50, blank=True, default='')
     Client_Description = models.CharField(max_length=50, blank=True, default='')
     Client_Alt_Description = models.CharField(max_length=50, blank=True, default='')
@@ -197,16 +197,22 @@ class Client_Statut(models.Model):
     Client_Statut_ID = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     Statut_Description = models.CharField(max_length=50)
 
+    class Meta:
+        db_table = 'Client_Statut'
+    
+    def __str__(self):
+        return self.Client_Statut_ID
+
 class Client_Discounts(models.Model):
     Client_Code = models.CharField(max_length=50)
-    Trx_Code = models.CharField(max_length=50)
-    Discounts = models.DecimalField(max_digits=18,decimal_places=2)
+    Trx_Code = models.CharField(max_length=50, default='',null=True )
+    Discounts = models.IntegerField()
     Month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
     Years = models.IntegerField(validators=[MinValueValidator(1990), MaxValueValidator(2030)])
     Discounts_label = models.CharField(max_length=50)
-    Applied = models.IntegerField()
-    Stamp_Date = models.DateTimeField()
-    Affected_item_code = models.CharField(max_length=50)
+    Applied = models.IntegerField(default=0, null=True)
+    Stamp_Date = models.DateTimeField(default=timezone.now())
+    Affected_item_code = models.CharField(max_length=50, default='')
 
 class Client_Target(models.Model):
     Client_Code = models.CharField(max_length=50)

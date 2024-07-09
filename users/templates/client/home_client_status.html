@@ -7,12 +7,12 @@
             <!-- Vos champs de recherche ici -->
         </form>
 
-        <h1>Liste des status clients</h1>
+        <h1>List of Statuses</h1>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Code Client status</th>
-                    <th>Description</th>
+                    <th>Code statut client</th>
+                    <th>Staut Description</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -23,15 +23,15 @@
                     <td>{{ client.Statut_Description }}</td>
                     
                     <td>
-                        <a href="{% url 'edit_statut_client' client.Client_Statut_ID %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'edit_statut_client' client.Client_Statut_ID %}" class="btn btn-warning btn-sm">Edit</a>
                     
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'client_status' %}" class="btn btn-primary">Ajouter</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
+        <a href="{% url 'client_status' %}" class="btn btn-primary">Add</a>
+        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
     </div>
 </body>
 </html>

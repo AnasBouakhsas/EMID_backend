@@ -1,3 +1,4 @@
+from django.utils import timezone
 import json
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -1053,38 +1054,34 @@ def upload_excel(request):
     if request.method == 'POST' and request.FILES['xlxfile']:
         excel_file = request.FILES['xlxfile']
         
-        # Charger le fichier Excel avec openpyxl
+    
+# Charger le fichier Excel
         wb = openpyxl.load_workbook(excel_file)
         sheet = wb.active
-        
-        # Lire les données de la première cellule pour vérification
-      # Récupérer toutes les lignes du fichier
-        # Itérer sur toutes les lignes en commençant par la deuxième (pour ignorer les en-têtes)
-    for row in sheet.iter_rows(min_row=2, values_only=True):
-        client = Clients(
-            Client_Code=row[0],
-            Area_Code=row[1],
-            Client_Description=row[2],
-            Client_Alt_Description=row[3],
-            Payment_Term_Code=row[4],
-            Email=row[5],
-            Address=row[6],
-            Alt_Address=row[7],
-            Contact_Person=row[8],
-            Phone_Number=row[9],
-            Barcode=row[10],
-            Client_Status_ID=row[11]
-        )
+
+# Itérer sur toutes les lignes en commençant par la deuxième (pour ignorer les en-têtes)
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            client = Clients(
+                Client_Code=row[0],
+                Area_Code=row[1],
+                Client_Description=row[2],
+                Client_Alt_Description=row[3],
+                Payment_Term_Code=row[4],
+                Email=row[5],
+                Address=row[6],
+                Alt_Address=row[7],
+                Contact_Person=row[8],
+                Phone_Number=row[9],
+                Barcode=row[10],
+                Client_Status_ID=row[11]
+            )
         client.save()  # Sauvegarder l'instance dans la base de données
         print(f"Client {client.Client_Code} ajouté")
 
 # Afficher toutes les lignes
-    for row in sheet.iter_rows(min_row=2, values_only=True):
-        print(row)
-        # Vous pouvez ajouter votre logique de traitement ici
-
-        return HttpResponse("File uploaded and processed successfully.")
-    
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            print(row)    
+        return redirect(f'home_client')
     return render(request, 'client/upload_excel.html')
 
 
@@ -1119,8 +1116,10 @@ def home_client_status(request):
 
 #client discounts
 def home_client_discounts(request):
-    clients = Client_Discounts.objects.all()  
-    return render(request, 'client/home_discounts.html', {'clients': clients})
+    message = request.GET.get('message', '')
+    clients = Client_Discounts.objects.all()
+    return render(request, 'client/home_discounts.html', {'clients': clients, 'message': message})
+
 
 def client_discounts(request):
     error_message = None
@@ -1162,6 +1161,44 @@ def delete_discounts(request, Client_Code):
     client.delete()
     return redirect('home_discounts') 
 
+  
+def upload_excel_discount(request):
+    if request.method == 'POST' and request.FILES['xlxfile']:
+        excel_file = request.FILES['xlxfile']
+        
+    
+# Charger le fichier Excel
+        wb = openpyxl.load_workbook(excel_file)
+        sheet = wb.active
+
+# Itérer sur toutes les lignes en commençant par la deuxième (pour ignorer les en-têtes)
+        for row in sheet.iter_rows(min_row=3, values_only=True):
+            clients = Clients.objects.filter(Client_Code=row[0])
+           
+            if clients.exists():
+                client = Client_Discounts(
+                    Client_Code=row[0],
+                    Trx_Code='',
+                    Discounts=row[2],
+                    Month=row[3],
+                    Years=row[4],
+                    Discounts_label=row[5],
+                    Applied=0,
+                    Stamp_Date=timezone.now(),
+                    Affected_item_code='en instance'
+                
+                )
+                client.save()  # Sauvegarder l'instance dans la base de données
+                print(f"Client {client.Client_Code} ajouté")
+            else:
+                message = f"Les autres clients n'existe pas."
+
+# Afficher toutes les lignes
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            print(row)
+        return redirect(f'/client/home_client_discount/?message={message}')     
+    return render(request, 'client/upload_excel_discount.html')
+    
 
 #client target
 

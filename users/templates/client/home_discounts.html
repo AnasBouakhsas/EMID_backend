@@ -3,24 +3,38 @@
 <body>
     <div class="container-fluid">
         <!-- Search Form -->
-        <form method="GET" action="" class="mb-4">
-            <!-- Vos champs de recherche ici -->
-        </form>
-        <a href="{% url 'upload_excel' %}" class="btn btn-secondary float-right">upload from excel</a>
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Modal title</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <a href="{% url 'upload_excel_discount' %}" class="btn btn-secondary float-right">upload from excel</a>
         
-        <h1>Liste des Clients Discounts</h1>
+        <h1>Liste Clients Discounts</h1>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Code Client</th>
-                    <th>Code Transaction</th>
-                    <th>Réductions</th>
-                    <th>Mois</th>
-                    <th>Année</th>
-                    <th>Libellé Réductions</th>
-                    <th>Appliqué</th>
-                    <th>Date de Tampon</th>
-                    <th>Code Article Affecté</th>
+                    <th>Client Code</th>
+                    <th>Trx_Code</th>
+                    <th>Discounts</th>
+                    <th>Month</th>
+                    <th>Years</th>
+                    <th>Discounts_label</th>
+                    <th>Applied</th>
+                    <th>Stamp_Date</th>
+                    <th>Affected_item_code</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -37,16 +51,25 @@
                     <td>{{ client.Stamp_Date }}</td>
                     <td>{{ client.Affected_item_code }}</td>
                     <td>
-                        <a href="{% url 'client_discounts_edit' client.Client_Code %}" class="btn btn-warning btn-sm">Modifier</a>
-                        <a href="{% url 'delete_discounts' client.Client_Code %}" class="btn btn-danger">Supprimer</a>
+                        <a href="{% url 'client_discounts_edit' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_discounts' client.Client_Code %}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        
-        <a href="{% url 'client_discounts' %}" class="btn btn-primary">Ajouter</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
-
+        {% if message %}
+            <div class="alert alert-danger mt-3">{{ message }}</div>
+        {% endif %}
+        <a href="{% url 'client_discounts' %}" class="btn btn-primary">Add</a>
+        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+        <script>
+            $(document).ready(function(){
+                $('#uploadButton').on('click', function(e){
+                    e.preventDefault();
+                    $('#uploadModal').modal('show');
+                });
+            });
+        </script>
 </body>
 </html>

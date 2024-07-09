@@ -135,20 +135,19 @@ class client_statutForm(forms.ModelForm):
             super(clientForm, self).__init__(*args, **kwargs)
             for field_name, field in self.fields.items():
                 field.widget.attrs['class'] = 'form-control'
+                
 
 class client_discountsForm(forms.ModelForm):
     class Meta:
         model = Client_Discounts
         fields  = [
             'Client_Code',
-            'Trx_Code',
             'Discounts',
             'Month',
             'Years',
             'Discounts_label',
-            'Applied',
-            'Stamp_Date',
-            'Affected_item_code'
+            'Stamp_Date'
+            
             ]
         def __init__(self, *args, **kwargs):
             super(clientForm, self).__init__(*args, **kwargs)

@@ -4,13 +4,15 @@
 
     <div class="container-fluid">
 
-        <a href="{% url 'Clients' %}" class="btn btn-primary">Ajouter</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
+        <a href="{% url 'Clients' %}" class="btn btn-primary">Add</a>
+        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+        <a href="{% url 'upload_excel' %}" class="btn btn-secondary float-right">Upload from excel</a>
+
         <div class="container-fluid">
             <div class="d-flex justify-content-center align-items-center mb-4">
                 <form method="post" action="{% url 'search_client' %}" class="form-inline">
                     {% csrf_token %}
-                    <input type="text" class="form-control mr-2" name="client_code" placeholder="Rechercher client">
+                    <input type="text" class="form-control mr-2" name="client_code" placeholder="Search client">
                     <button type="submit" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -22,23 +24,24 @@
 
         {% if clients %}
         <div class="mt-4">
-            <h2>Résultats de la recherche</h2>
+            <h2>Search results</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Code Client</th>
-                    <th>Code Zone</th>
+                    <th>Client Code</th>
+                    <th>Area Code</th>
                     <th>Description</th>
-                    <th>Description Alternative</th>
-                    <th>Code Terme de Paiement</th>
+                    <th>Alternative Description</th>
+                    <th>Payment Term Code</th>
                     <th>Email</th>
-                    <th>Adresse</th>
-                    <th>Adresse Alternative</th>
-                    <th>Personne de Contact</th>
-                    <th>Numéro de Téléphone</th>
-                    <th>Code Barre</th>
-                    <th>Statut du Client</th>
-                    <th>action</th>
+                    <th>Address</th>
+                    <th>Alternative Address</th>
+                    <th>Contact Person</th>
+                    <th>Phone Number</th>
+                    <th>Barcode</th>
+                    <th>Client Status</th>
+                    <th>Action</th>
+                    
 
                 </tr>
             </thead>
@@ -58,8 +61,8 @@
                     <td>{{ client.Barcode }}</td>
                     <td>{{ client.Client_Status_ID }}</td>
                     <td>
-                        <a href="{% url 'edit_client' client.Client_Code %}" class="btn btn-warning btn-sm">Modifier</a>
-                        <a href="{% url 'delete_client' client.Client_Code %}" class="btn btn-danger">Supprimer</a>
+                        <a href="{% url 'edit_client' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_client' client.Client_Code %}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
