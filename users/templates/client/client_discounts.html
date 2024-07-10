@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Modifier le Client</title>
+    <title>Add Client discount</title>
 </head>
 <body>
-    <h1>Modifier le Client</h1>
+    <h1>Add Client discount</h1>
     <form class="form " method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Enregistrer les modifications</button>
+        <button type="submit">Save</button>
     </form>
     {% if error_message %}
             <div class="alert alert-danger mt-3">{{ error_message }}</div>

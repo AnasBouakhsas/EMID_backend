@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 import openpyxl
-from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
+from .models import Channels, Client_Statut, Client_Target, Clients_Info, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
 from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
@@ -1009,11 +1009,18 @@ def load_devices(request):
 
 #client
 def clients(request):
+    
     if request.method == 'POST':
+        client = request.POST["Client_Code"]
         form = clientForm(request.POST)
+
         if form.is_valid():
             form.save()
-            return redirect('home')  
+
+            client_info = Clients_Info(Client_Codes_id = client)
+            client_info.save()
+
+            return redirect('home_client')  
     else:
         form = clientForm()
     
@@ -1053,18 +1060,15 @@ def search_client(request):
             clients = Clients.objects.all()
     return render(request, 'client/home_client.html', {'clients': clients, 'query': query})
 
-    
+#upload from excel 
 def upload_excel(request):
     if request.method == 'POST' and request.FILES['xlxfile']:
         excel_file = request.FILES['xlxfile']
         
-    
-# Charger le fichier Excel
         wb = openpyxl.load_workbook(excel_file)
         sheet = wb.active
 
-# Itérer sur toutes les lignes en commençant par la deuxième (pour ignorer les en-têtes)
-        for row in sheet.iter_rows(min_row=2, values_only=True):
+        for row in sheet.iter_rows(min_row=3, values_only=True):
             client = Clients(
                 Client_Code=row[0],
                 Area_Code=row[1],
@@ -1079,10 +1083,11 @@ def upload_excel(request):
                 Barcode=row[10],
                 Client_Status_ID=row[11]
             )
-        client.save()  # Sauvegarder l'instance dans la base de données
-        print(f"Client {client.Client_Code} ajouté")
+            client.save()  
+            client_info = Clients_Info(Client_Codes_id = row[0])
+            client_info.save() 
+            print(f"Client {client.Client_Code} ajouté")
 
-# Afficher toutes les lignes
         for row in sheet.iter_rows(min_row=2, values_only=True):
             print(row)    
         return redirect(f'home_client')
@@ -1108,7 +1113,7 @@ def edit_statut_client(request, client_statut_id):
         if form.is_valid():
             client.Client_Statut_ID = client_statut_id
             form.save()
-            return redirect('home') 
+            return redirect('home_client_statuts') 
     else:
         form = client_statutForm(instance=client)
     return render(request, 'client/status_client_modifier.html', {'form': form, 'client': client})
@@ -1164,6 +1169,18 @@ def delete_discounts(request, Client_Code):
     client = get_object_or_404(Client_Discounts, Client_Code=Client_Code)
     client.delete()
     return redirect('home_discounts') 
+
+
+def delete_selected_clients(request):
+    if request.method == 'POST':
+        client_ids = request.POST.getlist('client_ids')
+        if client_ids:
+            Client_Discounts.objects.filter(Client_Code__in=client_ids).delete()
+            messages.success(request, 'Selected clients have been deleted.')
+        else:
+            messages.error(request, 'No clients selected for deletion.')
+    return redirect('home_discounts')
+  
 
   
 def upload_excel_discount(request):
