@@ -74,6 +74,8 @@ urlpatterns = [
     path('client_discounts/<str:Client_Code>/delete/', views.delete_discounts, name='delete_discounts'),
     path('upload_excel_discount/', views.upload_excel_discount, name='upload_excel_discount'),
     path('delete-selected-clients/', views.delete_selected_clients, name='delete_selected_clients'),
+    path('search_client_discount/', views.search_client_discount, name='search_client_discount'),
+
 
     
     path('client/home_client_target/', views.home_client_target, name='home_target'),

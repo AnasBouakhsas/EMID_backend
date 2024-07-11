@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.utils import timezone
+from django.utils.timezone import now
 
 
 # Custom user manager for users_customers
@@ -122,6 +123,16 @@ class Route_Users(models.Model):
         db_table = 'Route_Users'
         unique_together = ('Route_ID', 'User_Code', 'Org_ID')
 
+class Client_Statut(models.Model):
+    Client_Statut_ID = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2)])
+    Statut_Description = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'Client_Statut'
+    
+    def __str__(self):
+        return self.Statut_Description
+    
 class Clients(models.Model):
 
     Client_Code = models.IntegerField(primary_key=True)
@@ -133,15 +144,15 @@ class Clients(models.Model):
     Address = models.CharField(max_length=50, blank=True, default='')
     Alt_Address = models.CharField(max_length=50, blank=True, default='')
     Contact_Person = models.CharField(max_length=50, blank=True, default='')   
-    Phone_Number = models.CharField(max_length=50, blank=True, default='')
+    Phone_Number = models.IntegerField()
     Barcode = models.CharField(max_length=50, blank=True, default='')
     Client_Status_ID = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(2)])
-     
+
     class Meta:
         
         db_table = 'Clients'
     def __str__(self):
-        return self.Client_Description
+        return self.Client_Code
 
 
 class Clients_Info(models.Model):
@@ -204,7 +215,7 @@ class PromoHeaders(models.Model):
         class Meta:
             db_table = 'Promo_Headers'
 
-from django.utils import timezone
+
 
 class PromoAssignments(models.Model):
     org_id = models.IntegerField()
@@ -233,29 +244,21 @@ class Area(models.Model):
     area = models.CharField(max_length=250)
     Area_description = models.CharField(max_length=255)
 
-class Client_Statut(models.Model):
-    Client_Statut_ID = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2)])
-    Statut_Description = models.CharField(max_length=50)
 
-    class Meta:
-        db_table = 'Client_Statut'
-    
-    def __str__(self):
-        return self.Client_Statut_ID
 
 class Client_Discounts(models.Model):
-    Client_Code = models.CharField(max_length=50)
+    Client_Code = models.IntegerField()
     Trx_Code = models.CharField(max_length=50, default='',null=True )
     Discounts = models.IntegerField()
     Month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
     Years = models.IntegerField(validators=[MinValueValidator(1990), MaxValueValidator(2030)])
     Discounts_label = models.CharField(max_length=50)
     Applied = models.IntegerField(default=0, null=True)
-    Stamp_Date = models.DateTimeField(default=timezone.now())
+    Stamp_Date = models.DateTimeField(default=now)
     Affected_item_code = models.CharField(max_length=50, default='')
 
 class Client_Target(models.Model):
-    Client_Code = models.CharField(max_length=50)
+    Client_Code = models.IntegerField()
     Month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
     years = models.IntegerField(validators=[MinValueValidator(1990), MaxValueValidator(2030)])
     Target_value = models.DecimalField(max_digits=18,decimal_places=2)

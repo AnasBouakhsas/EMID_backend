@@ -8,6 +8,9 @@
         <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
         <a href="{% url 'upload_excel' %}" class="btn btn-secondary float-right">Upload from excel</a>
 
+                <h1>List Clients</h1>
+
+
         <div class="container-fluid">
             <div class="d-flex justify-content-center align-items-center mb-4">
                 <form method="post" action="{% url 'search_client' %}" class="form-inline">
@@ -27,62 +30,61 @@
                 </form>
             </div>
         </div>
-        
-        </div>
 
+        <!-- Messages Section -->
+
+        
         {% if clients %}
         <div class="mt-4">
             <h2>Search results</h2>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Client Code</th>
-                    <th>Area Code</th>
-                    <th>Description</th>
-                    <th>Alternative Description</th>
-                    <th>Payment Term Code</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Alternative Address</th>
-                    <th>Contact Person</th>
-                    <th>Phone Number</th>
-                    <th>Barcode</th>
-                    <th>Client Status</th>
-                    <th>Action</th>
-                    
-
-                </tr>
-            </thead>
-            <tbody>
-                {% for client in clients %}
-                <tr>
-                    <td>{{ client.Client_Code }}</td>
-                    <td>{{ client.Area_Code }}</td>
-                    <td>{{ client.Client_Description }}</td>
-                    <td>{{ client.Client_Alt_Description }}</td>
-                    <td>{{ client.Payment_Term_Code }}</td>
-                    <td>{{ client.Email }}</td>
-                    <td>{{ client.Address }}</td>
-                    <td>{{ client.Alt_Address }}</td>
-                    <td>{{ client.Contact_Person }}</td>
-                    <td>{{ client.Phone_Number }}</td>
-                    <td>{{ client.Barcode }}</td>
-                    <td>{{ client.Client_Status_ID }}</td>
-                    <td>
-                        <a href="{% url 'edit_client' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="{% url 'delete_client' client.Client_Code %}" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% elif query %}
-    <div class="mt-4">
-        <p>Aucun client ne correspond à ce code client.</p>
-    </div>
-    {% endif %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Client Code</th>
+                        <th>Area Code</th>
+                        <th>Description</th>
+                        <th>Alternative Description</th>
+                        <th>Payment Term Code</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Alternative Address</th>
+                        <th>Contact Person</th>
+                        <th>Phone Number</th>
+                        <th>Barcode</th>
+                        <th>Client Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr>
+                        <td>{{ client.Client_Code }}</td>
+                        <td>{{ client.Area_Code }}</td>
+                        <td>{{ client.Client_Description }}</td>
+                        <td>{{ client.Client_Alt_Description }}</td>
+                        <td>{{ client.Payment_Term_Code }}</td>
+                        <td>{{ client.Email }}</td>
+                        <td>{{ client.Address }}</td>
+                        <td>{{ client.Alt_Address }}</td>
+                        <td>{{ client.Contact_Person }}</td>
+                        <td>{{ client.Phone_Number }}</td>
+                        <td>{{ client.Barcode }}</td>
+                        <td>{{ client.Client_Status_ID }}</td>
+                        <td>
+                            <a href="{% url 'edit_client' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'delete_client' client.Client_Code %}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif query %}
+        <div class="mt-4">
+            <p>Aucun client ne correspond à ce code client.</p>
+        </div>
+        {% endif %}
     </div>
 
 </body>

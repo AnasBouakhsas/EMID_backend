@@ -1009,18 +1009,13 @@ def load_devices(request):
 
 #client
 def clients(request):
-    
     if request.method == 'POST':
-        client = request.POST["Client_Code"]
         form = clientForm(request.POST)
-
         if form.is_valid():
             form.save()
-
-            client_info = Clients_Info(Client_Codes_id = client)
+            client_info = Clients_Info(Client_Codes_id=form.cleaned_data['Client_Code'])
             client_info.save()
-
-            return redirect('home_client')  
+            return redirect('home_client')
     else:
         form = clientForm()
     
@@ -1053,9 +1048,9 @@ def search_client(request):
         query = request.POST.get('query', '')
         search_type = request.POST.get('search_type', 'client_code')
         if search_type == 'client_code':
-            clients = Clients.objects.filter(Client_Code__icontains=query)
+            clients = Clients.objects.filter(Client_Code=query)
         elif search_type == 'description':
-            clients = Clients.objects.filter(Client_Description__icontains=query)
+            clients = Clients.objects.filter(Client_Description=query)
         else:
             clients = Clients.objects.all()
     return render(request, 'client/home_client.html', {'clients': clients, 'query': query})
@@ -1069,28 +1064,34 @@ def upload_excel(request):
         sheet = wb.active
 
         for row in sheet.iter_rows(min_row=3, values_only=True):
-            client = Clients(
-                Client_Code=row[0],
-                Area_Code=row[1],
-                Client_Description=row[2],
-                Client_Alt_Description=row[3],
-                Payment_Term_Code=row[4],
-                Email=row[5],
-                Address=row[6],
-                Alt_Address=row[7],
-                Contact_Person=row[8],
-                Phone_Number=row[9],
-                Barcode=row[10],
-                Client_Status_ID=row[11]
-            )
-            client.save()  
-            client_info = Clients_Info(Client_Codes_id = row[0])
-            client_info.save() 
-            print(f"Client {client.Client_Code} ajouté")
+            client_code = row[0]
+            
+            if Clients.objects.filter(Client_Code=client_code).exists():
+                messages.error(request, f"Client avec le code {client_code} existe déjà.")
+            else:
+                client = Clients(
+                    Client_Code=client_code,
+                    Area_Code=row[1],
+                    Client_Description=row[2],
+                    Client_Alt_Description=row[3],
+                    Payment_Term_Code=row[4],
+                    Email=row[5],
+                    Address=row[6],
+                    Alt_Address=row[7],
+                    Contact_Person=row[8],
+                    Phone_Number=row[9],
+                    Barcode=row[10],
+                    Client_Status_ID=row[11]
+                )
+                client.save()
+                client_info = Clients_Info(Client_Codes_id=client_code)
+                client_info.save()
+                messages.success(request, f"Client {client.Client_Code} ajouté")
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
-            print(row)    
-        return redirect(f'home_client')
+            print(row)
+            
+        return redirect('home_client')
     return render(request, 'client/upload_excel.html')
 
 
@@ -1181,18 +1182,24 @@ def delete_selected_clients(request):
             messages.error(request, 'No clients selected for deletion.')
     return redirect('home_discounts')
   
-
+def search_client_discount(request):
+    clients = None
+    query = ''
+    if request.method == 'POST':
+        query = request.POST.get('query', '')
+        search_type = request.POST.get('search_type', 'client_code')
+        if search_type == 'client_code':
+            clients = Client_Discounts.objects.filter(Client_Code=query)
+        else:
+            clients = Client_Discounts.objects.all()
+    return render(request, 'client/home_discounts.html', {'clients': clients, 'query': query})
   
 def upload_excel_discount(request):
     if request.method == 'POST' and request.FILES['xlxfile']:
         excel_file = request.FILES['xlxfile']
-        
-    
-# Charger le fichier Excel
         wb = openpyxl.load_workbook(excel_file)
         sheet = wb.active
 
-# Itérer sur toutes les lignes en commençant par la deuxième (pour ignorer les en-têtes)
         for row in sheet.iter_rows(min_row=3, values_only=True):
             clients = Clients.objects.filter(Client_Code=row[0])
            
@@ -1209,12 +1216,11 @@ def upload_excel_discount(request):
                     Affected_item_code='en instance'
                 
                 )
-                client.save()  # Sauvegarder l'instance dans la base de données
+                client.save()  
                 print(f"Client {client.Client_Code} ajouté")
             else:
-                message = f"Les autres clients n'existe pas."
+                message = f"Les clients disponible sont tous ajoutés"
 
-# Afficher toutes les lignes
         for row in sheet.iter_rows(min_row=2, values_only=True):
             print(row)
         return redirect(f'/client/home_client_discount/?message={message}')     

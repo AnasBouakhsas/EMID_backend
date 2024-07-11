@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Modifier le Client</title>
-</head>
+{% include 'promotions/navbar.html' %}
+
 <body>
-    <h1>Modifier Client discounts</h1>
-    <form class="form " method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        
-        <button type="submit">Enregistrer</button>
-    </form>
-    {% if error_message %}
-    <div class="alert alert-danger mt-3">{{ error_message }}</div>
-    {% endif %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Add client target</h1>
+        <form class="form" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+        {% if error_message %}
+        <div class="alert alert-danger mt-3">{{ error_message }}</div>
+        {% endif %}
+    </div>
+    <!-- Inclure Bootstrap JS et jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    
 </body>
-</html>
+

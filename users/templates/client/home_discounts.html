@@ -11,12 +11,11 @@
         
         <!-- Search Form -->
         <div class="d-flex justify-content-center align-items-center mb-4">
-            <form method="post" action="{% url 'search_client' %}" class="form-inline">
+            <form method="post" action="{% url 'search_client_discount' %}" class="form-inline">
                 {% csrf_token %}
                 <input type="text" class="form-control mr-2" name="query" placeholder="Search client">
                 <select name="search_by" class="form-control mr-2">
                     <option value="Client_Code">Code Client</option>
-                    <option value="Description">Description</option>
                 </select>
                 <button type="submit" class="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -25,9 +24,12 @@
                 </button>
             </form>
         </div>
-        
+        {% if clients %}
+        <div class="mt-4">
+            <h2>Search results</h2>
         <!-- Clients Table -->
         <form method="post" action="{% url 'delete_selected_clients' %}">
+            <button type="submit" class="btn btn-danger mt-3">Delete Selected</button>
             {% csrf_token %}
             <table class="table table-striped">
                 <thead>
@@ -66,11 +68,13 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <button type="submit" class="btn btn-danger mt-3">Delete Selected</button>
-        </form>
-        {% if message %}
-            <div class="alert alert-danger mt-3">{{ message }}</div>
-        {% endif %}
+    </div>
+    {% elif query %}
+    <div class="mt-4">
+        <p>Aucun client ne correspond à ce code client.</p>
+    </div>
+    {% endif %}
+    </div>
 
         <script>
             document.getElementById('select-all').onclick = function() {

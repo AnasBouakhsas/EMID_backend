@@ -1,60 +1,29 @@
 {% include 'promotions/navbar.html' %}
-<body>
-        
-<div class="container">
-    <h1>Add Client</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="{{ form.Client_Code.id_for_label }}">Code Client:</label>
-            {{ form.Client_Code }}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Add Client </title>
+        <!-- Inclure Bootstrap CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1 class="mb-4">Add Client Discount</h1>
+            <form class="form" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+            {% if error_message %}
+            <div class="alert alert-danger mt-3">{{ error_message }}</div>
+            {% endif %}
         </div>
-        <div class="form-group">
-            <label for="{{ form.Area_Code.id_for_label }}">Code Zone:</label>
-            {{ form.Area_Code }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Client_Description.id_for_label }}">Description Client:</label>
-            {{ form.Client_Description }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Client_Alt_Description.id_for_label }}">ALT Description Client :</label>
-            {{ form.Client_Alt_Description }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Payment_Term_Code.id_for_label }}">Code Terme de Paiement:</label>
-            {{ form.Payment_Term_Code }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Email.id_for_label }}">Email:</label>
-            {{ form.Email }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Address.id_for_label }}">Adresse:</label>
-            {{ form.Address }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Alt_Address.id_for_label }}">ALT Adresse:</label>
-            {{ form.Alt_Address }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Contact_Person.id_for_label }}">Personne de Contact:</label>
-            {{ form.Contact_Person }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Phone_Number.id_for_label }}">Phone Number:</label>
-            {{ form.Phone_Number }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Barcode.id_for_label }}">Barcode:</label>
-            {{ form.Barcode }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.Client_Status_ID.id_for_label }}">Statut Client:</label>
-            {{ form.Client_Status_ID }}
-        </div>
-        <button class="btn btn-primary" type="submit">Save</button>
-    </form>
-</div>
-
+        <!-- Inclure Bootstrap JS et jQuery -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    
+    </body>
+    </html>
+    
 </body>
+</html>
