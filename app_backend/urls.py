@@ -7,7 +7,8 @@ from users.views import( home, users, list_users, routes, promotions, devices,
     load_devices, assign_user_to_route, assign_client_to_route,
     get_routes, get_route_clients, affectation_clients_routes,
     save_user, get_users, edit_user, user_parameters, search_baskets, assign_promotions,add_basket, define_basket, load_entities,assign_entity)
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.user_login, name='login'),
@@ -89,3 +90,5 @@ urlpatterns = [
     path('channels/home_channel/', views.home_channel, name='home_channel'),
     path('channel/<str:channel_code>/delete/', views.delete_channel, name='delete_channel'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

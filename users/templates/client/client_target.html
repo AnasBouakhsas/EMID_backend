@@ -6,13 +6,12 @@
         <form class="form" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
         {% if error_message %}
         <div class="alert alert-danger mt-3">{{ error_message }}</div>
         {% endif %}
     </div>
-    <!-- Inclure Bootstrap JS et jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     

@@ -1,50 +1,159 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients Discounts</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2262c6;
+            color: #fff;
+            
+        }
+
+        .btn-primary {
+            background-color: #81bae7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .form-inline .form-control {
+            width: auto;
+        }
+
+        h1, h2 {
+            color: #0056b3;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 200%;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f3f3f3;
+        }
+
+        .table-striped tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+            color: #212529;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        .float-right {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
 {% include 'promotions/navbar.html' %}
 
-<body>
-    <div class="container-fluid">
-        <!-- Navigation Buttons -->
-        <a href="{% url 'client_discounts' %}" class="btn btn-primary">Add client Discount</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
-        <a href="{% url 'upload_excel_discount' %}" class="btn btn-secondary float-right">Upload from excel</a>
-        
-        <h1>List Clients Discounts</h1>
-        
-        <!-- Search Form -->
-        <div class="d-flex justify-content-center align-items-center mb-4">
-            <form method="post" action="{% url 'search_client_discount' %}" class="form-inline">
-                {% csrf_token %}
-                <input type="text" class="form-control mr-2" name="query" placeholder="Search client">
-                <select name="search_by" class="form-control mr-2">
-                    <option value="Client_Code">Code Client</option>
-                </select>
-                <button type="submit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                    </svg>
-                </button>
-            </form>
-        </div>
-        {% if clients %}
-        <div class="mt-4">
-            <h2>Search results</h2>
-        <!-- Clients Table -->
+<div class="container-fluid">
+    <a href="{% url 'client_discounts' %}" class="btn btn-primary">Add Client Discount</a>
+    <a href="{% url 'home' %}" class="btn btn-primary">Return to Homepage</a>
+    <a href="{% url 'upload_excel_discount' %}" class="btn btn-secondary float-right">Upload from Excel</a>
+    
+    <h1>List Clients Discounts</h1>
+    
+    <div class="d-flex justify-content-center align-items-center mb-4">
+        <form method="post" action="{% url 'search_client_discount' %}" class="form-inline">
+            {% csrf_token %}
+            <input type="text" class="form-control mr-2" name="query" placeholder="Search Client">
+            <select name="search_by" class="form-control mr-2">
+                <option value="Client_Code">Client Code</option>
+            </select>
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    {% if clients %}
+    <div class="mt-4">
+        <h2>Search results</h2>
         <form method="post" action="{% url 'delete_selected_clients' %}">
             <button type="submit" class="btn btn-danger mt-3">Delete Selected</button>
             {% csrf_token %}
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="select-all"></th>
-                        <th>Client Code</th>
-                        <th>Trx_Code</th>
-                        <th>Discounts</th>
-                        <th>Month</th>
-                        <th>Years</th>
-                        <th>Discounts label</th>
-                        <th>Applied</th>
-                        <th>Stamp_Date</th>
-                        <th>Affected item code</th>
-                        <th>Actions</th>
+                        <th style="background-color: #2262c6;"><input type="checkbox" id="select-all"></th>
+                        <th style="background-color: #2262c6;">Client Code</th>
+                        <th style="background-color: #2262c6;">Trx_Code</th>
+                        <th style="background-color: #2262c6;">Discounts</th>
+                        <th style="background-color: #2262c6;">Month</th>
+                        <th style="background-color: #2262c6;">Years</th>
+                        <th style="background-color: #2262c6;">Discounts label</th>
+                        <th style="background-color: #2262c6;">Applied</th>
+                        <th style="background-color: #2262c6;">Stamp_Date</th>
+                        <th style="background-color: #2262c6;">Affected item code</th>
+                        <th style="background-color: #2262c6;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,28 +170,32 @@
                         <td>{{ client.Stamp_Date }}</td>
                         <td>{{ client.Affected_item_code }}</td>
                         <td>
-                            <a href="{% url 'client_discounts_edit' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
-
+                            <a href="{% url 'client_discounts_edit' client.Client_Code %}" class="btn btn-primary">Edit</a>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </form>
     </div>
     {% elif query %}
     <div class="mt-4">
-        <p>Aucun client ne correspond à ce code client.</p>
+        <p>No clients match this client code.</p>
     </div>
     {% endif %}
-    </div>
+</div>
 
-        <script>
-            document.getElementById('select-all').onclick = function() {
-                var checkboxes = document.querySelectorAll('.client-checkbox');
-                for (var checkbox of checkboxes) {
-                    checkbox.checked = this.checked;
-                }
-            }
-        </script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<script>
+    document.getElementById('select-all').onclick = function() {
+        var checkboxes = document.querySelectorAll('.client-checkbox');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+</script>
+
 </body>
 </html>

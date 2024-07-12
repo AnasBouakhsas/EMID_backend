@@ -1,91 +1,269 @@
-{% include 'promotions/navbar.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2262c6;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #81bae7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .form-inline .form-control {
+            width: auto;
+        }
+
+        h1, h2 {
+            color: #0056b3;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 200%;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f3f3f3;
+        }
+
+        .table-striped tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+            color: #212529;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        .float-right {
+            float: right;
+        }
+    </style>
+</head>
 <body>
 
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users' %}">Users</a>
+            </li>
+            <li class="nav-item active dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'home_client' %}">Clients</a>
+                 <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a>
+                    </li>
 
-        <a href="{% url 'Clients' %}" class="btn btn-primary">Add Client</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
-        <a href="{% url 'upload_excel' %}" class="btn btn-secondary float-right">Upload from excel</a>
-
-                <h1>List Clients</h1>
-
-
-        <div class="container-fluid">
-            <div class="d-flex justify-content-center align-items-center mb-4">
-                <form method="post" action="{% url 'search_client' %}" class="form-inline">
-                    {% csrf_token %}
-                    <div class="form-group mr-2">
-                        <select class="form-control" name="search_type">
-                            <option value="client_code">Client Code</option>
-                            <option value="description">Description</option>
-                        </select>
-                    </div>
-                    <input type="text" class="form-control mr-2" name="query" placeholder="Search client">
-                    <button type="submit" class="btn btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Messages Section -->
-
-        
-        {% if clients %}
-        <div class="mt-4">
-            <h2>Search results</h2>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Client Code</th>
-                        <th>Area Code</th>
-                        <th>Description</th>
-                        <th>Alternative Description</th>
-                        <th>Payment Term Code</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>Alternative Address</th>
-                        <th>Contact Person</th>
-                        <th>Phone Number</th>
-                        <th>Barcode</th>
-                        <th>Client Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for client in clients %}
-                    <tr>
-                        <td>{{ client.Client_Code }}</td>
-                        <td>{{ client.Area_Code }}</td>
-                        <td>{{ client.Client_Description }}</td>
-                        <td>{{ client.Client_Alt_Description }}</td>
-                        <td>{{ client.Payment_Term_Code }}</td>
-                        <td>{{ client.Email }}</td>
-                        <td>{{ client.Address }}</td>
-                        <td>{{ client.Alt_Address }}</td>
-                        <td>{{ client.Contact_Person }}</td>
-                        <td>{{ client.Phone_Number }}</td>
-                        <td>{{ client.Barcode }}</td>
-                        <td>{{ client.Client_Status_ID }}</td>
-                        <td>
-                            <a href="{% url 'edit_client' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="{% url 'delete_client' client.Client_Code %}" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% elif query %}
-        <div class="mt-4">
-            <p>Aucun client ne correspond à ce code client.</p>
-        </div>
-        {% endif %}
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                                                
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_target' %}">Client target</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a>
+                    </li>
+            </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'devices' %}">Devices</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'routes' %}" aria-expanded="false">Routes</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'promotions' %}">Promotion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+        </ul>
     </div>
+</nav>
+
+<div class="container-fluid">
+    <a href="{% url 'Clients' %}" class="btn btn-primary">Add Client</a>
+    <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+    <a href="{% url 'upload_excel' %}" class="btn btn-secondary float-right">Upload from excel</a>
+
+    <h1>List Clients</h1>
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center align-items-center mb-4">
+            <form method="post" action="{% url 'search_client' %}" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group mr-2">
+                    <select class="form-control" name="search_type">
+                        <option value="client_code">Client Code</option>
+                        <option value="description">Description</option>
+                    </select>
+                </div>
+                <input type="text" class="form-control mr-2" name="query" placeholder="Search client">
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if clients %}
+    <div class="mt-4">
+        <h2>Search results</h2>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Client Code</th>
+                    <th>Area Code</th>
+                    <th>Description</th>
+                    <th>Alternative Description</th>
+                    <th>Payment Term Code</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Alternative Address</th>
+                    <th>Contact Person</th>
+                    <th>Phone Number</th>
+                    <th>Barcode</th>
+                    <th>Client Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{ client.Client_Code }}</td>
+                    <td>{{ client.Area_Code }}</td>
+                    <td>{{ client.Client_Description }}</td>
+                    <td>{{ client.Client_Alt_Description }}</td>
+                    <td>{{ client.Payment_Term_Code }}</td>
+                    <td>{{ client.Email }}</td>
+                    <td>{{ client.Address }}</td>
+                    <td>{{ client.Alt_Address }}</td>
+                    <td>{{ client.Contact_Person }}</td>
+                    <td>{{ client.Phone_Number }}</td>
+                    <td>{{ client.Barcode }}</td>
+                    <td>{{ client.Client_Status_ID }}</td>
+                    <td>
+                        <a href="{% url 'edit_client' client.Client_Code %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'delete_client' client.Client_Code %}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif query %}
+    <div class="mt-4">
+        <p>Aucun client ne correspond à ce code client.</p>
+    </div>
+    {% endif %}
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

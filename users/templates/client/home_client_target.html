@@ -1,46 +1,135 @@
 {% include 'promotions/navbar.html' %}
 
-<body>
-    <div class="container-fluid">
-        <!-- Search Form -->
-        <form method="GET" action="" class="mb-4">
-            <!-- Vos champs de recherche ici -->
-        </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients Target</title>
 
-        <h1>List of Clients Target</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Code Client</th>
-                    <th>Month</th>
-                    <th>Years</th>
-                    <th>Targed_Achieved</th>
-                    <th>Target_value</th>
-                    
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for client in clients %}
-                <tr>
-                    <td>{{ client.Client_Code }}</td>
-                    <td>{{ client.Month }}</td>
-                    <td>{{ client.years }}</td>
-                    <td>{{ client.Targed_Achieved }}</td>
-                    <td>{{ client.Target_value }}</td>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2262c6;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #81bae7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+            color: #212529;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        .float-right {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <form method="GET" action="" class="mb-4">
+    </form>
+
+    <h1>List of Clients Target</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Code Client</th>
+                <th>Month</th>
+                <th>Years</th>
+                <th>Targed Achieved</th>
+                <th>Target Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.Client_Code }}</td>
+                <td>{{ client.Month }}</td>
+                <td>{{ client.years }}</td>
+                <td>{{ client.Targed_Achieved }}</td>
+                <td>{{ client.Target_value }}</td>
                 
-                    
-                    <td>
-                        <a href="{% url 'client_target_edit' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="{% url 'delete_target' client.Client_Code %}" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-        <a href="{% url 'client_target' %}" class="btn btn-primary">Add</a>
-        <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+                <td>
+                    <a href="{% url 'client_target_edit' client.Client_Code %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_target' client.Client_Code %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <a href="{% url 'client_target' %}" class="btn btn-primary">Add</a>
+    <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
 </body>
 </html>

@@ -1,8 +1,89 @@
 {% include 'routes/navbar.html' %}
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
+        .styled-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        tr{
+            color: black;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+            border: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
+    button.btn-primary {
+            background-color: #81bae7;
+            border: none;
+            padding: 10px 20px;
+            margin-top: -9px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            align-self: center; /* Centrez le bouton dans le conteneur flex */
+        }
+        button.btn-primary:hover {
+            background-color: #0056b3;
+        }
+        button.btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        button.btn-primary2 {
+            background-color: #AFBDBA91;
+            border: none;
+            padding: 10px 20px;
+            margin-top: -8px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            align-self: center; /* Centrez le bouton dans le conteneur flex */
+        }
+        button.btn-primary2:hover {
+            background-color: #0056b3;
+        }
+        button.btn-primary2:hover {
+            background-color: rgba(175, 189, 186, 0.57);
+        }
+</style>
 <body>
     <div>
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addRouteModal">Add Route</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addRouteModal">Add Route</button>
     </div>
     <div>
         <h2>Routes</h2>
@@ -29,8 +110,12 @@
                     <td>{{ route.CreateBy }}</td>
                     <td>{{ route.HasClients }}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRouteModal" data-route-id="{{ route.Route_ID }}" data-route-description="{{ route.Route_Description }}" data-region-code="{{ route.Region_Code }}">Edit</button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteRouteModal" data-route-id="{{ route.Route_ID }}">Delete</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRouteModal" data-route-id="{{ route.Route_ID }}" data-route-description="{{ route.Route_Description }}" data-region-code="{{ route.Region_Code }}">
+                                                            <i class="fas fa-edit icon"></i> <!-- Icône Edit -->
+</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteRouteModal" data-route-id="{{ route.Route_ID }}">
+                                    <i class="fas fa-trash-alt icon"></i> <!-- Icône Delete -->
+</button>
                     </td>
                 </tr>
                 {% endfor %}

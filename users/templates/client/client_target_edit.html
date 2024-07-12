@@ -1,12 +1,12 @@
 {% include 'promotions/navbar.html' %}
 
 <body>
-    <h1>Modifier Client target</h1>
+    <h1>Edit Client target</h1>
     <form class="form " method="post">
         {% csrf_token %}
         {{ form.as_p }}
         
-        <button type="submit">Enregistrer</button>
+        <button type="submit">Save</button>
     </form>
     {% if error_message %}
     <div class="alert alert-danger mt-3">{{ error_message }}</div>

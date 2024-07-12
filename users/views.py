@@ -1048,9 +1048,9 @@ def search_client(request):
         query = request.POST.get('query', '')
         search_type = request.POST.get('search_type', 'client_code')
         if search_type == 'client_code':
-            clients = Clients.objects.filter(Client_Code=query)
+            clients = Clients.objects.filter(Client_Code__icontains=query)
         elif search_type == 'description':
-            clients = Clients.objects.filter(Client_Description=query)
+            clients = Clients.objects.filter(Client_Description__icontains=query)
         else:
             clients = Clients.objects.all()
     return render(request, 'client/home_client.html', {'clients': clients, 'query': query})
