@@ -103,7 +103,7 @@ class NewPromotionForm(forms.Form):
 
 class clientForm(forms.ModelForm):
     status_choices = [(status.Client_Statut_ID, status.Statut_Description) for status in Client_Statut.objects.all()]
-    
+    #print(status_choices) 
     Client_Status_ID = forms.ChoiceField(choices=status_choices, widget=forms.Select(attrs={'class': 'form-control'}))
     
     class Meta:
@@ -122,6 +122,19 @@ class clientForm(forms.ModelForm):
             'Barcode',
             'Client_Status_ID'
         ]
+        widgets = {
+            'Client_Code': forms.TextInput(attrs={'class': 'form-control'}),
+            'Area_Code': forms.TextInput(attrs={'class': 'form-control'}),
+            'Client_Description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'Client_Alt_Description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'Payment_Term_Code': forms.TextInput(attrs={'class': 'form-control'}),
+            'Email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'Address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'Alt_Address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'Contact_Person': forms.TextInput(attrs={'class': 'form-control'}),
+            'Phone_Number': forms.TextInput(attrs={'class': 'form-control'}),
+            'Barcode': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 class client_statutForm(forms.ModelForm):
     class Meta:
@@ -131,10 +144,7 @@ class client_statutForm(forms.ModelForm):
             'Statut_Description'
         ]
 
-        def __init__(self, *args, **kwargs):
-            super(clientForm, self).__init__(*args, **kwargs)
-            for field_name, field in self.fields.items():
-                field.widget.attrs['class'] = 'form-control'
+       
                 
 
 class client_discountsForm(forms.ModelForm):
@@ -146,13 +156,19 @@ class client_discountsForm(forms.ModelForm):
             'Month',
             'Years',
             'Discounts_label',
-            'Stamp_Date'
+            'Stamp_Date',
+            'Affected_item_code'
             
             ]
-        def __init__(self, *args, **kwargs):
-            super(clientForm, self).__init__(*args, **kwargs)
-            for field_name, field in self.fields.items():
-                field.widget.attrs['class'] = 'form-control'
+        widgets = {
+            'Client_Code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Client Code'}),
+            'Discounts': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Discounts', 'step': '0.01'}),
+            'Month': forms.TextInput(attrs={'class': 'form-control'}),
+            'Years': forms.TextInput(attrs={'class': 'form-control'}),
+            'Discounts_label': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Discount Label'}),
+            'Stamp_Date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'Affected_item_code': forms.TextInput(attrs={'class':'form-control'})
+        }
 
 class Client_TargetForm(forms.ModelForm):
     class Meta:

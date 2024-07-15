@@ -1034,7 +1034,9 @@ def edit_client(request, client_id):
 
 def home_client(request):
     clients = Clients.objects.all()
-    return render(request, 'client/home_client.html', {'clients': clients})
+    clients_status= Client_Statut.objects.all()
+    form = clientForm()
+    return render(request, 'client/home_client.html', {'clients': clients, 'form': form,'clients_status':clients_status})
 
 def delete_client(request, client_id):
     client = get_object_or_404(Clients, Client_Code=client_id)
@@ -1127,8 +1129,9 @@ def home_client_status(request):
 #client discounts
 def home_client_discounts(request):
     message = request.GET.get('message', '')
+    form = client_discountsForm()
     clients = Client_Discounts.objects.all()
-    return render(request, 'client/home_discounts.html', {'clients': clients, 'message': message})
+    return render(request, 'client/home_discounts.html', {'clients': clients, 'message': message, 'form' : form})
 
 
 def client_discounts(request):

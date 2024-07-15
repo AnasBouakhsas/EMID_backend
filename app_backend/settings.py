@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'users'
+    'users',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -86,9 +87,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'EMID',
-        'USER': 'django',
-        'PASSWORD': '12345',
-        'HOST': 'DESKTOP-HNMII7K\SQLEXPRESS',  # Ex. 'localhost' ou une adresse IP
+        'USER': 'django2',
+        'PASSWORD': '1234',
+        'HOST': 'LAPTOP-5DCIL3VU\SQLEXPRESS',  # Ex. 'localhost' ou une adresse IP
         'PORT': '',  # En général 1433
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
