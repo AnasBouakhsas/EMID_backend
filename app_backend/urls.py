@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib import admin
 from users import views
-from users.views import home, users, list_users, routes, promotions, devices
+from users.views import get_client_data, get_client_statut_data, home, users, list_users, routes, promotions, devices
 from users.views import( home, users, list_users, routes, promotions, devices,
     add_route, edit_route, delete_route, affectation_routes_users,
     load_devices, assign_user_to_route, assign_client_to_route,
@@ -60,12 +60,15 @@ urlpatterns = [
     path('clients/<int:client_id>/delete/', views.delete_client, name='delete_client'),
     path('search_client/', views.search_client, name='search_client'),
     path('upload_excel/', views.upload_excel, name='upload_excel'),
+    path('clients/<int:client_id>/data/', get_client_data, name='get_client_data'),
 
 
 
     path('client/statut_Add/', views.statut_client, name='client_status'),
     path('client_status/<int:client_statut_id>/edit/', views.edit_statut_client, name='edit_statut_client'),
     path('client/home_client_status/', views.home_client_status, name='home_client_status'),
+    path('client/<int:client_statut_id>/data/', views.get_client_statut_data, name='get_client_statut_data'),
+
     
 
 

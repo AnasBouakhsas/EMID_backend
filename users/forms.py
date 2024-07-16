@@ -144,7 +144,7 @@ class client_statutForm(forms.ModelForm):
             'Statut_Description'
         ]
 
-       
+
                 
 
 class client_discountsForm(forms.ModelForm):

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clients</title>
+    <title>Channels</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -110,7 +110,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
-        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">    </a>
+        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -203,13 +204,46 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'channels' %}" class="btn btn-primary">Add</a>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChannelModal">
+        Add Channel
+    </button>
     <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="addChannelModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addChannelModalLabel">Add Channel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'channels' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="modal-body">        
+                            {% if error_message %}
+                                <div class="alert alert-danger mt-3">{{ error_message }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
 </body>
 </html>

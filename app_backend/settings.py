@@ -87,10 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'EMID',
-        'USER': 'django2',
-        'PASSWORD': '1234',
-        'HOST': 'LAPTOP-5DCIL3VU\SQLEXPRESS',  # Ex. 'localhost' ou une adresse IP
-        'PORT': '',  # En général 1433
+        'USER': 'django',
+        'PASSWORD': '12345',
+        'HOST': 'DESKTOP-HNMII7K\SQLEXPRESS',  
+        'PORT': '',  
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
