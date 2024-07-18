@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 import openpyxl
-from .models import Channels, Client_Statut, Client_Target, Clients_Info, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
+from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
 from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
@@ -1013,13 +1013,12 @@ def clients(request):
         form = clientForm(request.POST)
         if form.is_valid():
             form.save()
-            client_info = Clients_Info(Client_Codes_id=form.cleaned_data['Client_Code'])
-            client_info.save()
+           
             return redirect('home_client')
     else:
         form = clientForm()
     
-    return render(request, 'client/home.html', {'form': form})
+    return render(request, 'client/home_client.html', {'form': form})
 
 def get_client_data(request, client_id):
     client = get_object_or_404(Clients, Client_Code=client_id)
@@ -1049,7 +1048,7 @@ def edit_client(request, client_id):
             return redirect('home_client') 
     else:
         form = clientForm(instance=client)
-    return render(request, 'client/modifier.html', {'form': form, 'client': client})
+    return render(request, 'client/home_client.html', {'form': form, 'client': client})
 
 def home_client(request):
     clients = Clients.objects.all()
@@ -1057,8 +1056,8 @@ def home_client(request):
     form = clientForm()
     return render(request, 'client/home_client.html', {'clients': clients, 'form': form,'clients_status':clients_status})
 
-def delete_client(request, client_id):
-    client = get_object_or_404(Clients, Client_Code=client_id)
+def delete_client(request, Client_Code):
+    client = get_object_or_404(Clients, Client_Code=Client_Code)
     client.delete()
     return redirect('home_client')  
 
@@ -1074,7 +1073,8 @@ def search_client(request):
             clients = Clients.objects.filter(Client_Description__icontains=query)
         else:
             clients = Clients.objects.all()
-    return render(request, 'client/home_client.html', {'clients': clients, 'query': query})
+    form = clientForm()
+    return render(request, 'client/home_client.html', {'clients': clients, 'form': form, 'query': query})
 
 #upload from excel 
 def upload_excel(request):
@@ -1105,8 +1105,7 @@ def upload_excel(request):
                     Client_Status_ID=row[11]
                 )
                 client.save()
-                client_info = Clients_Info(Client_Codes_id=client_code)
-                client_info.save()
+                
                 messages.success(request, f"Client {client.Client_Code} ajouté")
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
@@ -1143,7 +1142,7 @@ def edit_statut_client(request, client_statut_id):
         if form.is_valid():
             client.Client_Statut_ID = client_statut_id
             form.save()
-            return redirect('home_client_statuts') 
+            return redirect('home_client_status') 
     else:
         form = client_statutForm(instance=client)
     return render(request, 'client/status_client_modifier.html', {'form': form, 'client': client})
@@ -1152,7 +1151,7 @@ def edit_statut_client(request, client_statut_id):
 def home_client_status(request):
     clients = Client_Statut.objects.all()  
     form = client_statutForm()
-    return render(request, 'client/home_client_status.html', {'clients': clients, 'form': form})
+    return render(request, 'client/home_client_status.html', {'client': clients, 'form': form})
 
 #client discounts
 def home_client_discounts(request):
@@ -1160,6 +1159,24 @@ def home_client_discounts(request):
     form = client_discountsForm()
     clients = Client_Discounts.objects.all()
     return render(request, 'client/home_discounts.html', {'clients': clients, 'message': message, 'form' : form})
+
+
+
+def get_client_Discount_data(request, client_Code):
+    client_Discount = get_object_or_404(Client_Discounts, Client_Code=client_Code)
+    data = {
+        'Client_Code': client_Discount.Client_Code,
+        'Trx_Code': client_Discount.Trx_Code,
+        'Discounts': client_Discount.Discounts,
+        'Month': client_Discount.Month,
+        'Years': client_Discount.Years,
+        'Discounts_label': client_Discount.Discounts_label,
+        'Applied': client_Discount.Applied,
+        'Stamp_Date': client_Discount.Stamp_Date,  
+        'Affected_item_code': client_Discount.Affected_item_code,
+    }
+    return JsonResponse(data)
+
 
 
 def client_discounts(request):
@@ -1265,6 +1282,20 @@ def home_client_target(request):
     form = Client_TargetForm()
     return render(request, 'client/home_client_target.html', {'clients': clients, 'form': form})
 
+def get_target(request, Client_Code):
+    client_t = get_object_or_404(Client_Target, Client_Code=Client_Code)
+    data = {
+        'Client_Code': client_t.Client_Code,
+        'Month': client_t.Month,
+        'years': client_t.years,
+        'Targed_Achieved': client_t.Targed_Achieved,
+        'Target_value': client_t.Target_value,
+
+    }
+    
+    return JsonResponse(data)
+
+
 def client_target(request):
     error_message = None
     if request.method == "POST":
@@ -1320,6 +1351,14 @@ def channels(request):
     
     return render(request, 'client/channel.html', {'form': form, 'channels': channels_list})
 
+
+def get_channel_data(request, channel_code):
+    channel = get_object_or_404(Channels, channel_code=channel_code)
+    data = {
+        'channel_code': channel.channel_code,
+        'Channel_description': channel.Channel_description
+    }
+    return JsonResponse(data)
 
 def edit_channel(request, channel_code):
     client = get_object_or_404(Channels, channel_code=channel_code)

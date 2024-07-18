@@ -33,7 +33,7 @@ class CustomUserManager(BaseUserManager):
 
 # CustomUser model for users_customers
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    id = models.AutoField(primary_key=True)
+    id_client = models.AutoField(primary_key=True)
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=150)
@@ -134,8 +134,7 @@ class Client_Statut(models.Model):
         return self.Statut_Description
     
 class Clients(models.Model):
-
-    Client_Code = models.IntegerField(primary_key=True)
+    Client_Code = models.CharField(primary_key=True, max_length=20)
     Area_Code = models.CharField(max_length=50, blank=True, default='')
     Client_Description = models.CharField(max_length=50, blank=True, default='')
     Client_Alt_Description = models.CharField(max_length=50, blank=True, default='')
@@ -144,7 +143,7 @@ class Clients(models.Model):
     Address = models.CharField(max_length=50, blank=True, default='')
     Alt_Address = models.CharField(max_length=50, blank=True, default='')
     Contact_Person = models.CharField(max_length=50, blank=True, default='')   
-    Phone_Number = models.IntegerField()
+    Phone_Number = models.CharField(max_length=50, blank=True, default='')
     Barcode = models.CharField(max_length=50, blank=True, default='')
     Client_Status_ID = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(2)])
 
@@ -154,46 +153,6 @@ class Clients(models.Model):
     def __str__(self):
         return self.Client_Code
 
-
-class Clients_Info(models.Model):
-    ID = models.AutoField(primary_key=True)
-    Client_Codes = models.ForeignKey(Clients, on_delete=models.CASCADE, related_name='clients_info', null=True, blank=True)
-    Org_ID = models.CharField(max_length=50, blank=True, null=True)
-    Channel_Code = models.CharField(max_length=50, blank=True, null=True)
-    Area_Of_Business_Code = models.CharField(max_length=50, blank=True, null=True)
-    Region_Code = models.ForeignKey('Regions', on_delete=models.CASCADE, blank=True, null=True)
-    City_Code = models.CharField(max_length=50, blank=True, null=True)
-    Is_Dummy = models.IntegerField(blank=True, null=True)
-    Fax_Number = models.CharField(max_length=50, blank=True, null=True)
-    Longitude = models.CharField(max_length=50, blank=True, null=True)
-    Latitude = models.CharField(max_length=50, blank=True, null=True)
-    Tax_Code = models.CharField(max_length=50, blank=True, null=True)
-    IsFromERP = models.IntegerField(blank=True, null=True)
-    Currency_Code = models.CharField(max_length=50, blank=True, null=True)
-    Sq_Meter_Area = models.CharField(max_length=50, blank=True, null=True)
-    Collection_Type = models.IntegerField(blank=True, null=True)
-    Client_Type_ID = models.IntegerField(blank=True, null=True)
-    Stamp_Date = models.DateTimeField(blank=True, null=True)
-    User_Code = models.CharField(max_length=50, blank=True, null=True)
-    Parent_Client_Code = models.CharField(max_length=50, blank=True, null=True)
-    Price_List_Code = models.CharField(max_length=50, blank=True, null=True)
-    Is_From_Census = models.IntegerField(blank=True, null=True)
-    Price_List_Code2 = models.CharField(max_length=50, blank=True, null=True)
-    Return_Price_List_Code = models.CharField(max_length=50, blank=True, null=True)
-    Grace_Period = models.IntegerField(blank=True, null=True)
-    Is_Taxable = models.IntegerField(blank=True, null=True)
-    Invoice_Limit = models.DecimalField(max_digits=18, decimal_places=6, blank=True, null=True)
-    Invoice_Settlement = models.IntegerField(blank=True, null=True)
-    Allow_PDC = models.IntegerField(blank=True, null=True)
-    Allow_Check = models.IntegerField(blank=True, null=True)
-    Number_Of_Outlets = models.IntegerField(blank=True, null=True)
-    Classification_Code = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        db_table = 'Clients_Info'
-
-    def __str__(self):
-        return str(self.Client_Code)
 
 class PromoHeaders(models.Model):
         promotion_id = models.AutoField(primary_key=True)
@@ -247,7 +206,7 @@ class Area(models.Model):
 
 
 class Client_Discounts(models.Model):
-    Client_Code = models.IntegerField()
+    Client_Code = models.CharField(max_length=20)
     Trx_Code = models.CharField(max_length=50, default='',null=True )
     Discounts = models.IntegerField()
     Month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
@@ -258,7 +217,7 @@ class Client_Discounts(models.Model):
     Affected_item_code = models.CharField(max_length=50, default='')
 
 class Client_Target(models.Model):
-    Client_Code = models.IntegerField()
+    Client_Code = models.CharField(max_length=20)
     Month = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
     years = models.IntegerField(validators=[MinValueValidator(1990), MaxValueValidator(2030)])
     Target_value = models.DecimalField(max_digits=18,decimal_places=2)

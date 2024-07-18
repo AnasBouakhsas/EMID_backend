@@ -1,136 +1,186 @@
 {% load static %}
-
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clients Discounts</title>
+    <title>Discount</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        .navbar {
-            background-color: #f8f9fa;
-        }
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+ 
+ <style>
+     .navbar {
+         background-color: #f8f9fa;
+     }
 
-        .navbar-brand {
-            font-weight: bold;
-        }
+     .navbar-brand {
+         font-weight: bold;
+     }
 
-        .navbar-nav .nav-link {
-            color: #007bff;
-        }
+     .navbar-nav .nav-link {
+         color: #007bff;
+     }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+    
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+     .btn-primary {
+         background-color: #81bae7;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         color: white;
+         cursor: pointer;
+         align-self: center;
+     }
 
-        th {
-            background-color: #2262c6;
-            color: #fff;
-            
-        }
+     .btn-primary:hover {
+         background-color: #0056b3;
+     }
 
-        .btn-primary {
-            background-color: #81bae7;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            align-self: center;
-        }
+     .form-inline .form-control {
+         width: auto;
+     }
+     .auto-width-select {
+        width: auto;
+        min-width: 150px; /* Ajustez cette valeur selon vos besoins */
+        max-width: 100%;
+        white-space: nowrap;
+     }
+     h1, h2 {
+         color: #0056b3;
+         font-family: 'Poppins', sans-serif;
+         font-weight: 600;
+         font-size: 200%;
+         text-align: center;
+        
+     }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
+     
 
-        .form-inline .form-control {
-            width: auto;
-        }
+     .btn-sm {
+         padding: 5px 10px;
+     }
 
-        h1, h2 {
-            color: #0056b3;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 200%;
-        }
+     .btn-danger {
+         background-color: #dc3545;
+         border-color: #dc3545;
+     }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f3f3f3;
-        }
+     .btn-danger:hover {
+         background-color: #c82333;
+         border-color: #bd2130;
+     }
 
-        .table-striped tbody tr:hover {
-            background-color: #f1f1f1;
-        }
+     .btn-warning {
+         background-color: #ffc107;
+         border-color: #ffc107;
+         color: #212529;
+     }
 
-        .btn-sm {
-            padding: 5px 10px;
-        }
+     .btn-warning:hover {
+         background-color: #e0a800;
+         border-color: #d39e00;
+         color: #212529;
+     }
 
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
+     .mt-4 {
+         margin-top: 1.5rem;
+     }
 
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-
-        .btn-warning {
-            background-color: #ffc107;
-            border-color: #ffc107;
-            color: #212529;
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
-            border-color: #d39e00;
-            color: #212529;
-        }
-
-        .mt-4 {
-            margin-top: 1.5rem;
-        }
-
-        .float-right {
-            float: right;
-        }
-    </style>
+     .float-right {
+         float: right;
+     }
+     .table{
+        --bs-table-bg:none;
+     }
+     th {
+        background-color: #2262c6;
+        color: #fff;
+        
+    }
+ </style>
 </head>
 <body>
 
-{% include 'promotions/navbar.html' %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'users' %}">Users</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_target' %}">Client target</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'devices' %}">Devices</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Routes</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'promotions' %}">Promotion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-<div class="container-fluid text-center">
-    <h1 class="mb-4">List Clients Discounts</h1>
-    <div class="d-flex justify-content-center mb-4">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#uploadModal" class="btn btn-secondary float-right"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+<h1 class="mb-4">List Clients Discounts</h1>
+   
+<div class="d-flex justify-content-right mb-4">
+      
+    <a href="#" data-bs-toggle="modal" data-bs-target="#uploadModal" class="btn btn-secondary me-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
             <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
-        </svg> excel</a>
-    
-        <a href="#" data-bs-toggle="modal" data-bs-target="#uploadClientDiscount" class="btn btn-primary">Add <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+        </svg>  Excel
+            
+    </a>
+
+       
+    <a href="#" data-bs-toggle="modal" data-bs-target="#uploadClientDiscount"  class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-        </svg></a>
-       
-         
-        
-    </div>
-    
+        </svg>    Add Client
+
+    </a>
+</div>
+
+<div class="container-fluid ">    
     <div class="d-flex justify-content-center align-items-center mb-4">
-        <form method="post" action="{% url 'search_client_discount' %}" class="form-inline">
+        <form method="post" action="{% url 'search_client_discount' %}" class="d-flex">
             {% csrf_token %}
             
             <select name="search_by" class="form-control mr-2">
@@ -142,8 +192,11 @@
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
             </button>
+            </button>
         </form>
     </div>
+</div>
+    
  <hr class="my-4">
    
     {% if clients %}
@@ -182,8 +235,14 @@
                         <td>{{ client.Stamp_Date }}</td>
                         <td>{{ client.Affected_item_code }}</td>
                         <td>
-                            <a href="{% url 'client_discounts_edit' client.Client_Code %}" class="btn btn-primary">Edit</a>
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editDiscount" data-client-statut-id="{{ client.Client_Code }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                </svg>
+                            </a>
                         </td>
+
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -196,34 +255,32 @@
     </div>
     {% endif %}
 </div>
-<a href="{% url 'home' %}" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-      </svg> Homepage</a>
-    <!-- Modal HTML -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">Upload Excel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{% url 'upload_excel_discount' %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="xlxfile" class="form-label">Choose Excel file</label>
-                            <input type="file" class="form-control" id="xlxfile" name="xlxfile" accept=".xlsx, .xlsm">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+
+    
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form action="{% url 'upload_excel_discount' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="xlxfile" class="form-label">Choose Excel file</label>
+                        <input type="file" class="form-control" id="xlxfile" name="xlxfile" accept=".xlsx, .xlsm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
-    <!-- Modal HTML -->
+</div>
+   
 <div class="modal fade" id="uploadClientDiscount" tabindex="-1" aria-labelledby="uploadClientDiscountLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -236,34 +293,22 @@
                 
                 <div class="modal-body">
                     <div class="mb-3">
-                        <!-- Affichage des erreurs non spécifiques au champ -->
                         {{ form.non_field_errors }}
-                        
                         {% for field in form %}
-                            <div class="mb-3">
-                                <!-- Label du champ -->
+                            <div class="mb-3">                               
                                 <label for="{{ field.id_for_label }}" class="form-label">
                                     {{ field.label }}
-                                </label>
-                                
-                                <!-- Champ du formulaire avec la classe form-control -->
-                                {{ field }}
-                                
-                                <!-- Erreurs spécifiques au champ -->
-                                {{ field.errors }}
-                                
-                                <!-- Texte d'aide pour le champ -->
+                                </label>                                                             
+                                {{ field }}                                                               
+                                {{ field.errors }}                                                                
                                 <small class="form-text text-muted">{{ field.help_text }}</small>
                             </div>
                         {% endfor %}
                     </div>
-                    
-                    <!-- Affichage des erreurs globales -->
                     {% if error_message %}
                         <div class="alert alert-danger mt-3">{{ error_message }}</div>
                     {% endif %}
                 </div>
-                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -272,6 +317,107 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editDiscount" tabindex="-1" aria-labelledby="editDiscountLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDiscountLabel">Edit Client Discount</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="statutForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ form.instance.client_code }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                        {% if error_message %}
+                            <div class="alert alert-danger mt-3">{{ error_message }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('editDiscount'); 
+
+        modal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; 
+            var Client_Code = button.getAttribute('data-client-statut-id'); 
+            console.log(Client_Code)
+            var form = modal.querySelector('#statutForm'); 
+
+        
+            if (Client_Code) {
+                fetch(`/clientDiscount/${Client_Code}/data/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Client Discounts  data received:', data);
+
+                    if (form) {
+                    
+                        const fields = {
+                           
+                            'Client_Code': 'input',
+                            'Discounts': 'input',
+                            'Month': 'input',
+                            'Years': 'input',
+                            'Discounts_label': 'input',
+                            'Affected_item_code': 'input',
+                            'Stamp_Date': 'date',
+                            
+                        };
+                    
+                        for (const [field, type] of Object.entries(fields)) {
+                            let element;
+
+                            if (type === 'date') {
+                                // Handle date inputs specifically
+                                element = form.querySelector(input[type="${type}"][name="${field}"]);
+                            } else {
+                                // Handle other input types
+                                 element = form.querySelector(`${type}[name="${field}"]`);
+                            }
+                                 
+                
+                            if (element) {
+                                
+
+                                if (element.type === 'date') {
+                                    // Format date value correctly
+                                    element.value = data[field] ? new Date(data[field]).toISOString().split('T')[0] : '';
+                                } else {
+                                    element.value = data[field] || '';
+                                }
+                            } else {
+                                            console.warn(`Field ${field} not found in the form.`);
+                                        }
+                                    }
+                                } else {
+                                    console.error('Form not found in the modal.');
+                                }
+                })
+                .catch(error => console.error('Error fetching client statut data:', error));
+              
+            form.action = `/client_discounts/${Client_Code}/edit/`;
+            } else {
+            console.error('Client_Code not found.');
+            }
+        })
+    });
+
+
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

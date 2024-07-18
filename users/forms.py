@@ -103,8 +103,8 @@ class NewPromotionForm(forms.Form):
 
 class clientForm(forms.ModelForm):
     status_choices = [(status.Client_Statut_ID, status.Statut_Description) for status in Client_Statut.objects.all()]
-    #print(status_choices) 
-    Client_Status_ID = forms.ChoiceField(choices=status_choices, widget=forms.Select(attrs={'class': 'form-control'}))
+    print(status_choices) 
+    Client_Status_ID = forms.ChoiceField(choices=status_choices, widget=forms.Select(attrs={'class': 'form-control'}, choices=[(0, '0')] + status_choices))
     
     class Meta:
         model = Clients
@@ -160,6 +160,7 @@ class client_discountsForm(forms.ModelForm):
             'Affected_item_code'
             
             ]
+        
         widgets = {
             'Client_Code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Client Code'}),
             'Discounts': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Discounts', 'step': '0.01'}),
@@ -169,6 +170,7 @@ class client_discountsForm(forms.ModelForm):
             'Stamp_Date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'Affected_item_code': forms.TextInput(attrs={'class':'form-control'})
         }
+
 
 class Client_TargetForm(forms.ModelForm):
     class Meta:

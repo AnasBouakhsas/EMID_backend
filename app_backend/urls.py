@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from users import views
 from users.views import get_client_data, get_client_statut_data, home, users, list_users, routes, promotions, devices
-from users.views import( home, users, list_users, routes, promotions, devices,
+from users.views import( home, users, list_users, routes, promotions, devices, get_target,
     add_route, edit_route, delete_route, affectation_routes_users,
     load_devices, assign_user_to_route, assign_client_to_route,
     get_routes, get_route_clients, affectation_clients_routes,
@@ -55,12 +55,12 @@ urlpatterns = [
 
     path('client/<int:client_id>/', views.clients, name='Clients'),
     path('client/', views.clients, name='Clients'),
-    path('clients/<int:client_id>/edit/', views.edit_client, name='edit_client'),
+    path('clients/<str:client_id>/edit/', views.edit_client, name='edit_client'),
     path('client/home_client/', views.home_client, name='home_client'),
-    path('clients/<int:client_id>/delete/', views.delete_client, name='delete_client'),
+    path('clients/<str:Client_Code>/delete/', views.delete_client, name='delete_client'),
     path('search_client/', views.search_client, name='search_client'),
     path('upload_excel/', views.upload_excel, name='upload_excel'),
-    path('clients/<int:client_id>/data/', get_client_data, name='get_client_data'),
+    path('clients/<str:client_id>/data/', get_client_data, name='get_client_data'),
 
 
 
@@ -79,6 +79,7 @@ urlpatterns = [
     path('upload_excel_discount/', views.upload_excel_discount, name='upload_excel_discount'),
     path('delete-selected-clients/', views.delete_selected_clients, name='delete_selected_clients'),
     path('search_client_discount/', views.search_client_discount, name='search_client_discount'),
+    path('clientDiscount/<str:client_Code>/data/', views.get_client_Discount_data, name='get_client_Discount_data'),
 
 
     
@@ -86,12 +87,16 @@ urlpatterns = [
     path('client/client_target/', views.client_target, name='client_target'),
     path('client_target/<str:Client_Code>/edit/', views.edit_client_target, name='client_target_edit'),
     path('client_target/<str:Client_Code>/delete/', views.delete_target, name='delete_target'),
+    path('client_target/<str:Client_Code>/data/', views.get_target, name='get_target'),
+
 
 
     path('channels/Add/', views.channels, name='channels'),
     path('modifier_channel/<str:channel_code>/edit/', views.edit_channel, name='edit_channel'),
     path('channels/home_channel/', views.home_channel, name='home_channel'),
     path('channel/<str:channel_code>/delete/', views.delete_channel, name='delete_channel'),
+    path('channel/<str:channel_code>/data/', views.get_channel_data, name='get_channel_data'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
