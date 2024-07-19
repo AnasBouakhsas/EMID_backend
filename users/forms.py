@@ -1,5 +1,5 @@
 from django import forms
-from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders
+from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders, Routes
 from django.db import connection
 
 
@@ -194,4 +194,14 @@ class ChannelsForm(forms.ModelForm):
         fields  = [
             'channel_code',
             'Channel_description',
+        ]
+
+
+class RouteForm(forms.ModelForm):
+    class Meta:
+        model = Routes
+        fields = [
+            'Route_Description',
+            'Route_Alt_Description',
+            'Region_Code',
         ]

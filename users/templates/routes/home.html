@@ -1,104 +1,191 @@
-{% include 'routes/navbar.html' %}
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-      <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<style>
-    .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
 
-        .styled-table thead tr {
-            background-color: #009879;
-            color: #ffffff;
-            text-align: left;
-            font-weight: bold;
-        }
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+ 
+ <style>
+     .navbar {
+         background-color: #f8f9fa;
+     }
 
-        tr{
-            color: black;
-        }
+     .navbar-brand {
+         font-weight: bold;
+     }
 
-        .styled-table th,
-        .styled-table td {
-            padding: 12px 15px;
-            border: 1px solid #dddddd;
-        }
+     .navbar-nav .nav-link {
+         color: #007bff;
+     }
 
-        .styled-table tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
+    
 
-        .styled-table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
+     .btn-primary {
+         background-color: #81bae7;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         color: white;
+         cursor: pointer;
+         align-self: center;
+     }
 
-        .styled-table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
+     .btn-primary:hover {
+         background-color: #0056b3;
+     }
 
-        .styled-table tbody tr.active-row {
-            font-weight: bold;
-            color: #009879;
-        }
-    button.btn-primary {
-            background-color: #81bae7;
-            border: none;
-            padding: 10px 20px;
-            margin-top: -9px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            align-self: center; /* Centrez le bouton dans le conteneur flex */
-        }
-        button.btn-primary:hover {
-            background-color: #0056b3;
-        }
-        button.btn-primary:hover {
-            background-color: #0056b3;
-        }
+     .form-inline .form-control {
+         width: auto;
+     }
+     .auto-width-select {
+        width: auto;
+        min-width: 150px; 
+        max-width: 100%;
+        white-space: nowrap;
+     }
+     h1, h2 {
+         color: #0056b3;
+         font-family: 'Poppins', sans-serif;
+         font-weight: 600;
+         font-size: 200%;
+         text-align: center;
+        
+     }
 
-        button.btn-primary2 {
-            background-color: #AFBDBA91;
-            border: none;
-            padding: 10px 20px;
-            margin-top: -8px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            align-self: center; /* Centrez le bouton dans le conteneur flex */
-        }
-        button.btn-primary2:hover {
-            background-color: #0056b3;
-        }
-        button.btn-primary2:hover {
-            background-color: rgba(175, 189, 186, 0.57);
-        }
-</style>
+     
+
+     .btn-sm {
+         padding: 5px 10px;
+     }
+
+     .btn-danger {
+         background-color: #dc3545;
+         border-color: #dc3545;
+     }
+
+     .btn-danger:hover {
+         background-color: #c82333;
+         border-color: #bd2130;
+     }
+
+     .btn-warning {
+         background-color: #ffc107;
+         border-color: #ffc107;
+         color: #212529;
+     }
+
+     .btn-warning:hover {
+         background-color: #e0a800;
+         border-color: #d39e00;
+         color: #212529;
+     }
+
+     .mt-4 {
+         margin-top: 1.5rem;
+     }
+
+     .float-right {
+         float: right;
+     }
+     .table{
+        --bs-table-bg:none;
+     }
+     th {
+        background-color: #2262c6;
+        color: #fff;
+        
+    }
+ </style>
+</head>
 <body>
-    <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addRouteModal">Add Route</button>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'users' %}">Users</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_target' %}">Client target</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'devices' %}">Devices</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Routes</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_routes_users' %}">Affectation Routes-Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_clients_routes' %}">Affectation Routes-Clients</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'promotions' %}">Promotion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+            </li>
+        </ul>
     </div>
-    <div>
-        <h2>Routes</h2>
-        <table id="routes-table">
-            <thead>
+</nav>
+
+<!-- ------------------------------------------------------------------------------------------------------- -->
+<body>
+
+    <h1>Routes</h1>
+
+
+
+    <div class="d-flex justify-content-right mb-4">  
+        <a href="#" data-bs-toggle="modal" data-bs-target="#addRouteModal"  class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>   
+            
+            Add Route
+        </a>
+    </div>
+    
+    <div class="container mt-5">
+        <table class="table table-bordered" id="routes-table">
+            <thead style="background-color:#2262c6;">
                 <tr>
-                    <th>Route ID</th>
-                    <th>Route Name</th>
-                    <th>Region Code</th>
-                    <th>Region Name</th>
-                    <th>Create By</th>
-                    <th>Has Clients</th>
-                    <th>Actions</th>
+                    <th class="text-white">Route ID</th>
+                    <th class="text-white">Route Name</th>
+                    <th class="text-white">Region Code</th>
+                    <th class="text-white">Region Name</th>
+                    <!--<th class="text-white">Create By</th>-->
+                    <th class="text-white">Has Clients</th>
+                    <th class="text-white">Actions</th>
                 </tr>
-                <!-- Add search fields if necessary -->
             </thead>
             <tbody>
                 {% for route in routes %}
@@ -107,15 +194,19 @@
                     <td>{{ route.Route_Description }}</td>
                     <td>{{ route.Region_Code }}</td>
                     <td>{{ route.Region_Description }}</td>
-                    <td>{{ route.CreateBy }}</td>
+                    <!--<td>{{ route.CreateBy }}</td>-->
                     <td>{{ route.HasClients }}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRouteModal" data-route-id="{{ route.Route_ID }}" data-route-description="{{ route.Route_Description }}" data-region-code="{{ route.Region_Code }}">
-                                                            <i class="fas fa-edit icon"></i> <!-- Icône Edit -->
-</button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteRouteModal" data-route-id="{{ route.Route_ID }}">
-                                    <i class="fas fa-trash-alt icon"></i> <!-- Icône Delete -->
-</button>
+                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editRoute" data-route-id="{{ route.Route_ID }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                        </a>
+                        <a href="{% url 'delete_client' route.Route_ID %}" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -123,16 +214,13 @@
         </table>
     </div>
 
-    <!-- Modals for Add/Edit/Delete Routes -->
     <!-- Add Route Modal -->
-    <div class="modal fade" id="addRouteModal" tabindex="-1" role="dialog" aria-labelledby="addRouteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="addRouteModal" tabindex="-1" aria-labelledby="addRouteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addRouteModalLabel">Add Route</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form method="post" action="{% url 'add_route' %}">
@@ -149,45 +237,48 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Add Route</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Route Modal -->
-    <div class="modal fade" id="editRouteModal" tabindex="-1" role="dialog" aria-labelledby="editRouteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editRouteModalLabel">Edit Route</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="{% url 'edit_route' 0 %}" id="editRouteForm">
-                        {% csrf_token %}
-                        <input type="hidden" id="edit_route_id" name="route_id">
-                        <div class="form-group">
-                            <label for="edit_route_description">Route Name:</label>
-                            <input type="text" id="edit_route_description" name="route_description" class="form-control" required>
+<!-- Edit Route Modal -->
+<div class="modal fade" id="editRoute" tabindex="-1" role="dialog" aria-labelledby="editRouteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRouteLabel">Edit Route</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="editRouteForm">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            {{ form.instance.client_code }}
                         </div>
-                        <div class="form-group">
-                            <label for="edit_region_description">Region Name:</label>
-                            <select id="edit_region_description" name="region_description" class="form-control" required>
-                                {% for region in regions %}
-                                    <option value="{{ region.Region_Code }}">{{ region.Region_Description }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                            {% if error_message %}
+                                <div class="alert alert-danger mt-3">{{ error_message }}</div>
+                            {% endif %}
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Delete Route Modal -->
     <div class="modal fade" id="deleteRouteModal" tabindex="-1" role="dialog" aria-labelledby="deleteRouteModalLabel" aria-hidden="true">
@@ -212,38 +303,65 @@
         </div>
     </div>
 
-    <script>
-        // Add Route Modal Reset Form
-        $('#addRouteModal').on('hidden.bs.modal', function() {
-            $(this).find('form')[0].reset();
-        });
 
-        // Edit Route Modal Fill Form
-        $('#editRouteModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var routeId = button.data('route-id');
-            var routeName = button.data('route-description');
-            var regionCode = button.data('region-code');
 
-            var modal = $(this);
-            modal.find('#edit_route_id').val(routeId);
-            modal.find('#edit_route_description').val(routeName);
-            modal.find('#edit_region_description').val(regionCode);
 
-            var action = "{% url 'edit_route' 0 %}".replace('0', routeId);
-            $('#editRouteForm').attr('action', action);
-        });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById('editRoute');
+            
+            modal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; 
+                var RouteId = button.getAttribute('data-route-id'); 
+                console.log(RouteId)
+                var form = modal.querySelector('#editRouteForm');
 
-        // Delete Route Modal Fill Form
-        $('#deleteRouteModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var routeId = button.data('route-id');
 
-            var modal = $(this);
-            modal.find('#delete_route_id').val(routeId);
+        if (RouteId) {
+            fetch(`/routes/${RouteId}/data/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Route data received:', data);
+                    if (form) {    
+                        const fields = {
+                                'Route_Description': 'input',
+                                'Route_Alt_Description': 'input',
+                                'Region_Code': 'input',
+                                
+                            };
+                            
+                            for (const [field, type] of Object.entries(fields)) {
+                                const element = form.querySelector(`${type}[name="${field}"]`);
+                                if (element) {
+                                    console.log(data[field])
+                                    element.value = data[field] || '';
+                                } else {
+                                    console.warn(`Field ${field} not found in the form.`);
+                                }
+                            }
+                        } else {
+                            console.error('Form not found in the modal.');
+                        }
+                })
+                .catch(error => console.error('Error fetching route data:', error));
+            
+            // Update the form action URL to include the route ID
+            var form = document.getElementById('editRouteForm');
+            form.action = `/routes/edit/${RouteId}/`;
+        } else {
+            console.error('Route ID not found.');
+        }
+    });
+});
 
-            var action = "{% url 'delete_route' 0 %}".replace('0', routeId);
-            $('#deleteRouteForm').attr('action', action);
-        });
-    </script>
+  
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
 </body>
+</html>
+

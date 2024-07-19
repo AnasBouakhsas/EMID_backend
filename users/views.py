@@ -10,10 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 import openpyxl
 from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
-from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
+from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
-
+from django.db.utils import DatabaseError
 
 import logging
 
@@ -724,6 +724,8 @@ def update_checkbox(request):
             return JsonResponse({'success': False, 'error': str(e)})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
 def get_regions():
     with connection.cursor() as cursor:
         cursor.execute("SELECT Region_Code, Region_Description FROM Regions")
@@ -732,7 +734,6 @@ def get_regions():
     return regions
 
 def routes(request):
-    current_user = request.user
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT r.Route_ID, r.Route_Description, r.Region_Code, rg.Region_Description
@@ -740,30 +741,33 @@ def routes(request):
             LEFT JOIN Regions rg ON r.Region_Code = rg.Region_Code
         """)
         routes_data = cursor.fetchall()
+
     routes_list = [{
         'Route_ID': row[0],
         'Route_Description': row[1],
         'Region_Code': row[2],
         'Region_Description': row[3],
-        #'CreateBy': current_user.username,
+        #'CreateBy': row[4],
         'HasClients': False
     } for row in routes_data]
-    regions = get_regions()
-    return render(request, 'routes/home.html', {'routes': routes_list, 'regions': regions})
+    form = RouteForm()
 
-@login_required
+    regions = get_regions()
+    return render(request, 'routes/home.html', {'routes': routes_list, 'regions': regions, 'form': form})
+
 def add_route(request):
     if request.method == 'POST':
         route_description = request.POST.get('route_description')
         region_code = request.POST.get('region_description')
-        create_by = request.user.username
 
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                INSERT INTO Routes (Route_Description, Region_Code, CreateBy)
-                VALUES (%s, %s, %s)
-            """, [route_description, region_code, create_by])
-
+        route = Routes(
+            Branch_Code = '',
+            Route_Description = route_description,
+            Route_Alt_Description = '',
+            Region_Code = region_code,
+            
+         )
+        route.save()
         messages.success(request, 'Route added successfully.')
         return redirect('routes')
 
@@ -771,7 +775,20 @@ def add_route(request):
     return render(request, 'routes/home.html', {'regions': regions})
 
 
-@login_required
+def edit_route(request, route_id):
+    route = get_object_or_404(Routes, Route_ID=route_id)
+    if request.method == "POST":
+        form = RouteForm(request.POST, instance=route)
+        if form.is_valid():
+            form.save()
+            return redirect('routes') 
+    else:
+        form = RouteForm(instance=route)
+    return render(request, 'routes/home.html', {'form': form, 'route': route})
+
+
+
+
 def delete_route(request, route_id):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -781,6 +798,20 @@ def delete_route(request, route_id):
 
     messages.success(request, 'Route deleted successfully.')
     return redirect('routes')
+
+def get_routes_data(request, route_id):
+    route= get_object_or_404(Routes, Route_ID=route_id)
+    data = {
+        'Branch_Code' :  route.Branch_Code,
+        'Route_Description' : route.Route_Description,
+        'Route_Alt_Description' : route.Route_Alt_Description,
+        'Region_Code': route.Region_Code
+
+    }
+     
+    return JsonResponse(data)
+
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -884,6 +915,8 @@ def assign_client_to_route(request):
         return JsonResponse({'success': True})
 
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
 @login_required
 def affectation_routes_users(request):
     if request.method == 'GET' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -1086,7 +1119,8 @@ def upload_excel(request):
 
         for row in sheet.iter_rows(min_row=3, values_only=True):
             client_code = row[0]
-            
+            route = get_object_or_404(Routes, pk=row[12])
+
             if Clients.objects.filter(Client_Code=client_code).exists():
                 messages.error(request, f"Client avec le code {client_code} existe déjà.")
             else:
@@ -1102,7 +1136,8 @@ def upload_excel(request):
                     Contact_Person=row[8],
                     Phone_Number=row[9],
                     Barcode=row[10],
-                    Client_Status_ID=row[11]
+                    Client_Status_ID=row[11],
+                    Route_ID=route
                 )
                 client.save()
                 

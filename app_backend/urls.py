@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib import admin
 from users import views
-from users.views import get_client_data, get_client_statut_data, home, users, list_users, routes, promotions, devices
+from users.views import get_client_data, get_client_statut_data, get_routes_data, home, users, list_users, routes, promotions, devices
 from users.views import( home, users, list_users, routes, promotions, devices, get_target,
     add_route, edit_route, delete_route, affectation_routes_users,
     load_devices, assign_user_to_route, assign_client_to_route,
@@ -27,6 +27,10 @@ urlpatterns = [
     path('routes/get-route-clients/', views.get_route_clients, name='get_route_clients'),
     path('routes/assign-client-to-route/', views.assign_client_to_route, name='assign_client_to_route'),
     path('routes/affectation-clients-routes/', views.affectation_clients_routes, name='affectation_clients_routes'),
+    path('routes/<int:route_id>/data/', get_routes_data, name='get_routes_data'), 
+    
+    
+    
     path('promotions/', promotions, name='promotions'),
     path('promotions/assign_promotions', assign_promotions, name='assign_promotions'),
     path('promotions/load_entities/', views.load_entities, name='load_entities'),
