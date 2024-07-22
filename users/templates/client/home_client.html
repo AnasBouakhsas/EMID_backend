@@ -141,9 +141,9 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_routes_users' %}">Affectation Routes-Users</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_clients_routes' %}">Affectation Routes-Clients</a></li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -201,10 +201,15 @@
         <div class="mt-4">
             <h2 class="text-center">Search results</h2>
 
-            <table class="table table-striped " >
+            <table  id="add-row" class="table table-striped " >
                 <thead  style="background-color:#2262c6;">
                     <tr>
-                        <th class="text-white">Client Code</th>
+                        <th class="text-white">Client Code  <button id="up-button"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+                          </svg></button>
+                          <button id="down-button"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+                          </svg></button></th>
                         <th class="text-white">Area Code</th>
                         <th class="text-white">Description</th>
                         <th class="text-white">Payment Term Code</th>
@@ -363,6 +368,50 @@
 
 
 <script>
+         document.addEventListener('DOMContentLoaded', function(e) {
+            var upButton = document.getElementById('up-button');
+            var downButton = document.getElementById('down-button');
+            var tableBody = document.querySelector('#add-row tbody');
+
+            // Function to sort table rows based on Client Code in ascending order
+            function sortTableAsc() {
+                var rows = Array.from(tableBody.querySelectorAll('tr'));
+                rows.sort(function(rowA, rowB) {
+                    var codeA = rowA.cells[0].textContent.trim();
+                    var codeB = rowB.cells[0].textContent.trim();
+                    return codeA.localeCompare(codeB, undefined, { numeric: true, sensitivity: 'base' });
+                });
+                rows.forEach(function(row) {
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Function to sort table rows based on Client Code in descending order
+            function sortTableDesc() {
+                var rows = Array.from(tableBody.querySelectorAll('tr'));
+                rows.sort(function(rowA, rowB) {
+                    var codeA = rowA.cells[0].textContent.trim();
+                    var codeB = rowB.cells[0].textContent.trim();
+                    return codeB.localeCompare(codeA, undefined, { numeric: true, sensitivity: 'base' });
+                });
+                rows.forEach(function(row) {
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Event listener for up button (ascending order)
+            upButton.addEventListener('click', function(e) {
+                sortTableAsc();
+            });
+
+            // Event listener for down button (descending order)
+            downButton.addEventListener('click', function(e) {
+                sortTableDesc();
+            });
+        });
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
             var modal = document.getElementById('editClient');
             

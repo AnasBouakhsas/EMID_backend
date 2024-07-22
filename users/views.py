@@ -878,8 +878,8 @@ def affectation_clients_routes(request):
             if not route_id:
                 return JsonResponse({'error': 'No route ID provided'}, status=400)
 
-            assigned_clients = Clients.objects.filter(route_id=route_id).values('Client_Code', 'Client_Description')
-            available_clients = Clients.objects.filter(route_id__isnull=True).values('Client_Code', 'Client_Description')
+            assigned_clients = Clients.objects.filter(Route_ID=route_id).values('Client_Code', 'Client_Description')
+            available_clients = Clients.objects.filter(Route_ID=1).values('Client_Code', 'Client_Description')
             return JsonResponse({'assigned_clients': list(assigned_clients), 'available_clients': list(available_clients)})
 
     return render(request, 'routes/affectation_clients_routes.html')
@@ -890,14 +890,15 @@ def get_routes(request):
 
 def get_route_clients(request):
     route_id = request.GET.get('route_id')
-    if route_id:
-        assigned_clients = Clients.objects.filter(route_id=route_id).values('Client_Code', 'Client_Description')
-        available_clients = Clients.objects.filter(route_id__isnull=True).values('Client_Code', 'Client_Description')
+    if route_id and route_id != '1':
+        assigned_clients = Clients.objects.filter(Route_ID=route_id).values('Client_Code', 'Client_Description')
+        available_clients = Clients.objects.filter(Route_ID=1).values('Client_Code', 'Client_Description')
     else:
         assigned_clients = []
-        available_clients = Clients.objects.filter(route_id__isnull=True).values('Client_Code', 'Client_Description')
+        available_clients = Clients.objects.filter(Route_ID=1).values('Client_Code', 'Client_Description')
 
     return JsonResponse({'assigned_clients': list(assigned_clients), 'available_clients': list(available_clients)})
+
 
 def assign_client_to_route(request):
     if request.method == 'POST':
@@ -905,18 +906,30 @@ def assign_client_to_route(request):
         route_id = request.POST.get('route_id')
         action = request.POST.get('action', 'assign')
 
-        client = Clients.objects.get(pk=client_code)
-        if action == 'assign':
-            client.route_id = route_id
-        elif action == 'remove':
-            client.route_id = None
+        try:
+            # Récupérer le client
+            client = Clients.objects.get(Client_Code=client_code)
+            
+            if action == 'assign':
+                # Récupérer l'instance de la route
+                route_instance = Routes.objects.get(Route_ID=route_id)
+                client.Route_ID = route_instance
+            elif action == 'remove':
+                # Optionnel : Vous pouvez définir Route_ID à None si vous utilisez une relation Nullable
+                client.Route_ID = Routes.objects.get(Route_ID=1)  # Route_ID=1 pour aucune route
 
-        client.save()
-        return JsonResponse({'success': True})
+            client.save()
+            return JsonResponse({'success': True})
+        except Clients.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Client not found'})
+        except Routes.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Route not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
-
+#affct_
 @login_required
 def affectation_routes_users(request):
     if request.method == 'GET' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -962,6 +975,9 @@ def assign_user_to_route(request):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+
+
+#device
 def devices(request):
     username = request.GET.get('username', '')
     device_status = request.GET.get('device_status', '')
