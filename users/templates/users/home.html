@@ -1,303 +1,372 @@
-{% include 'users/navbar.html' %}
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+ 
+ <style>
+     .navbar {
+         background-color: #f8f9fa;
+     }
+
+     .navbar-brand {
+         font-weight: bold;
+     }
+
+     .navbar-nav .nav-link {
+         color: #007bff;
+     }
+
+    
+
+     .btn-primary {
+         background-color: #81bae7;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         color: white;
+         cursor: pointer;
+         align-self: center;
+     }
+
+     .btn-primary:hover {
+         background-color: #0056b3;
+     }
+
+     .form-inline .form-control {
+         width: auto;
+     }
+     .auto-width-select {
+        width: auto;
+        min-width: 150px; 
+        max-width: 100%;
+        white-space: nowrap;
+     }
+     h1, h2 {
+         color: #0056b3;
+         font-family: 'Poppins', sans-serif;
+         font-weight: 600;
+         font-size: 200%;
+         text-align: center;
+        
+     }
+
+     
+
+     .btn-sm {
+         padding: 5px 10px;
+     }
+
+     .btn-danger {
+         background-color: #dc3545;
+         border-color: #dc3545;
+     }
+
+     .btn-danger:hover {
+         background-color: #c82333;
+         border-color: #bd2130;
+     }
+
+     .btn-warning {
+         background-color: #ffc107;
+         border-color: #ffc107;
+         color: #212529;
+     }
+
+     .btn-warning:hover {
+         background-color: #e0a800;
+         border-color: #d39e00;
+         color: #212529;
+     }
+
+     .mt-4 {
+         margin-top: 1.5rem;
+     }
+
+     .float-right {
+         float: right;
+     }
+     .table{
+        --bs-table-bg:none;
+     }
+     th {
+        background-color: #2262c6;
+        color: #fff;
+        
+    }
+ </style>
+</head>
+
 
 <body>
-    <form method="get" action="{% url 'users' %}">
-    <input type="text" name="user_code" placeholder="User Code" value="{{ request.GET.user_code }}">
-    <input type="text" name="user_name" placeholder="User Name" value="{{ request.GET.user_name }}">
-    <input type="text" name="phone_number" placeholder="Phone Number" value="{{ request.GET.phone_number }}">
-    <select name="type_user">
-        <option value="">Select User Type</option>
-        <option value="HHT User" {% if request.GET.type_user == "HHT User" %}selected{% endif %}>HHT User</option>
-        <option value="Other User" {% if request.GET.type_user == "Other User" %}selected{% endif %}>Other User</option>
-    </select>
-    <button type="submit">Filter</button>
-</form>
 
-    <div style="height: 200px; overflow-y: scroll;">
-        <h1>User List</h1>
-        <table id="users-table">
-            <thead>
-                <tr>
-                    <th>User Code</th>
-                    <th>User Name</th>
-                    <th>Phone Number</th>
-                    <th>Grouping</th>
-                    <th>Is Blocked</th>
-                    <th>Login Name</th>
-                    <th>Area Code</th>
-                    <th>City ID</th>
-                    <th>Route Code</th>
-                    <th>Parent Code</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr class="user-row" data-user-code="{{ user.UserCode }}">
-                    <td>{{ user.UserCode }}</td>
-                    <td>{{ user.UserName }}</td>
-                    <td>{{ user.PhoneNumber }}</td>
-                    <td>{{ user.Grouping }}</td>
-                    <td>{{ user.IsBlocked }}</td>
-                    <td>{{ user.LoginName }}</td>
-                    <td>{{ user.AreaCode }}</td>
-                    <td>{{ user.CityID }}</td>
-                    <td>{{ user.RouteCode }}</td>
-                    <td>{{ user.ParentCode }}</td>
-                    <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUserModal"
-                            data-user-code="{{ user.UserCode }}"
-                            data-user-name="{{ user.UserName }}"
-                            data-phone-number="{{ user.PhoneNumber }}"
-                            data-grouping="{{ user.Grouping }}"
-                            data-is-blocked="{{ user.IsBlocked }}"
-                            data-login-name="{{ user.LoginName }}"
-                            data-area-code="{{ user.AreaCode }}"
-                            data-city-id="{{ user.CityID }}"
-                            data-route-code="{{ user.RouteCode }}"
-                            data-parent-code="{{ user.ParentCode }}">Edit</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'users' %}">Users</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_target' %}">Client target</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'devices' %}">Devices</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Routes</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_routes_users' %}">Affectation Routes-Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_clients_routes' %}">Affectation Routes-Clients</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'promotions' %}">Promotion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+            </li>
+        </ul>
     </div>
+</nav>
 
-    <!-- Edit User Modal -->
-<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<h1 class="mb-4">List Users</h1>
+
+
+<a href="#" data-bs-toggle="modal" data-bs-target="#uploadUser" class="btn btn-primary">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+    </svg>    Add User
+
+</a>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-center align-items-center mb-4">
+        <form method="post" action="{% url 'search_user' %}" class="d-flex">
+            {% csrf_token %}
+            <div class="form-group me-2" >
+                <select class="form-select auto-width-select" name="search_type">
+                    <option value="UserCode">User Code</option>
+                    <option value="UserName">Name</option>
+                    <option value="PhoneNumber">PhoneNumber</option>
+                    <option value="CityID">CityID</option>
+                </select>
+            </div>
+            <input type="text" class="form-control me-2" name="query" placeholder="Search user">
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+    <hr class="my-4">
+
+
+
+<div class="container-fluid">
+    {% if users %}
+        <div class="mt-4">
+            <h2 class="text-center">User List</h2>
+            <table class="table table-striped">
+                <thead style="background-color:#2262c6;">
+                    <tr>
+                        <th class="text-white">UserCode</th>
+                        <th class="text-white">UserName</th>
+                        <th class="text-white">PhoneNumber</th>
+                        <th class="text-white">Grouping</th>
+                        <th class="text-white">IsBlocked</th>
+                        <th class="text-white">LoginName</th>
+                        <th class="text-white">AreaCode</th>
+                        <th class="text-white">CityID</th>
+                        <th class="text-white">RouteCode</th>
+                        <th class="text-white">ParentCode</th>
+                        <th class="text-white">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.UserCode }}</td>
+                        <td>{{ user.UserName }}</td>
+                        <td>{{ user.PhoneNumber }}</td>
+                        <td>{{ user.Grouping }}</td>
+                        <td>{{ user.IsBlocked }}</td>
+                        <td>{{ user.LoginName }}</td>
+                        <td>{{ user.AreaCode }}</td>
+                        <td>{{ user.CityID }}</td>
+                        <td>{{ user.RouteCode }}</td>
+                        <td>{{ user.ParentCode }}</td>
+                        <td>
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUser" data-user-id="{{ user.UserCode }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                </svg>
+                            </a>
+                            <a href="{% url 'delete_user' user.UserCode %}" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="mt-4">
+            <p>No users found.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal pour ajouter un utilisateur -->
+<div class="modal fade" id="uploadUser" tabindex="-1" aria-labelledby="uploadUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="uploadUserLabel">Add User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="post" id="editUserForm">
-                    {% csrf_token %}
-                    <input type="hidden" id="edit_user_code" name="user_code">
-                    <!-- Add hidden method field for PUT request -->
-                    <input type="hidden" name="_method" value="put">
-                    <div class="form-group">
-                        <label for="edit_user_name">User Name:</label>
-                        <input type="text" id="edit_user_name" name="user_name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_phone_number">Phone Number:</label>
-                        <input type="text" id="edit_phone_number" name="phone_number" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_grouping">Grouping:</label>
-                        <input type="text" id="edit_grouping" name="grouping" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_is_blocked">Is Blocked:</label>
-                        <input type="text" id="edit_is_blocked" name="is_blocked" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_login_name">Login Name:</label>
-                        <input type="text" id="edit_login_name" name="login_name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_area_code">Area Code:</label>
-                        <input type="text" id="edit_area_code" name="area_code" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_city_id">City ID:</label>
-                        <input type="text" id="edit_city_id" name="city_id" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_route_code">Route Code:</label>
-                        <input type="text" id="edit_route_code" name="route_code" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_parent_code">Parent Code:</label>
-                        <input type="text" id="edit_parent_code" name="parent_code" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
-            </div>
+            <form action="{% url 'add_user' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-
-<script>
-    // Set form action URL and pre-fill form with user data
-    $('#editUserModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var userCode = button.data('user-code');
-        var userName = button.data('user-name');
-        var phoneNumber = button.data('phone-number');
-        var grouping = button.data('grouping');
-        var isBlocked = button.data('is-blocked');
-        var loginName = button.data('login-name');
-        var areaCode = button.data('area-code');
-        var cityId = button.data('city-id');
-        var routeCode = button.data('route-code');
-        var parentCode = button.data('parent-code');
-
-        var modal = $(this);
-        modal.find('#edit_user_code').val(userCode);
-        modal.find('#edit_user_name').val(userName);
-        modal.find('#edit_phone_number').val(phoneNumber);
-        modal.find('#edit_grouping').val(grouping);
-        modal.find('#edit_is_blocked').val(isBlocked);
-        modal.find('#edit_login_name').val(loginName);
-        modal.find('#edit_area_code').val(areaCode);
-        modal.find('#edit_city_id').val(cityId);
-        modal.find('#edit_route_code').val(routeCode);
-        modal.find('#edit_parent_code').val(parentCode);
-
-        // Set form action dynamically
-        var actionUrl = "{% url 'edit_user' 0 %}".replace('0', userCode);
-        $('#editUserForm').attr('action', actionUrl);
-    });
-
-    // Function to handle fetching parameters for a specific user
-    function fetchParameters(userCode) {
-        fetch(`/user_parameters/${userCode}/`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    console.error('Error:', data.error);
-                    return;
-                }
-                updateParametersTable(data);
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-    }
-
-    // Function to update the parameters table with fetched data
-    function updateParametersTable(parameters) {
-        const tableBody = document.querySelector('#parameters-table tbody');
-        tableBody.innerHTML = '';
-        parameters.forEach(param => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${param.ParameterName}</td>
-                <td>${param.ParameterType}</td>
-                <td>${param.DefaultValue}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-
-    // Add event listener to each user row to fetch parameters on click
-    document.querySelectorAll('.user-row').forEach(row => {
-        row.addEventListener('click', function () {
-            const userCode = this.getAttribute('data-user-code');
-            fetchParameters(userCode);
-        });
-    });
-</script>
-
-     <div style="height: 300px; overflow-y: scroll;">
-        <h2>Parameters List</h2>
-        <table id="parameters-table">
-            <thead>
-                <tr>
-                    <th>Parameter Name</th>
-                    <th>Parameter Type</th>
-                    <th>Default Value</th>
-                </tr>
-                <tr>
-                    <th>
-                        <input type="text" id="search-parameter-name" onkeyup="searchParameter('parameter-name', 0)" placeholder="Search Parameter Name">
-                    </th>
-                    <th>
-                        <input type="text" id="search-parameter-type" onkeyup="searchParameter('parameter-type', 1)" placeholder="Search Parameter Type">
-                    </th>
-                    <th>
-                        <input type="text" id="search-default-value" onkeyup="searchParameter('default-value', 2)" placeholder="Search Default Value">
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for parameter in parameters %}
-                <tr>
-                    <td>{{ parameter.ParameterName }}</td>
-                    <td>{{ parameter.ParameterType }}</td>
-                    <td>{{ parameter.DefaultValue }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<!-- Modal pour éditer un utilisateur -->
+<div class="modal fade" id="editUser" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="userForm" method="post">
+            {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ form.instance.UserCode }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                        {% if error_message %}
+                            <div class="alert alert-danger mt-3">{{ error_message }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+      </div>
     </div>
-</body>
+  </div>
 
 <script>
-    // JavaScript for handling user row click and fetching parameters
-    document.querySelectorAll('.user-row').forEach(row => {
-        row.addEventListener('click', function () {
-            const userCode = this.getAttribute('data-user-code');
-            console.log('Fetching parameters for user code:', userCode); // Add this line
-
-            fetchParameters(userCode);
-        });
-    });
-
-    function fetchParameters(userCode) {
-        fetch(`/user_parameters/${userCode}/`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
+    document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById('editUser');
+    
+    modal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; 
+        var userId = button.getAttribute('data-user-id'); 
+        console.log(userId);
+        var form = modal.querySelector('#userForm');
+        
+        if (userId) {
+            fetch(`/users/${userId}/data/`)
+            .then(response => response.json())
             .then(data => {
-                if (data.error) {
-                    console.error('Error:', data.error);
-                    return;
+                console.log('User data received:', data);
+                if (form) {
+                    const fields = {
+                        'UserCode': 'input',
+                        'UserName': 'input',
+                        'PhoneNumber': 'input',
+                        'Grouping': 'input',
+                        'IsBlocked': 'input[type="checkbox"]',
+                        'LoginName': 'input',
+                        'AreaCode': 'input',
+                        'CityID': 'input',
+                        'RouteCode': 'input',
+                        'ParentCode': 'input',
+                    };
+                    
+                    for (const [field, selector] of Object.entries(fields)) {
+                        const element = form.querySelector(`${selector}[name="${field}"]`);
+                        if (element) {
+                            if (selector === 'input[type="checkbox"]') {
+                                element.checked = data[field];  // Set checkbox state
+                            } else {
+                                element.value = data[field] || '';
+                            }
+
+                        } else {
+                            console.warn(`Field ${field} not found in the form.`);
+                        }
+                    }
+                } else {
+                    console.error('Form not found in the modal.');
                 }
-                updateParametersTable(data);
             })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-    }
-
-    function updateParametersTable(parameters) {
-        const tableBody = document.querySelector('#parameters-table tbody');
-        tableBody.innerHTML = '';
-        parameters.forEach(param => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${param.ParameterName}</td>
-                <td>${param.ParameterType}</td>
-                <td>${param.DefaultValue}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-</script>
-
-
-<!-- Inside the <head> tag -->
-<script type="text/javascript">
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
+            .catch(error => console.error('Error fetching user data:', error));
+        
+        form.action = `/users/${userId}/edit/`;
+        } else {
+            console.error('User ID not found.');
         }
-        return cookieValue;
-    }
+    });
+});
 
-    const csrftoken = getCookie('csrftoken');
 </script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

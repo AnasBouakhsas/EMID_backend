@@ -7,6 +7,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = InternalUser
         fields = [
+            'UserCode',
             'UserName',
             'PhoneNumber',
             'Grouping',
@@ -17,6 +18,9 @@ class UserForm(forms.ModelForm):
             'RouteCode',
             'ParentCode'
         ]
+        widgets = {
+            'IsBlocked': forms.CheckboxInput(),
+        }
 
 class AssignPromotionSearchForm(forms.Form):
     promotion_type = forms.ChoiceField(

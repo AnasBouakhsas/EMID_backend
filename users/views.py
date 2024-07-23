@@ -14,6 +14,8 @@ from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewProm
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from django.db.utils import DatabaseError
+from django.db.models import Q
+
 
 import logging
 
@@ -40,7 +42,7 @@ def edit_route(request, route_id):
 
 
 
-@login_required
+'''@login_required
 def edit_user(request, user_code):
     if request.method == 'POST':
         # Get the data from the form
@@ -117,21 +119,13 @@ def edit_user(request, user_code):
 
 
 def users(request):
-    # Fetch parameters data
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM Parameters")
-        parameters_data = cursor.fetchall()
-
-    parameters_list = [{'ParameterName': row[1], 'ParameterType': row[3], 'DefaultValue': row[2]} for row in
-                       parameters_data]
-
     # Extract query parameters from the request
     user_code = request.GET.get('user_code', '').strip()
     user_name = request.GET.get('user_name', '').strip()
     phone_number = request.GET.get('phone_number', '').strip()
     type_user = request.GET.get('type_user', '').strip()
 
-    # Initialize base query and parameters list
+    # Initialize base query
     query = """
         SELECT UserCode, UserName, PhoneNumber, ug.Grouping, IsBlocked,
                LoginName, AreaCode, CityID, RouteCode, ParentCode
@@ -140,28 +134,22 @@ def users(request):
         WHERE 1=1
     """
 
-    params = []
-
     # Add conditions to the query based on the provided parameters
     if user_code:
-        query += " AND UserCode LIKE %s"
-        params.append(f"%{user_code}%")
+        query += f" AND UserCode LIKE '%{user_code}%'"
 
     if user_name:
-        query += " AND UserName LIKE %s"
-        params.append(f"%{user_name}%")
+        query += f" AND UserName LIKE '%{user_name}%'"
 
     if phone_number:
-        query += " AND PhoneNumber LIKE %s"
-        params.append(f"%{phone_number}%")
+        query += f" AND PhoneNumber LIKE '%{phone_number}%'"
 
     if type_user:
-        query += " AND Grouping = %s"
-        params.append(type_user)
+        query += f" AND Grouping = '{type_user}'"
 
-    # Execute the query with the accumulated parameters
+    # Execute the query
     with connection.cursor() as cursor:
-        cursor.execute(query, params)
+        cursor.execute(query)
         users_data = cursor.fetchall()
 
     # Prepare the users list
@@ -178,8 +166,8 @@ def users(request):
         'ParentCode': row[9],
     } for row in users_data]
 
-    # Render the template with the filtered users and parameters
-    return render(request, 'users/home.html', {'users': users_list, 'parameters': parameters_list})
+    # Render the template with the filtered users
+    return render(request, 'users/home.html', {'users': users_list})
 
 
 
@@ -262,8 +250,8 @@ def user_parameters(request, user_code):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-# View to save user details
-@csrf_exempt
+# View to save user details'''
+'''@csrf_exempt
 def save_user(request):
     if request.method == 'POST':
         user_code = request.POST.get('UserCode')
@@ -295,6 +283,45 @@ def save_user(request):
         return JsonResponse({'status': 'success', 'created': created})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+
+
+def list_users(request):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT UserCode, UserName, PhoneNumber, Grouping, IsBlocked,
+                   LoginName, AreaCode, CityID, RouteCode, ParentCode
+            FROM users
+        """)
+        users_data = cursor.fetchall()
+
+    users_list = []
+    for row in users_data:
+        user = {
+            'UserCode': row[0],
+            'UserName': row[1],
+            'PhoneNumber': row[2],
+            'Grouping': row[3],
+            'IsBlocked': row[4],
+            'LoginName': row[5],
+            'AreaCode': row[6],
+            'CityID': row[7],
+            'RouteCode': row[8],
+            'ParentCode': row[9],
+        }
+        users_list.append(user)
+
+    return render(request, 'list_users.html', {'users': users_list})
+
+def fetch_users():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT UserCode, UserName FROM Users")
+        rows = cursor.fetchall()
+    users = [{'UserCode': row[0], 'UserName': row[1]} for row in rows]
+    return users
+def get_users(request):
+    users = InternalUser.objects.all().values('UserCode', 'UserName')
+    return JsonResponse({'users': list(users)})
+'''
 
 
 # User login view for customers (authentication)
@@ -828,43 +855,6 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('home')
-
-def list_users(request):
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT UserCode, UserName, PhoneNumber, Grouping, IsBlocked,
-                   LoginName, AreaCode, CityID, RouteCode, ParentCode
-            FROM users
-        """)
-        users_data = cursor.fetchall()
-
-    users_list = []
-    for row in users_data:
-        user = {
-            'UserCode': row[0],
-            'UserName': row[1],
-            'PhoneNumber': row[2],
-            'Grouping': row[3],
-            'IsBlocked': row[4],
-            'LoginName': row[5],
-            'AreaCode': row[6],
-            'CityID': row[7],
-            'RouteCode': row[8],
-            'ParentCode': row[9],
-        }
-        users_list.append(user)
-
-    return render(request, 'list_users.html', {'users': users_list})
-
-def fetch_users():
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT UserCode, UserName FROM Users")
-        rows = cursor.fetchall()
-    users = [{'UserCode': row[0], 'UserName': row[1]} for row in rows]
-    return users
-def get_users(request):
-    users = InternalUser.objects.all().values('UserCode', 'UserName')
-    return JsonResponse({'users': list(users)})
 
 
 def affectation_clients_routes(request):
@@ -1431,3 +1421,88 @@ def delete_channel(request, channel_code):
     client = get_object_or_404(Channels, channel_code=channel_code)
     client.delete()
     return redirect('home_channel')  
+
+
+
+
+
+
+
+#users
+
+
+def users(request):
+    users = InternalUser.objects.all()
+    form = UserForm()
+    return render(request, 'users/home.html', {'users': users, 'form': form})
+
+def add_user(request):
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('users')
+    else:
+        form = UserForm()
+    return render(request, 'users/list_users.html', {'form': form})
+
+
+
+def get_user_data(request, UserCode):
+    user = get_object_or_404(InternalUser, UserCode=UserCode)
+    data = {
+        'UserCode': user.UserCode,
+        'UserName': user.UserName,
+        'PhoneNumber': user.PhoneNumber,
+        'Grouping': user.Grouping,
+        'IsBlocked': user.IsBlocked,
+        'LoginName': user.LoginName,
+        'AreaCode': user.AreaCode,
+        'CityID': user.CityID,
+        'RouteCode': user.RouteCode,
+        'ParentCode': user.ParentCode
+    }
+
+    return JsonResponse(data)
+
+
+
+
+
+
+def edit_user(request, UserCode):
+    user = get_object_or_404(InternalUser, UserCode=UserCode)
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            print(user.IsBlocked)  
+            return redirect('users')
+    else:
+        form = UserForm(instance=user)
+    
+    return render(request, 'users/home.html', {'form': form, 'user': user})
+
+def delete_user(request, UserCode):
+    user = get_object_or_404(InternalUser, UserCode=UserCode)
+    user.delete()
+    return redirect('users') 
+
+def search_user(request):
+    users = None
+    query = ''
+    if request.method == 'POST':
+        query = request.POST.get('query', '')
+        search_type = request.POST.get('search_type', 'UserCode')
+        if search_type == 'UserCode':
+            users = InternalUser.objects.filter(UserCode__icontains=query)
+        elif search_type == 'UserName':
+            users = InternalUser.objects.filter(UserName__icontains=query)
+        elif search_type == 'PhoneNumber':
+            users = InternalUser.objects.filter(PhoneNumber=query)
+        elif search_type == 'CityID':
+            users = InternalUser.objects.filter(CityID=query)
+        else:
+            users = InternalUser.objects.all()
+    form = UserForm()
+    return render(request, 'users/home.html', {'users': users, 'form': form, 'query': query})
