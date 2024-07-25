@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tagets</title>
+    <title>User Groups</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -164,39 +164,33 @@
     </div>
 </nav>
 
-<div class="container-fluid">
-    <form method="GET" action="" class="mb-4">
-    </form>
 
-    <h1>List of Clients Target</h1>
+<h1>Groups List</h1>
+
+<div class="container">
+    <form method="GET" action="" class="mb-4"></form>
+
     <table class="table table-striped">
-        <thead>
+        <thead style="background-color:#2262c6;">
             <tr>
-                <th>Code Client</th>
-                <th>Month</th>
-                <th>Years</th>
-                <th>Targed Achieved</th>
-                <th>Target Value</th>
-                <th>Actions</th>
+                <th class="text-white">Code Groupe</th>
+                <th class="text-white">Description</th>
+                <th class="text-white">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for client in clients %}
+            {% for groupe in groupes %}
             <tr>
-                <td>{{ client.Client_Code }}</td>
-                <td>{{ client.Month }}</td>
-                <td>{{ client.years }}</td>
-                <td>{{ client.Targed_Achieved }}</td>
-                <td>{{ client.Target_value }}</td>
-                
+                <td>{{ groupe.Code_groupe }}</td>
+                <td>{{ groupe.Groupe_description }}</td>
                 <td>
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editTarget" data-client-id="{{ client.Client_Code }}">
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editGroupeModal" data-groupe-id="{{ groupe.Code_groupe }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg>
                     </a>
-                    <a href="{% url 'delete_target' client.Client_Code %}" class="btn btn-danger">
+                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGroupeModal" data-groupe-id="{{ groupe.Code_groupe }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -207,95 +201,111 @@
             {% endfor %}
         </tbody>
     </table>
-    
-    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTargetModal">Add</a>
-    <a href="{% url 'home' %}" class="btn btn-primary">Return to homepage</a>
+    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupeModal">Ajouter un Groupe</a>
+    <a href="{% url 'home' %}" class="btn btn-primary">Retour à la page d'accueil</a>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="addTargetModal" tabindex="-1" aria-labelledby="addTargetModalLabel" aria-hidden="true">
+<!-- Modal pour ajouter un groupe -->
+<div class="modal fade" id="addGroupeModal" tabindex="-1" aria-labelledby="addGroupeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addTargetModalLabel">Add Client Target</h5>
+                <h5 class="modal-title" id="addGroupeModalLabel">Ajouter un Groupe</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{% url 'client_target' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="modal-body">
-                    
-
-                    {% if error_message %}
-                        <div class="alert alert-danger mt-3">{{ error_message }}</div>
-                    {% endif %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-                     
-<!-- Modal -->
-<div class="modal fade" id="editTarget" tabindex="-1" aria-labelledby="editTargetLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="editTargetLabel">Edit Target</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="TargetForm" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
             <div class="modal-body">
-                {{ form.as_p }}
-                {% if error_message %}
-                    <div class="alert alert-danger mt-3">{{ error_message }}</div>
-                {% endif %}
+                <form method="post" action="{% url 'add_groupe' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_Code_groupe" class="form-label">Code Groupe</label>
+                        <input type="text" name="Code_groupe" class="form-control" id="id_Code_groupe" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_Groupe_description" class="form-label">Description</label>
+                        <input type="text" name="Groupe_description" class="form-control" id="id_Groupe_description" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<!-- Modal pour éditer un groupe -->
+<div class="modal fade" id="editGroupeModal" tabindex="-1" aria-labelledby="editGroupeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editGroupeModalLabel">Éditer un Groupe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editGroupeForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="editGroupeId">
+                    <div class="mb-3">
+                        <label for="edit_Code_groupe" class="form-label">Code Groupe</label>
+                        <input type="text" name="Code_groupe" class="form-control" id="edit_Code_groupe" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_Groupe_description" class="form-label">Description</label>
+                        <input type="text" name="Groupe_description" class="form-control" id="edit_Groupe_description" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour supprimer un groupe -->
+<div class="modal fade" id="deleteGroupeModal" tabindex="-1" aria-labelledby="deleteGroupeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteGroupeModalLabel">Delete a Group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this group? This action is irreversible.</p>
+                <form id="deleteGroupeForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="deleteGroupeId">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <script>
+    var editModal = document.getElementById('editGroupeModal'); 
     document.addEventListener('DOMContentLoaded', function () {
-        var modal = document.getElementById('editTarget');
-        
-        modal.addEventListener('show.bs.modal', function (event) {
+        editModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget; 
-            var clientcode = button.getAttribute('data-client-id'); 
-            console.log(clientcode)
-            var form = modal.querySelector('#TargetForm');
-            
-            
-            if (clientcode) {
-             
-                fetch(`/client_target/${clientcode}/data/`)
+            var groupeId = button.getAttribute('data-groupe-id'); 
+            console.log(groupeId);
+            var form = editModal.querySelector('#editGroupeForm'); 
+
+            if (groupeId) {
+                fetch(`/groupes/${groupeId}/data/`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Client data received:', data);
+                    console.log('Groupe data received:', data);
+
                     if (form) {
-                        
+                    
                         const fields = {
-                            'Client_Code': 'input',
-                            'Month': 'input',
-                            'years': 'input',
-                            'Targed_Achieved': 'input',
-                            'Target_value': 'input',
+                            'Code_groupe': 'input',
+                            'Groupe_description': 'input',
                         };
-                        
+                    
                         for (const [field, type] of Object.entries(fields)) {
                             const element = form.querySelector(`${type}[name="${field}"]`);
                             if (element) {
-                                console.log(data[field])
+                                console.log(data[field]);
                                 element.value = data[field] || '';
                             } else {
                                 console.warn(`Field ${field} not found in the form.`);
@@ -305,23 +315,30 @@
                         console.error('Form not found in the modal.');
                     }
                 })
-                .catch(error => console.error('Erreur lors de la récupération des données du client :', error));
-            
-            
-            form.action = `/client_target/${clientcode}/edit/`;
+                .catch(error => console.error('Error fetching groupe data:', error));
+
+                form.action = `/groupes/${groupeId}/edit/`;
             } else {
-                console.error('Client ID not found.');
+                console.error('Groupe ID not found.');
             }
         });
     });
-  
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteGroupeModal = document.getElementById('deleteGroupeModal');
+        deleteGroupeModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var groupeId = button.getAttribute('data-groupe-id');
+            document.getElementById('deleteGroupeId').value = groupeId;
+            var form = document.getElementById('deleteGroupeForm');
+            form.action = `/groupes/${groupeId}/delete/`; 
+        });
+    });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

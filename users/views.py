@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 import openpyxl
-from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts
-from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, client_discountsForm, client_statutForm, clientForm
+from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts, UserGroupe
+from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, UserGroupeForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from django.db.utils import DatabaseError
@@ -317,11 +317,12 @@ def fetch_users():
         cursor.execute("SELECT UserCode, UserName FROM Users")
         rows = cursor.fetchall()
     users = [{'UserCode': row[0], 'UserName': row[1]} for row in rows]
-    return users
+    return users'''
+
 def get_users(request):
-    users = InternalUser.objects.all().values('UserCode', 'UserName')
+    users = InternalUser.objects.all().values('UserCode', 'UserName', 'CityID')
     return JsonResponse({'users': list(users)})
-'''
+
 
 
 # User login view for customers (authentication)
@@ -763,7 +764,7 @@ def get_regions():
 def routes(request):
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT r.Route_ID, r.Route_Description, r.Region_Code, rg.Region_Description
+            SELECT r.Route_ID, r.Route_Description, r.Region_Code, rg.Region_Description, r.RVSCode, r.RVSDescription
             FROM Routes r
             LEFT JOIN Regions rg ON r.Region_Code = rg.Region_Code
         """)
@@ -775,7 +776,9 @@ def routes(request):
         'Region_Code': row[2],
         'Region_Description': row[3],
         #'CreateBy': row[4],
-        'HasClients': False
+        'HasClients': False,
+        'RVSCode': row[4],
+        'RVSDescription': row[5]
     } for row in routes_data]
     form = RouteForm()
 
@@ -813,18 +816,13 @@ def edit_route(request, route_id):
         form = RouteForm(instance=route)
     return render(request, 'routes/home.html', {'form': form, 'route': route})
 
-
-
-
 def delete_route(request, route_id):
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            DELETE FROM Routes
-            WHERE Route_ID = %s
-        """, [route_id])
+    route = get_object_or_404(Routes, Route_ID=route_id)
+    if request.method == 'POST':
+        route.delete()
+        return redirect('routes')
+    return render(request, 'routes/home.html', {'route': route})
 
-    messages.success(request, 'Route deleted successfully.')
-    return redirect('routes')
 
 def get_routes_data(request, route_id):
     route= get_object_or_404(Routes, Route_ID=route_id)
@@ -890,6 +888,10 @@ def get_route_clients(request):
     return JsonResponse({'assigned_clients': list(assigned_clients), 'available_clients': list(available_clients)})
 
 
+
+
+##################################
+
 def assign_client_to_route(request):
     if request.method == 'POST':
         client_code = request.POST.get('client_code')
@@ -920,12 +922,13 @@ def assign_client_to_route(request):
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
 #affct_
-@login_required
 def affectation_routes_users(request):
+    
     if request.method == 'GET' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        
         action = request.GET.get('action')
         if action == 'get_users':
-            users = InternalUser.objects.all().values('UserCode', 'UserName')
+            users = InternalUser.objects.all().values('UserCode', 'UserName', 'CityID')
             return JsonResponse(list(users), safe=False)
         elif action == 'get_user_routes':
             user_code = request.GET.get('user_code')
@@ -933,17 +936,19 @@ def affectation_routes_users(request):
                 return JsonResponse({'error': 'No user code provided'}, status=400)
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT Route_ID, Route_Description FROM Routes WHERE UserCode IS NULL")
+                cursor.execute("SELECT Route_ID, Route_Description FROM Routes WHERE RVSCode = '' ")
                 unlinked_routes = cursor.fetchall()
 
-                cursor.execute("SELECT Route_ID, Route_Description FROM Routes WHERE UserCode = %s", [user_code])
+                cursor.execute("SELECT Route_ID, Route_Description FROM Routes WHERE RVSCode = %s", [user_code])
                 linked_routes = cursor.fetchall()
 
             unlinked_routes = [{'Route_ID': row[0], 'Route_Description': row[1]} for row in unlinked_routes]
             linked_routes = [{'Route_ID': row[0], 'Route_Description': row[1]} for row in linked_routes]
-            return JsonResponse({'unlinked_routes': unlinked_routes, 'linked_routes': linked_routes})
 
-    users = InternalUser.objects.all().values('UserCode', 'UserName')
+            return JsonResponse({'unlinked_routes': unlinked_routes, 'linked_routes': linked_routes})
+        
+
+    users = InternalUser.objects.all().values('UserCode', 'UserName', 'CityID')
     return render(request, 'routes/affectation_routes_users.html', {'users': users})
 
 @csrf_exempt
@@ -952,16 +957,16 @@ def assign_user_to_route(request):
         route_id = request.POST.get('route_id')
         user_code = request.POST.get('user_code')
         action = request.POST.get('action')
-
         if not route_id or not user_code:
             return JsonResponse({'success': False, 'error': 'Invalid data'})
-
+                    
         with connection.cursor() as cursor:
             if action == 'remove':
-                cursor.execute("UPDATE Routes SET UserCode = NULL WHERE Route_ID = %s", [route_id])
+                cursor.execute("UPDATE Routes SET RVSCode = '' WHERE Route_ID = %s", [route_id])
             else:
-                cursor.execute("UPDATE Routes SET UserCode = %s WHERE Route_ID = %s", [user_code, route_id])
 
+                    cursor.execute("UPDATE Routes SET RVSCode = %s WHERE Route_ID = %s", [user_code, route_id])
+                
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
@@ -1433,8 +1438,9 @@ def delete_channel(request, channel_code):
 
 def users(request):
     users = InternalUser.objects.all()
+    groupe = UserGroupe.objects.all()
     form = UserForm()
-    return render(request, 'users/home.html', {'users': users, 'form': form})
+    return render(request, 'users/home.html', {'users': users, 'form': form, 'groupe': groupe})
 
 def add_user(request):
     if request.method == "POST":
@@ -1488,6 +1494,14 @@ def delete_user(request, UserCode):
     user.delete()
     return redirect('users') 
 
+
+def delete_groupe(request, UserCode):
+    user = get_object_or_404(UserGroupe, UserCode=UserCode)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('users')
+    return render(request, 'users/home.html', {'user': user})
+
 def search_user(request):
     users = None
     query = ''
@@ -1506,3 +1520,47 @@ def search_user(request):
             users = InternalUser.objects.all()
     form = UserForm()
     return render(request, 'users/home.html', {'users': users, 'form': form, 'query': query})
+
+
+#groupe
+
+def home_groupe(request):
+    groupes = UserGroupe.objects.all()
+    return render(request, 'users/Groupes.html', {'groupes': groupes})
+
+def add_groupe(request):
+    if request.method == 'POST':
+        form = UserGroupeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home_groupe')
+    else:
+        form = UserGroupeForm()
+    return render(request, 'users/Groupes.html', {'form': form})
+
+def edit_groupe(request, Code_groupe):
+    groupe = get_object_or_404(UserGroupe, Code_groupe=Code_groupe)
+    if request.method == 'POST':
+        form = UserGroupeForm(request.POST, instance=groupe)
+        if form.is_valid():
+            form.save()
+            return redirect('home_groupe')
+    else:
+        form = UserGroupeForm(instance=groupe)
+    return render(request, 'users/Groupes.html', {'form': form, 'groupe': groupe})
+
+def delete_groupe(request, Code_groupe):
+    groupe = get_object_or_404(UserGroupe, Code_groupe=Code_groupe)
+    if request.method == 'POST':
+        groupe.delete()
+        return redirect('home_groupe')
+    return render(request, 'users/Groupes.html', {'groupe': groupe})
+
+def get_group_data(request, Code_groupe):
+    group = get_object_or_404(UserGroupe, Code_groupe=Code_groupe)
+    data = {
+        'Code_groupe': group.Code_groupe,
+        'Groupe_description': group.Groupe_description,
+    }
+
+    return JsonResponse(data)

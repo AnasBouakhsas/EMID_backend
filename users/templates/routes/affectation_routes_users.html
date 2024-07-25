@@ -4,103 +4,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clients</title>
+    <title>Assign route-client</title>
 
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
- 
- <style>
-     .navbar {
-         background-color: #f8f9fa;
-     }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-     .navbar-brand {
-         font-weight: bold;
-     }
+    <style>
+        .navbar {
+            background-color: #f8f9fa;
+        }
 
-     .navbar-nav .nav-link {
-         color: #007bff;
-     }
+        .navbar-brand {
+            font-weight: bold;
+        }
 
-    
+        .navbar-nav .nav-link {
+            color: #007bff;
+        }
 
-     .btn-primary {
-         background-color: #81bae7;
-         border: none;
-         padding: 10px 20px;
-         border-radius: 5px;
-         color: white;
-         cursor: pointer;
-         align-self: center;
-     }
+        .btn-primary {
+            background-color: #81bae7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            align-self: center;
+        }
 
-     .btn-primary:hover {
-         background-color: #0056b3;
-     }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
 
-     .form-inline .form-control {
-         width: auto;
-     }
-     .auto-width-select {
-        width: auto;
-        min-width: 150px; 
-        max-width: 100%;
-        white-space: nowrap;
-     }
-     h1, h2 {
-         color: #0056b3;
-         font-family: 'Poppins', sans-serif;
-         font-weight: 600;
-         font-size: 200%;
-         text-align: center;
-        
-     }
+        .form-inline .form-control {
+            width: auto;
+        }
 
-     
+        .auto-width-select {
+            width: auto;
+            min-width: 150px;
+            max-width: 100%;
+            white-space: nowrap;
+        }
 
-     .btn-sm {
-         padding: 5px 10px;
-     }
+        h1, h2 {
+            color: #0056b3;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 200%;
+            text-align: center;
+        }
 
-     .btn-danger {
-         background-color: #dc3545;
-         border-color: #dc3545;
-     }
+        .btn-sm {
+            padding: 5px 10px;
+        }
 
-     .btn-danger:hover {
-         background-color: #c82333;
-         border-color: #bd2130;
-     }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
 
-     .btn-warning {
-         background-color: #ffc107;
-         border-color: #ffc107;
-         color: #212529;
-     }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
 
-     .btn-warning:hover {
-         background-color: #e0a800;
-         border-color: #d39e00;
-         color: #212529;
-     }
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
 
-     .mt-4 {
-         margin-top: 1.5rem;
-     }
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+            color: #212529;
+        }
 
-     .float-right {
-         float: right;
-     }
-     .table{
-        --bs-table-bg:none;
-     }
-     th {
-        background-color: #2262c6;
-        color: #fff;
-        
-    }
- </style>
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        .float-right {
+            float: right;
+        }
+
+        .table {
+            --bs-table-bg: none;
+        }
+
+        th {
+            background-color: #2262c6;
+            color: #fff;
+        }
+        thead {
+            background-color: #2262c6;
+            color: #fff;
+        }
+        .clients-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .section {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .section:last-child {
+            border-right: none;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .center-container {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -116,8 +144,13 @@
             <li class="nav-item">
                 <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'users' %}">Users</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Users</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'users' %}">Info Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_groupe' %}">User Groupe</a></li>
+                </ul>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
@@ -141,9 +174,9 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_routes_users' %}">Affectation Routes-Users</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_clients_routes' %}">Affectation Routes-Clients</a></li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -160,53 +193,95 @@
 <body>
     <h2>Route Assignment</h2>
 
-    <div id="userSelection">
-        <label for="users">Select User: </label>
-        <select id="users" name="users" onchange="loadUserRoutes(this.value)">
-            <option value="">Select a user</option>
-            <!-- User options will be populated here -->
-            {% for user in users %}
-            <option value="{{ user.UserCode }}">{{ user.UserName }}</option>
-            {% endfor %}
-        </select>
-        <button id="findUsers" onclick="findUsers()">Find</button>
-    </div>
 
-    <div id="routesContainer">
-        <div class="section" id="availableRoutesSection">
+
+<div class="d-flex justify-content-center">
+    <div class="form-container">
+        <div aria-hidden="true" id="userSelection">
+            <label for="users"></label>
+            <select id="users" name="users" onchange="loadUserRoutes(this.value)">
+                <option value="">Select a user</option>
+                {% for user in users %}
+                    <option value="{{ user.UserCode }}">{{ user.UserName }}</option>
+                {% endfor %}
+            </select>
+            
+            <button id="findUsers" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userListModal" onclick="findUsers()">Find</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-4">
+    <!-- USERS container -->
+    <div id="routesContainer"  class="clients-container" style="display: none;">
+        <div class="section table-responsive" id="availableRoutesSection">
             <h3>Available Routes</h3>
-            <ul id="availableRoutes" class="route-list">
-                <!-- Routes will be dynamically inserted here using radio buttons instead of checkboxes -->
-            </ul>
-        </div>
-        <div class="section" id="userRoutesSection">
-            <h3>User's Route</h3>
-            <ul id="userRoutes" class="route-list">
-                <!-- User's assigned routes will be dynamically inserted here -->
-            </ul>
-        </div>
-    </div>
-
-    <button id="assignRoute" onclick="assignRoute()">Assign Selected Route</button>
-
-    <!-- Modal for displaying the user list -->
-    <div id="userListModal">
-        <div id="userListModalContent">
-            <h3>Select a User</h3>
-            <table id="userListTable">
+            <table id="availableRoutes" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>UserCode</th>
-                        <th>UserName</th>
+                        <th>user code</th>
+                        <th>user Description</th>
+                        <th>city code</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="userList">
-                    <!-- User list will be dynamically populated here -->
+                <tbody>
+                    <!-- Available clients will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Separator -->
+        <div class="section-separator"></div>
+
+        <div class="section table-responsive" id="userRoutesSection">
+            <h3>Assigned Route</h3>
+            <table id="userRoutes" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Route code</th>
+                        <th>user Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Assigned clients will be dynamically inserted here -->
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+
+
+<div class="modal fade" id="userListModal" tabindex="-1" role="dialog" aria-labelledby="userListModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userListModalLabel">Select a User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="userListTable">
+                    <thead>
+                        <tr>
+                            <th>UserCode</th>
+                            <th>UserName</th>
+                            <th>CityID</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userList">
+                        <!-- User list will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -214,18 +289,24 @@
         function findUsers() {
             $.ajax({
                 url: "{% url 'get_users' %}",
+                method: 'GET',
                 success: function(data) {
+                if (data.users) {    
                     $('#userList').empty(); // Clear any existing rows
                     data.users.forEach(function(user) {
                         $('#userList').append(
                             '<tr>' +
                             '<td>' + user.UserCode + '</td>' +
                             '<td>' + user.UserName + '</td>' +
-                            '<td><button onclick="selectUser(\'' + user.UserCode + '\', \'' + user.UserName + '\')">Select</button></td>' +
+                            '<td>' + user.CityID + '</td>' +
+                            '<td><button onclick="selectUser(\'' + user.UserCode + '\', \'' + user.UserName + '\', \'' + user.CityID + '\')">Select</button></td>' +
                             '</tr>'
                         );
                     });
-                    $('#userListModal').show();
+                    $('#userListModal').modal('show');
+                } else {
+                    alert('No routes found');
+                }
                 },
                 error: function(xhr, status, error) {
                     console.error('Failed to fetch users:', error);
@@ -235,9 +316,9 @@
         }
 
         // Function to handle the selection of a user
-        function selectUser(userCode, userName) {
+        function selectUser(userCode, userName, CityID) {
             $('#users').val(userCode).change();
-            $('#userListModal').hide();
+            $('#userListModal').modal('hide');
         }
 
         // Function to load user routes based on selected user
@@ -245,31 +326,63 @@
             if (userId) {
                 $.ajax({
                     url: "{% url 'affectation_routes_users' %}",
+                    method: 'GET',
                     data: { action: 'get_user_routes', user_code: userId },
                     success: function(data) {
+                        
                         $('#availableRoutes').empty();
+                            $('#availableRoutes').append(
+                                '<thead style="background-color:#2262c6; color: #fff;">' +
+                                    '<tr>' +
+                                        '<th>Route ID</th>' +
+                                        '<th>Route Description</th>' +
+                                        '<th>Action</th>' +
+                                    '</tr>' +
+                                '</thead>' +
+                                '<tbody></tbody>' // Ensure there's a tbody to append rows
+                            );
+                         $('#userRoutes').empty();    
+                            $('#userRoutes').append(
+                                '<thead style="background-color:#2262c6; color: #fff;">' +
+                                    '<tr>' +
+                                        '<th>Route ID </th>' +
+                                        '<th>Route Description</th>' +
+                                        '<th>Action</th>' +
+                                    '</tr>' +
+                                '</thead>' +
+                                '<tbody></tbody>'  // Ensure there's a tbody to append rows
+                            );
+
+  
                         data.unlinked_routes.forEach(function(route) {
                             $('#availableRoutes').append(
-                                '<li>' +
-                                '<label><input type="radio" name="route" value="' + route.Route_ID + '">' + route.Route_Description + '</label>' +
-                                '</li>'
+                                '<tr>' +
+                                '<td>' + route.Route_ID + '</td>' +
+                                '<td>' + route.Route_Description + '</td>' +
+                                '<td><button class="btn btn-primary" onclick="assignRoute(\'' + route.Route_ID + '\')">Assign</button></td>' +
+                            '</tr>'
                             );
                         });
 
-                        $('#userRoutes').empty();
+                        
                         if (data.linked_routes.length > 0) {
                             const route = data.linked_routes[0];
                             $('#userRoutes').append(
-                                '<li>' + route.Route_Description +
-                                '<button class="removeRoute" onclick="removeRoute(' + route.Route_ID + ')">Remove</button></li>'
+                                '<tr>' +
+                                '<td>' + route.Route_ID + '</td>' +
+                                '<td>' + route.Route_Description + '</td>' +
+                                '<td><button class="btn btn-primary" onclick="removeRoute(\'' + route.Route_ID + '\')">Remove</button></td>' +
+                            '</tr>'
                             );
                         }
                         $('#routesContainer').show();
+                        
                     },
                     error: function(xhr, status, error) {
                         console.error('Failed to fetch user routes:', error);
                         alert('Failed to fetch user routes: ' + error);
-                    }
+                    },
+                    
                 });
             } else {
                 $('#routesContainer').hide();
@@ -277,17 +390,20 @@
         }
 
         // Assign the selected route to the user
-        function assignRoute() {
-            var selectedRoute = $('input[name="route"]:checked').val();
+        function assignRoute(routeID) {
+            
             var userId = $('#users').val();
-            if (selectedRoute && userId) {
+            if (routeID && userId) {
                 $.ajax({
                     url: "{% url 'assign_user_to_route' %}",
                     type: 'POST',
                     data: {
-                        route_id: selectedRoute,
+                        route_id: routeID,
                         user_code: userId,
+                        action: 'assign',
                         csrfmiddlewaretoken: '{{ csrf_token }}'
+                        
+
                     },
                     success: function(data) {
                         if (data.success) {
@@ -302,12 +418,15 @@
                     }
                 });
             } else {
+                console.log('User ID:', userId);
+                console.log('Route ID:', routeId);
                 alert('Please select a user and a route');
             }
         }
 
         // Remove the user's route
         function removeRoute(routeId) {
+            
             var userId = $('#users').val();
             if (userId && routeId) {
                 $.ajax({
@@ -335,5 +454,10 @@
                 alert('Invalid user or route');
             }
         }
-    </script></body>
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

@@ -18,7 +18,7 @@ urlpatterns = [
     path('routes/edit/<int:route_id>/', edit_route, name='edit_route'),
     path('routes/delete/<int:route_id>/', delete_route, name='delete_route'),
     path('routes/affectation-routes-users/', affectation_routes_users, name='affectation_routes_users'),
-    path('routes/affectation-routes-users/', assign_user_to_route, name='assign_user_to_route'),
+    path('routes/assign_user_to_route/', assign_user_to_route, name='assign_user_to_route'),
     path('promotions/search_baskets/', views.search_baskets, name='search_baskets'),
     path('promotions/get_basket/<int:basket_id>/', views.get_basket, name='get_basket'),
     path('routes/get-routes/', views.get_routes, name='get_routes'),
@@ -93,15 +93,21 @@ urlpatterns = [
     path('channel/<str:channel_code>/data/', views.get_channel_data, name='get_channel_data'),
 
 
+    path('users/data/', views.get_users, name='get_users'),
 
     path('users/', users, name='users'),
     path('add_user/', add_user, name='add_user'),
-    path('delete_user/<str:UserCode>/', delete_user, name='delete_user'),
+    path('users/<str:UserCode>/delete/', views.delete_user, name='delete_user'),
     path('search/', views.search_user, name='search_user'),
     path('users/<str:UserCode>/data/', views.get_user_data, name='get_user_data'),
     path('users/<str:UserCode>/edit/', views.edit_user, name='edit_user'),
 
 
+    path('groupes/', views.home_groupe, name='home_groupe'),
+    path('groupes/add/', views.add_groupe, name='add_groupe'),
+    path('groupes/<str:Code_groupe>/edit/', views.edit_groupe, name='edit_groupe'),
+    path('groupes/<str:Code_groupe>/delete/', views.delete_groupe, name='delete_groupe'),
+    path('groupes/<str:Code_groupe>/data/', views.get_group_data, name='get_group_data'),
 
 
 

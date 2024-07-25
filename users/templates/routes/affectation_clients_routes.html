@@ -144,8 +144,13 @@
             <li class="nav-item">
                 <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'users' %}">Users</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Users</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'users' %}">Info Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_groupe' %}">User Groupe</a></li>
+                </ul>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>

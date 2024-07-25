@@ -56,12 +56,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+class UserGroupe(models.Model):
+    Code_groupe = models.CharField(max_length=50)
+    Groupe_description = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'UserGroupe'
+    
+
 
 # Model for internal user management in the 'users' table
 class InternalUser(models.Model):
     UserCode = models.CharField(max_length=50, primary_key=True)
+    Route_ID = models.ForeignKey('Routes', on_delete=models.SET_NULL, null=True, blank=True)
     UserName = models.CharField(max_length=100)
     PhoneNumber = models.CharField(max_length=15, null=True, blank=True)
+    UserType = models.CharField(max_length=15, null=True, blank=True)
     Grouping = models.CharField(max_length=50, null=True, blank=True)
     IsBlocked = models.BooleanField(default=False)
     LoginName = models.CharField(max_length=100)
@@ -69,6 +79,9 @@ class InternalUser(models.Model):
     CityID = models.IntegerField(null=True, blank=True)
     RouteCode = models.CharField(max_length=10, null=True, blank=True)
     ParentCode = models.CharField(max_length=50, null=True, blank=True)
+    ParentDescription = models.CharField(max_length=50, null=True, blank=True)
+
+
 
     class Meta:
         db_table = 'users'
@@ -103,19 +116,13 @@ class Routes(models.Model):
     Route_Description = models.CharField(max_length=100, blank=True, default='')
     Route_Alt_Description = models.CharField(max_length=100, blank=True, default='')
     Region_Code = models.CharField(max_length=50, blank=True, default='')
+    RVSCode = models.CharField(max_length=50, blank=True, default='')
+    RVSDescription = models.CharField(max_length=50, blank=True, default='')
     Stamp_Date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = 'Routes'
 
-class Route_Users(models.Model):
-    Route_ID = models.ForeignKey('Routes', on_delete=models.CASCADE)
-    User_Code = models.ForeignKey('users.InternalUser', on_delete=models.CASCADE)
-    Stamp_Date = models.DateTimeField()
-    Assignment_Type = models.IntegerField()
-    class Meta:
-        db_table = 'Route_Users'
-        unique_together = ('Route_ID', 'User_Code')
 
 class Client_Statut(models.Model):
     Client_Statut_ID = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2)])
@@ -130,6 +137,7 @@ class Client_Statut(models.Model):
 class Clients(models.Model):
     Client_Code = models.CharField(primary_key=True, max_length=20)
     Route_ID = models.ForeignKey('Routes', on_delete=models.SET_NULL, null=True, blank=True)
+    Salesman = models.CharField(max_length=100, blank=True, default='N/A')
     Area_Code = models.CharField(max_length=50, blank=True, default='')
     Client_Description = models.CharField(max_length=50, blank=True, default='')
     Client_Alt_Description = models.CharField(max_length=50, blank=True, default='')
@@ -142,6 +150,8 @@ class Clients(models.Model):
     Phone_Number = models.CharField(max_length=50, blank=True, default='')
     Barcode = models.CharField(max_length=50, blank=True, default='')
     Client_Status_ID = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(2)])
+    Channel_description = models.ForeignKey('Channels', on_delete=models.SET_NULL, null=True, blank=True)
+
 
     class Meta:
         

@@ -119,8 +119,13 @@
             <li class="nav-item">
                 <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'users' %}">Users</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Users</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'users' %}">Info Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_groupe' %}">User Groupe</a></li>
+                </ul>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
@@ -220,7 +225,13 @@
                         <td>{{ user.UserCode }}</td>
                         <td>{{ user.UserName }}</td>
                         <td>{{ user.PhoneNumber }}</td>
-                        <td>{{ user.Grouping }}</td>
+                        <td>
+                            {% for grp in groupe %}
+                                {% if user.Grouping == grp.Code_groupe %}
+                                    {{ grp.Groupe_description }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td>{{ user.IsBlocked }}</td>
                         <td>{{ user.LoginName }}</td>
                         <td>{{ user.AreaCode }}</td>
@@ -234,10 +245,12 @@
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                 </svg>
                             </a>
-                            <a href="{% url 'delete_user' user.UserCode %}" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                            </svg></a>
+                            <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteuserModal" data-user-id="{{ user.UserCode }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -305,6 +318,28 @@
     </div>
   </div>
 
+<!--Modal DELETE-->
+  <div class="modal fade" id="deleteuserModal" tabindex="-1" aria-labelledby="deleteuserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteuserModalLabel">Delete a user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this user? This action is irreversible.</p>
+                <form id="deleteuserForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="deleteuserId">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     var modal = document.getElementById('editUser');
@@ -359,6 +394,16 @@
         }
     });
 });
+document.addEventListener('DOMContentLoaded', function () {
+        var deleteuserModal = document.getElementById('deleteuserModal');
+        deleteuserModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var userId = button.getAttribute('data-user-id');
+            document.getElementById('deleteuserId').value = userId;
+            var form = document.getElementById('deleteuserForm');
+            form.action = `/users/${userId}/delete/`; 
+        });
+    });
 
 </script>
 

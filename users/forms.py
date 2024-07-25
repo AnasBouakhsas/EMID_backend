@@ -1,10 +1,19 @@
 from django import forms
-from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders, Routes
+from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders, Routes, UserGroupe
 from django.db import connection
 
 
 class UserForm(forms.ModelForm):
+    grouping_choices = [(groupe.Code_groupe, groupe.Groupe_description) for groupe in UserGroupe.objects.all()]
+
+    # Utiliser les choix pour le champ Grouping
+    Grouping = forms.ChoiceField(choices=grouping_choices, widget=forms.Select(attrs={'class': 'form-control'}))
+
+
+
     class Meta:
+
+
         model = InternalUser
         fields = [
             'UserCode',
@@ -21,6 +30,18 @@ class UserForm(forms.ModelForm):
         widgets = {
             'IsBlocked': forms.CheckboxInput(),
         }
+        
+
+
+class UserGroupeForm(forms.ModelForm):
+    class Meta:
+        model = UserGroupe
+        fields  = [
+            'Code_groupe',
+            'Groupe_description'
+        ]
+
+
 
 class AssignPromotionSearchForm(forms.Form):
     promotion_type = forms.ChoiceField(
@@ -208,4 +229,6 @@ class RouteForm(forms.ModelForm):
             'Route_Description',
             'Route_Alt_Description',
             'Region_Code',
+            'RVSCode',
+            'RVSDescription'
         ]
