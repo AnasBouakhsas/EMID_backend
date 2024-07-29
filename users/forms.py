@@ -1,5 +1,5 @@
 from django import forms
-from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, InternalUser, PromoHeaders, PromoItemBasketHeaders, Routes, UserGroupe
+from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, Device, InternalUser, PromoHeaders, PromoItemBasketHeaders, Routes, UserGroupe
 from django.db import connection
 
 
@@ -232,3 +232,25 @@ class RouteForm(forms.ModelForm):
             'RVSCode',
             'RVSDescription'
         ]
+
+
+class DeviceForm(forms.ModelForm):
+    
+
+    class Meta:
+        model = Device
+        fields = [
+            'device_serial',
+            'device_name',
+            'UserCode',
+            'device_status',
+            'type',
+            'Route_ID'
+        ]
+
+        widgets = {
+            'device_serial': forms.TextInput(attrs={'class': 'form-control'}),
+            'device_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'device_status': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.TextInput(attrs={'class': 'form-control'}),
+        }

@@ -85,7 +85,9 @@ class InternalUser(models.Model):
 
     class Meta:
         db_table = 'users'
-
+    
+    def __str__(self):
+        return self.UserCode
 
 class Regions(models.Model):
     Region_Code = models.CharField(max_length=50, primary_key=True)
@@ -122,6 +124,10 @@ class Routes(models.Model):
 
     class Meta:
         db_table = 'Routes'
+
+    def __str__(self):
+        return str(self.Route_ID)
+    
 
 
 class Client_Statut(models.Model):
@@ -237,3 +243,15 @@ class Channels(models.Model):
     related_price_list_code = models.CharField(max_length=50, null=True)
     return_price_list_code = models.CharField(max_length=50, null=True)
 
+class Device(models.Model):
+    device_serial = models.CharField(max_length=100, unique=True)
+    device_name = models.CharField(max_length=100)
+    UserCode = models.ForeignKey('InternalUser', on_delete=models.SET_NULL, null=True, blank=True)
+    device_status = models.CharField(max_length=100)
+    type = models.CharField(max_length=100, default = 'HHT')
+    Route_ID = models.ForeignKey('Routes', on_delete=models.SET_NULL, null=True, blank=True)
+
+
+
+    def __str__(self):
+        return self.device_name

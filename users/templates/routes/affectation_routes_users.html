@@ -390,39 +390,39 @@
         }
 
         // Assign the selected route to the user
-        function assignRoute(routeID) {
-            
-            var userId = $('#users').val();
-            if (routeID && userId) {
-                $.ajax({
-                    url: "{% url 'assign_user_to_route' %}",
-                    type: 'POST',
-                    data: {
-                        route_id: routeID,
-                        user_code: userId,
-                        action: 'assign',
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        
+            function assignRoute(routeID) {
+                
+                var userId = $('#users').val();
+                if (routeID && userId) {
+                    $.ajax({
+                        url: "{% url 'assign_user_to_route' %}",
+                        type: 'POST',
+                        data: {
+                            route_id: routeID,
+                            user_code: userId,
+                            action: 'assign',
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            
 
-                    },
-                    success: function(data) {
-                        if (data.success) {
-                            alert('Route assigned successfully');
-                            loadUserRoutes(userId); // Reload routes to reflect changes
-                        } else {
-                            alert('Failed to assign route: ' + data.error);
+                        },
+                        success: function(data) {
+                            if (data.success) {
+                                alert('Route assigned successfully');
+                                loadUserRoutes(userId); // Reload routes to reflect changes
+                            } else {
+                                alert('Failed to assign route: ' + data.error);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Failed to assign route: ' + error);
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Failed to assign route: ' + error);
-                    }
-                });
-            } else {
-                console.log('User ID:', userId);
-                console.log('Route ID:', routeId);
-                alert('Please select a user and a route');
+                    });
+                } else {
+                    console.log('User ID:', userId);
+                    console.log('Route ID:', routeId);
+                    alert('Please select a user and a route');
+                }
             }
-        }
 
         // Remove the user's route
         function removeRoute(routeId) {

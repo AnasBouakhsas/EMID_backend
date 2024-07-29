@@ -219,6 +219,8 @@
                         <tr>
                             <th>Route ID</th>
                             <th>Route Description</th>
+                            <th>RVS Code</th>
+                            <th>RVS Description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -313,6 +315,8 @@
                             '<tr>' +
                                 '<td>' + route.Route_ID + '</td>' +
                                 '<td>' + route.Route_Description + '</td>' +
+                                '<td>' + route.RVSCode + '</td>' +
+                                '<td>' + route.RVSDescription + '</td>' +
                                 '<td><button class="btn btn-primary" onclick="selectRoute(\'' + route.Route_ID + '\', \'' + route.Route_Description + '\')">Select</button></td>' +
                             '</tr>'
                         );

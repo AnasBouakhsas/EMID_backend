@@ -1,10 +1,9 @@
 from django.urls import path, include
 from django.contrib import admin
 from users import views
-from users.views import add_user, delete_user, edit_user, get_client_data, get_client_statut_data, get_routes_data, get_user_data, home, search_user, users, routes, promotions, devices
-from users.views import( home, users, routes, promotions, devices, get_target,
-    add_route, edit_route, delete_route, affectation_routes_users,
-    load_devices, assign_user_to_route, assign_client_to_route,
+from users.views import add_user, delete_user, edit_user, get_client_data, get_client_statut_data, get_routes_data, get_user_data, home, search_user, users, routes, promotions
+from users.views import( home, users, routes, promotions, get_target,
+    add_route, edit_route, delete_route, affectation_routes_users, assign_user_to_route, assign_client_to_route,
     get_routes, get_route_clients, affectation_clients_routes, search_baskets, assign_promotions,add_basket, define_basket, load_entities,assign_entity)
 from django.conf import settings
 from django.conf.urls.static import static
@@ -43,9 +42,13 @@ urlpatterns = [
     path('promotions/update_checkbox/', views.update_checkbox, name='update_checkbox'),
 
 
+    path('devices/home_device/', views.home_device, name='devices'),
+    path('devices/', views.list_devices, name='list_devices'),
+    path('devices/add/', views.add_device, name='add_device'),
+    path('devices/<str:device_serial>/edit/', views.edit_device, name='edit_device'),
+    path('devices/<str:device_serial>/remove/', views.remove_device_from_user, name='remove_device_from_user'),
+    path('devices/<str:device_serial>/data/', views.get_device_data, name='get_device_data'),
 
-    path('devices/', devices, name='devices'),
-    path('devices/load/', load_devices, name='load_devices'),
 
 
     path('client/<int:client_id>/', views.clients, name='Clients'),

@@ -9,12 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 import openpyxl
-from .models import Channels, Client_Statut, Client_Target, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts, UserGroupe
-from .forms import ChannelsForm, Client_TargetForm, PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, UserGroupeForm, client_discountsForm, client_statutForm, clientForm
+from .models import Channels, Client_Statut, Client_Target, Device, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts, UserGroupe
+from .forms import ChannelsForm, Client_TargetForm, DeviceForm, PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, UserGroupeForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from django.db.utils import DatabaseError
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 
 import logging
@@ -873,8 +874,9 @@ def affectation_clients_routes(request):
     return render(request, 'routes/affectation_clients_routes.html')
 
 def get_routes(request):
-    routes = Routes.objects.all().values('Route_ID', 'Route_Description')
+    routes = Routes.objects.filter(RVSCode__isnull=False).exclude(RVSCode='').values('Route_ID', 'Route_Description', 'RVSCode', 'RVSDescription')
     return JsonResponse({'routes': list(routes)})
+
 
 def get_route_clients(request):
     route_id = request.GET.get('route_id')
@@ -964,8 +966,12 @@ def assign_user_to_route(request):
             if action == 'remove':
                 cursor.execute("UPDATE Routes SET RVSCode = '' WHERE Route_ID = %s", [route_id])
             else:
-
-                    cursor.execute("UPDATE Routes SET RVSCode = %s WHERE Route_ID = %s", [user_code, route_id])
+                cursor.execute("SELECT Route_ID FROM Routes WHERE RVSCode = %s", [user_code])
+                existing_route = cursor.fetchone()
+                
+                if existing_route:
+                    return JsonResponse({'success': False, 'error': 'User is already assigned to a route'})
+                cursor.execute("UPDATE Routes SET RVSCode = %s WHERE Route_ID = %s", [user_code, route_id])
                 
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
@@ -973,83 +979,67 @@ def assign_user_to_route(request):
 
 
 #device
-def devices(request):
-    username = request.GET.get('username', '')
-    device_status = request.GET.get('device_status', '')
-    device_type = request.GET.get('device_type', '')
-    device_brand = request.GET.get('device_brand', '')
-    device_serial = request.GET.get('device_serial', '')
-    query = """
-            SELECT 
-                u.UserCode,
-                u.UserName,
-                d.DeviceType,
-                d.DeviceBrand,
-                d.DeviceSerial,
-                d.DeviceStatus
-            FROM 
-                User_Device_Registration udr
-            JOIN 
-                users u ON u.UserCode = udr.UserCode
-            JOIN 
-                Devices d ON d.DeviceSerial = udr.DeviceSerialID
-            WHERE 
-                u.Grouping = 1  
-                 AND (u.UserName LIKE %s OR %s = '')
-                AND (d.DeviceStatus = %s OR %s = '')
-                AND (d.DeviceType = %s OR %s = '')
-                AND (d.DeviceBrand = %s OR %s = '')
-                AND (d.DeviceSerial LIKE %s OR %s = '')  
+def list_devices(request):
+    devices = Device.objects.select_related('UserCode', 'Route_ID').all().values(
+        'device_serial', 
+        'device_name', 
+        'UserCode__UserCode', 
+        'device_status', 
+        'type', 
+        'Route_ID__Route_ID'
+    )
+    form = DeviceForm()
+    return render(request, 'devices/home.html', {'devices': devices, 'form': form})
 
-    """
+def add_device(request):
+    if request.method == "POST":
+        form = DeviceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('devices')
+    else:
+        form = DeviceForm()
+    return render(request, 'devices/home.html', {'form': form})
 
-    with connection.cursor() as cursor:
-        cursor.execute(query, [
-            f'%{username}%', username,
-            device_status, device_status,
-            device_type, device_type,
-            device_brand, device_brand,
-            f'%{device_serial}%', device_serial
-        ])
-        devices_data = cursor.fetchall()
 
-    devices_list = []
-    for row in devices_data:
-        device = {
-            'UserCode': row[0],
-            'UserName': row[1],
-            'DeviceType': row[2],
-            'DeviceBrand': row[3],
-            'DeviceSerial': row[4],
-            'DeviceStatus': row[5],
-        }
-        devices_list.append(device)
+def get_device_data(request, device_serial):
+    device = get_object_or_404(Device, device_serial=device_serial)
+    data = {
+        'device_serial': device.device_serial,
+        'device_name': device.device_name,
+        'UserCode': device.UserCode.UserCode if device.UserCode else None,
+        'device_status': device.device_status,
+        'type': device.type,
+        'Route_ID': device.Route_ID.Route_ID if device.Route_ID else None
+    }
 
-    return render(request, 'devices/home.html', {'devices': devices_list})
+    return JsonResponse(data)
 
-def load_devices(request):
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT 
-                DeviceSerial, 
-                DeviceStatus, 
-                DeviceBrand, 
-                DeviceType 
-            FROM Devices
-        """)
-        devices_data = cursor.fetchall()
 
-    devices_list = []
-    for row in devices_data:
-        device = {
-            'DeviceSerial': row[0],
-            'DeviceStatus': row[1],
-            'DeviceBrand': row[2],
-            'DeviceType': row[3]
-        }
-        devices_list.append(device)
+def edit_device(request, device_serial):
+    device = get_object_or_404(Device, device_serial=device_serial)
+    if request.method == 'POST':
+        form = DeviceForm(request.POST, instance=device)
+        if form.is_valid():
+            form.save()
+            return redirect('devices')  
+    else:
+        form = DeviceForm(instance=device)
+    return render(request, 'devices/home.html', {'form': form})
 
-    return JsonResponse({'devices': devices_list})
+def remove_device_from_user(request, device_serial):
+    device = get_object_or_404(Device, device_serial=device_serial)
+    if request.method == 'POST':
+        device.delete()
+        return redirect('devices')
+    return render(request, 'devices/home.html', {'device': device})
+
+def home_device(request):
+    devices = Device.objects.all()
+    form = DeviceForm()
+    return render(request, 'devices/home.html', {'devices': devices, 'form': form})
+
+
 
 #client
 def clients(request):
