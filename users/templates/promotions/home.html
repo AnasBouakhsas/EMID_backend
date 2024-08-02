@@ -1,540 +1,484 @@
-
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Promo</title>
 
-
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+ 
     <style>
         .navbar {
             background-color: #f8f9fa;
         }
-
+   
         .navbar-brand {
             font-weight: bold;
         }
-
+   
         .navbar-nav .nav-link {
             color: #007bff;
         }
-
-        table {
-            width: 400%;
-            border-collapse: collapse;
-            margin-top: 50px;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #2262c6;
-        }
-        .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .styled-table thead tr {
-            background-color: #009879;
-            color: #ffffff;
-            text-align: left;
-            font-weight: bold;
-        }
-
-        .styled-table th,
-        .styled-table td {
-            padding: 12px 15px;
-            border: 1px solid #dddddd;
-        }
-
-        .styled-table tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
-
-        .styled-table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-
-        .styled-table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .styled-table tbody tr.active-row {
-            font-weight: bold;
-            color: #009879;
-        }
-
-
-
-        .btn-custom {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-custom:hover {
-            background-color: #218838;
-        }
-
-        .card{
-            width: 130%;
-            margin-top: 30px;
-        }
-
-
-
-
-        button.btn-primary {
+   
+       
+   
+        .btn-primary {
             background-color: #81bae7;
             border: none;
             padding: 10px 20px;
-            margin-top: -9px;
             border-radius: 5px;
             color: white;
             cursor: pointer;
-            align-self: center; /* Centrez le bouton dans le conteneur flex */
+            align-self: center;
         }
-        button.btn-primary:hover {
+   
+        .btn-primary:hover {
             background-color: #0056b3;
         }
-        button.btn-primary:hover {
-            background-color: #0056b3;
+   
+        .form-inline .form-control {
+            width: auto;
         }
-
-        button.btn-primary2 {
-            background-color: #AFBDBA91;
-            border: none;
-            padding: 10px 20px;
-            margin-top: -8px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            align-self: center; /* Centrez le bouton dans le conteneur flex */
+        .auto-width-select {
+           width: auto;
+           min-width: 150px; 
+           max-width: 100%;
+           white-space: nowrap;
         }
-        button.btn-primary2:hover {
-            background-color: #0056b3;
+        h1, h2 {
+            color: #0056b3;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 200%;
+            text-align: center;
+           
         }
-        button.btn-primary2:hover {
-            background-color: rgba(175, 189, 186, 0.57);
+   
+        
+   
+        .btn-sm {
+            padding: 5px 10px;
         }
+   
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+   
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+   
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+   
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+            color: #212529;
+        }
+   
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+   
+        .float-right {
+            float: right;
+        }
+        .table{
+           --bs-table-bg:none;
+        }
+        th {
+           background-color: #2262c6;
+           color: #fff;
+           
+       }
     </style>
-</head>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
-        <img src="bg.png" alt="My Project" style="height: 80px;">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'users' %}">Users</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'users' %}">Clients</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'devices' %}">Devices</a>
-            </li>
-            <li class="nav-item  dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'routes' %}" aria-expanded="false">Routes</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
-                    <li><hr class="dropdown-divider"></li>
-
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
-                    <li><hr class="dropdown-divider"></li>
-
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
-                </ul>
-            </li>
-            <li class="nav-item active dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'promotions' %}">Promotions</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'promotions' %}">Promotions</a></li>
-
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'assign_promotions' %}">Assign Promotions</a></li>
-
-                    <li><hr class="dropdown-divider"></li>
-
-                    <li><a class="dropdown-item" href="{% url 'define_basket' %}">Define Basket</a></li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Log out</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+   </head>
+   
+   
+   <body>
+   
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Users</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'users' %}">Info Users</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'home_groupe' %}">User Groupe</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'home_target' %}">Client target</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'devices' %}">Devices</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Routes</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'affectation_routes_users' %}">Affectation Routes-Users</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'affectation_clients_routes' %}">Affectation Routes-Clients</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Promotions</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'promotions' %}">Promotions</a></li>
+    
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'assign_promotions' %}">Assign Promotions</a></li>
+    
+                        <li><hr class="dropdown-divider"></li>
+    
+                        <li><a class="dropdown-item" href="{% url 'define_basket' %}">Define Basket</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
 <body>
-    <div class="container">
-        <div class="card mb-4 ">
-            <div class="card-body">
-                <form method="GET" action="" class="mb-4">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="promotion_id">Promotion ID</label>
-                            <input type="number" class="form-control" id="promotion_id" name="promotion_id" value="{{ request.GET.promotion_id }}">
+
+
+    <div class="d-flex justify-content-right mb-4">  
+        <a href="#" data-bs-toggle="modal" data-bs-target="#addPromotionModal" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>   
+            Add Promotion
+        </a>
+    </div>
+    
+    <!-- Promotion list table -->
+    <table class="table" id="promotionList">
+        <thead>
+            <tr style="background-color:#2262c6;">
+                <th class="text-white">Promotion Code</th>
+                <th class="text-white">Promotion description</th>
+                <th class="text-white">type</th>
+                <th class="text-white">Start Date</th>
+                <th class="text-white">End Date</th>
+                <th class="text-white">Forced</th>
+                <th class="text-white">Active</th>
+                <th class="text-white">priority</th>
+                <th class="text-white">apply</th>
+                <th class="text-white">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for promotion in promotions %}
+            <tr>
+                <td>{{ promotion.promotion_id }}</td>
+                <td>{{ promotion.promotion_description }}</td>
+                <td>{{ promotion.promotion_type }}</td>
+                <td>{{ promotion.start_date }}</td>
+                <td>{{ promotion.end_date }}</td>
+                <td>{{ promotion.is_forced }}</td>
+                <td>{{ promotion.is_active }}</td>
+                <td>{{ promotion.priority }}</td>
+                <td>{{ promotion.promotion_apply }}</td>
+                <td>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPromotionModal" data-basket-id="{{ promotion.basket.item_basket_id }}" data-promotion-id="{{ promotion.promotion_id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePromotionModal" data-promotion-id="{{ promotion.promotion_id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1h12z"/>
+                            <path fill-rule="evenodd" d="M1 4.5v-1h14v1H1zm3.5-.5v9.5h7V4h-7z"/>
+                            <path d="M7.5 1v2h-1V1h1z"/>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+<div class="modal fade" id="addPromotionModal" tabindex="-1" aria-labelledby="addPromotionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPromotionModalLabel">Add Promotion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="promotionForm" method="post" action="{% url 'create_promotion' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_promotion_description" class="form-label">Description</label>
+                                {{ form.promotion_description }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_promotion_type" class="form-label">Type</label>
+                                {{ form.promotion_type }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_start_date" class="form-label">Start Date</label>
+                                {{ form.start_date }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_end_date" class="form-label">End Date</label>
+                                {{ form.end_date }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_is_forced" class="form-label">Is Forced</label>
+                                {{ form.is_forced }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_is_active" class="form-label">Is Active</label>
+                                {{ form.is_active }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_priority" class="form-label">Priority</label>
+                                {{ form.priority }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_promotion_apply" class="form-label">Promotion Apply</label>
+                                {{ form.promotion_apply }}
+                            </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label for="promotion_description">Description</label>
-                            <input type="text" class="form-control" id="promotion_description" name="promotion_description" value="{{ request.GET.promotion_description }}">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="start_date">Start Date</label>
-                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="end_date">End Date</label>
-                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_basket_id" class="form-label">Basket</label>
+                                {{ detail_form.as_p }}
+                            </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPromotionModal">New Promotion</button>
-
+                    <!-- Boutons de soumission -->
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Promotion</button>
+                    </div>
                 </form>
             </div>
         </div>
-
-        <!-- Button to trigger New Promotion Modal -->
-
-
-        <!-- Delete Confirmation Modal -->
-        <div class="modal fade" id="deletePromotionModal" tabindex="-1" role="dialog" aria-labelledby="deletePromotionModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deletePromotionModalLabel">Delete Promotion</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this promotion?</p>
-                        <form id="deletePromotionForm">
-                            {% csrf_token %}
-                            <input type="hidden" id="deletePromotionID" name="promotion_id">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        </form>
-                    </div>
-                </div>
+    </div>
+</div>
+    
+<div class="modal fade" id="editPromotionModal" tabindex="-1" aria-labelledby="editPromotionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPromotionModalLabel">Edit Promotion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-
-        <!-- Edit Promotion Modal -->
-        <div class="modal fade" id="editPromotionModal" tabindex="-1" role="dialog" aria-labelledby="editPromotionModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editPromotionModalLabel">Edit Promotion</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editPromotionForm">
-                            {% csrf_token %}
-                            <input type="hidden" id="editPromotionID" name="promotion_id">
-                            <!-- Form fields for Promotion Description, Dates, Priority, etc. -->
-                            <div class="form-group">
-                                <label for="editPromotionDescription">Promotion Description:</label>
-                                <input type="text" class="form-control" id="editPromotionDescription" name="promotion_description" required>
+            <div class="modal-body">
+                <form id="editPromotionForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="promotion_id" class="form-label">Promotion ID</label>
+                                <input type="text" class="form-control" id="promotion_id" name="promotion_id" readonly>
                             </div>
-                            <div class="form-group">
-                                <label for="editStartDate">Start Date:</label>
-                                <input type="date" class="form-control" id="editStartDate" name="start_date" required>
+                            <div class="mb-3">
+                                <label for="promotion_description" class="form-label">Description</label>
+                                {{ form.promotion_description }}
                             </div>
-                            <div class="form-group">
-                                <label for="editEndDate">End Date:</label>
-                                <input type="date" class="form-control" id="editEndDate" name="end_date" required>
+                            <div class="mb-3">
+                                <label for="promotion_type" class="form-label">Type</label>
+                                {{ form.promotion_type }}
                             </div>
-                            <div class="form-group">
-                                <label for="editPriority">Priority:</label>
-                                <input type="number" class="form-control" id="editPriority" name="priority" required>
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                {{ form.start_date }}
                             </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="editIsForced" name="is_forced">
-                                <label class="form-check-label" for="editIsForced">Forced</label>
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">End Date</label>
+                                {{ form.end_date }}
                             </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="editIsActive" name="is_active">
-                                <label class="form-check-label" for="editIsActive">Active</label>
+                            <div class="mb-3">
+                                <label for="is_forced" class="form-label">Is Forced</label>
+                                {{ form.is_forced }}
                             </div>
-                            <div class="form-group">
-                                <label for="editPromotionType">Promotion Type:</label>
-                                <select class="form-control" id="editPromotionType" name="promotion_type" required>
-                                    <option value="Trade Sales">Trade Sales</option>
-                                    <option value="Consumer Sales">Consumer Sales</option>
-                                </select>
+                            <div class="mb-3">
+                                <label for="is_active" class="form-label">Is Active</label>
+                                {{ form.is_active }}
                             </div>
-                            <div class="form-group">
-                                <label for="editPromotionApply">Apply:</label>
-                                <select class="form-control" id="editPromotionApply" name="promotion_apply" required>
-                                    <option value="ISELL">ISELL</option>
-                                    <option value="E-Ordering">E-Ordering</option>
-                                    <option value="Retail">Retail</option>
-                                </select>
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Priority</label>
+                                {{ form.priority }}
                             </div>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- New Promotion Modal -->
-        <div class="modal fade" id="newPromotionModal" tabindex="-1" role="dialog" aria-labelledby="newPromotionModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="newPromotionModalLabel">New Promotion</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Initial form section for new promotion -->
-                        <div id="newPromotionFormSection">
-                            <form id="newPromotionForm">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="promotionDescription">Promotion Description:</label>
-                                    <input type="text" class="form-control" id="promotionDescription" name="promotion_description" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="startDate">Start Date:</label>
-                                    <input type="date" class="form-control" id="startDate" name="start_date" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="endDate">End Date:</label>
-                                    <input type="date" class="form-control" id="endDate" name="end_date" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="priority">Priority:</label>
-                                    <input type="number" class="form-control" id="priority" name="priority" required>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="isForced" name="is_forced">
-                                    <label class="form-check-label" for="isForced">Forced</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="isActive" name="is_active">
-                                    <label class="form-check-label" for="isActive">Active</label>
-                                </div>
-                                <div class="form-group">
-                                    <label for="promotionType">Promotion Type:</label>
-                                    <select class="form-control" id="promotionType" name="promotion_type" required>
-                                        <option value="Trade Sales">Trade Sales</option>
-                                        <option value="Consumer Sales">Consumer Sales</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="promotionApply">Apply:</label>
-                                    <select class="form-control" id="promotionApply" name="promotion_apply" required>
-                                        <option value="ISELL">ISELL</option>
-                                        <option value="E-Ordering">E-Ordering</option>
-                                        <option value="Retail">Retail</option>
-                                    </select>
-                                </div>
-                                <button type="button" class="btn btn-primary" onclick="showBasketSelection()">Next</button>
-                            </form>
+                            <div class="mb-3">
+                                <label for="promotion_apply" class="form-label">Promotion Apply</label>
+                                {{ form.promotion_apply }}
+                            </div>
                         </div>
-
-                        <!-- Basket selection section -->
-                         <div id="basketSelectionSection">
-            <form id="basketForm">
-                {% csrf_token %}
-                <div class="form-group">
-                 <input type="text" id="item_basket_id_input" placeholder="Enter Basket ID">
-<button onclick="fetchBaskets()">Find</button>
-                    <table class="table table-bordered" id="basketsTable" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>Basket ID</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody id="basketsTableBody">
-                            <!-- Dynamically filled by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="form-group">
-                    <label for="item_basket_id">Basket ID:</label>
-                    <input type="text" class="form-control" id="item_basket_id" name="item_basket_id" readonly required>
-                </div>
-                <button type="submit" class="btn btn-primary">Create Promotion</button>
-            </form>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="basket_id" class="form-label">Basket</label>
+                                <select class="form-control" id="basket_id" name="basket_id">
+                                    {% for basket in baskets %}
+                                        <option value="{{ basket.item_basket_id }}">
+                                            {{ basket.item_basket_id }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity_buy" class="form-label">Quantity Buy</label>
+                                {{ detail_form.quantity_buy }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="types_buy" class="form-label">Types Buy</label>
+                                {{ detail_form.types_buy }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity_get" class="form-label">Quantity Get</label>
+                                {{ detail_form.quantity_get }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="types_get" class="form-label">Types Get</label>
+                                {{ detail_form.types_get }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Delete Promotion Modal -->
+    <div class="modal fade" id="deletePromotionModal" tabindex="-1" aria-labelledby="deletePromotionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletePromotionModalLabel">Delete Promotion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this promotion?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <!-- Table displaying existing promotions -->
-
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Promotion ID</th>
-                    <th>Promotion Description</th>
-                    <th>Promotion Type</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Is Forced</th>
-                    <th>Is Active</th>
-                    <th>Priority</th>
-                    <th>Apply</th>
-                    <th>Actions</th>
-
-                </tr>
-            </thead>
-       <tbody>
-                {% for promotion in promotions %}
-                    <tr>
-                        <td>{{ promotion.Promotion_ID }}</td>
-                        <td>{{ promotion.Promotion_Description }}</td>
-                        <td>{{ promotion.Promotion_Type }}</td>
-                        <td>{{ promotion.Start_Date }}</td>
-                        <td>{{ promotion.End_Date }}</td>
-                        <td>
-                <input type="checkbox" class="checkbox-isForced" data-id="{{ promotion.Promotion_ID }}"
-                       {% if promotion.Is_Forced %}checked{% endif %} />
-            </td>
-            <td>
-                <input type="checkbox" class="checkbox-isActive" data-id="{{ promotion.Promotion_ID }}"
-                       {% if promotion.Is_Active %}checked{% endif %} />
-            </td>
-                        <td>{{ promotion.Priority }}</td>
-                        <td>{{ promotion.Promotion_Apply }}</td>
-
-                        <td>
-
-                            <div class="btn-group" role="group" aria-label="Promotion Actions">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editPromotionModal" onclick="editPromotion({{ promotion.Promotion_ID }})">
-                                    <i class="fas fa-edit icon"></i> <!-- Icône Edit -->
-
-                                </button>
-                                <button type="button" class="btn btn-primary2" data-target="#deletePromotionModal" onclick="deletePromotion({{ promotion.Promotion_ID }})">
-                                    <i class="fas fa-trash-alt icon"></i> <!-- Icône Delete -->
-                                </button>
-                            </div>
-                        </td>
-
-
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
+</div>
+    
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById('editPromotionModal');
+            
+            modal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var promotionId = button.getAttribute('data-promotion-id');
+                var form = modal.querySelector('#editPromotionForm');
+                
+                if (promotionId) {
+                    fetch(`/promotions/${promotionId}/data/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Promotion data received:', data);
+                            if (form) {
+                                const fields = {
+                                    'promotion_id': 'input',
+                                    'promotion_description': 'input',
+                                    'promotion_type': 'select',
+                                    'start_date': 'input',
+                                    'end_date': 'input',
+                                    'is_forced': 'input[type="checkbox"]',
+                                    'is_active': 'input[type="checkbox"]',
+                                    'priority': 'input',
+                                    'promotion_apply': 'select',
+                                    'basket_id': 'select',
+                                    'quantity_buy': 'input',
+                                    'types_buy': 'select',
+                                    'quantity_get': 'input',
+                                    'types_get': 'select'
+                                };
+                                
+                                for (const [field, selector] of Object.entries(fields)) {
+                                    const element = form.querySelector(`${selector}[name="${field}"]`);
+                                    if (element) {
+                                        if (selector === 'input[type="checkbox"]') {
+                                            element.checked = data[field];  
+                                        } else {
+                                            element.value = data[field] || '';
+                                        }
 
-    <!-- JavaScript -->
-    <script>
-        // Function to show basket selection form
-        function showBasketSelection() {
-            document.getElementById('newPromotionFormSection').style.display = 'none';
-            document.getElementById('basketSelectionSection').style.display = 'block';
-        }
-
-        // Function to show new promotion form
-        function showNewPromotionForm() {
-            document.getElementById('basketSelectionSection').style.display = 'none';
-            document.getElementById('newPromotionFormSection').style.display = 'block';
-        }
-
-        // Function to fetch and display baskets
-     // Function to fetch and display baskets
-function fetchBaskets() {
-    // Get the item_basket_id from the input field
-    var item_basket_id = document.getElementById('item_basket_id_input').value;
-
-    // Check if item_basket_id is not empty
-    if (!item_basket_id) {
-        console.error('item_basket_id is not provided');
-        return;
-    }
-
-    // Construct the URL
-    var url = '/promotions/get_basket/' + item_basket_id;
-
-    // Make the AJAX request
-    $.get(url, function(data) {
-        if (data.success) {
-            var basket = data.basket;
-            var basketsTableBody = document.getElementById('basketsTableBody');
-            basketsTableBody.innerHTML = `
-                <tr onclick="selectBasket(${basket.item_basket_id}, '${basket.item_basket_description}')">
-                    <td>${basket.item_basket_id}</td>
-                    <td>${basket.item_basket_description}</td>
-                </tr>
-            `;
-            document.getElementById('basketsTable').style.display = 'table';
-        } else {
-            console.error(data.error);
-        }
-    }).fail(function() {
-        console.error('Error fetching baskets');
-    });
-}
-
-        // Function to select a basket
-        function selectBasket(basketId, basketDescription) {
-            document.getElementById('itemBasketId').value = basketId;
-            // Optionally update other parts of the form with basket details
-        }
-
-        // Function to edit a promotion
-        function editPromotion(promotionID) {
-             var url = `/promotions/get/${promotionID}/`;
-    $.get(url, function(data) {
-                document.getElementById('editPromotionID').value = data.Promotion_ID;
-                document.getElementById('editPromotionDescription').value = data.Promotion_Description;
-                document.getElementById('editStartDate').value = data.Start_Date;
-                document.getElementById('editEndDate').value = data.End_Date;
-                document.getElementById('editPriority').value = data.Priority;
-                document.getElementById('editIsForced').checked = data.Is_Forced;
-                document.getElementById('editIsActive').checked = data.Is_Active;
-                document.getElementById('editPromotionType').value = data.Promotion_Type;
-                document.getElementById('editPromotionApply').value = data.Promotion_Apply;
+                                    } else {
+                                        console.warn(`Field ${field} not found in the form.`);
+                                    }
+                                }
+                            } else {
+                                console.error('Form not found in the modal.');
+                            }
+                        })
+                        .catch(error => console.error('Error fetching promotion data:', error));
+                        
+                    // Update the form action URL for editing the promotion
+                    if (form) {
+                        form.action = `/promotions/${promotionId}/edit/`;
+                    }
+                } else {
+                    console.error('Promotion ID not found.');
+                }
             });
-        }
+        });
 
-        // Function to delete a promotion
-        function deletePromotion(promotionId) {
-            document.getElementById('deletePromotionID').value = promotionId;
-            $('#deletePromotionForm').on('submit', function(e) {
-                e.preventDefault();
-                $.post("{% url 'delete_promotion' %}", {
-                    promotion_id: promotionId,
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-                }, function() {
-                    location.reload(); // Reload the page after deletion
-                });
-            });
-        }
+
+ 
     </script>
+    
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>

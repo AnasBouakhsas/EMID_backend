@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 import openpyxl
-from .models import Channels, Client_Statut, Client_Target, Device, InternalUser, CustomUser, Routes, Clients,PromoItemBasketHeaders,PromoHeaders,Client_Discounts, UserGroupe
-from .forms import ChannelsForm, Client_TargetForm, DeviceForm, PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, UserGroupeForm, client_discountsForm, client_statutForm, clientForm
+from .models import Channels, Client_Statut, Client_Target, Device, InternalUser, CustomUser, Produit, PromoDetails, PromoHeaders, Routes, Clients,PromoItemBasketHeaders,Client_Discounts, UserGroupe
+from .forms import ChannelsForm, Client_TargetForm, DeviceForm, ProduitForm, PromoDetailsForm,PromoHeadersForm , PromotionSearchForm, NewPromotionForm, RouteForm, UserForm, AssignPromotionSearchForm, BasketForm, UserGroupeForm, client_discountsForm, client_statutForm, clientForm
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from django.db.utils import DatabaseError
@@ -41,284 +41,6 @@ def edit_route(request, route_id):
         messages.success(request, 'Route updated successfully.')
         return redirect('routes')
 
-
-
-'''@login_required
-def edit_user(request, user_code):
-    if request.method == 'POST':
-        # Get the data from the form
-        user_name = request.POST.get('user_name')
-        phone_number = request.POST.get('phone_number')
-        grouping = request.POST.get('grouping')
-        is_blocked = request.POST.get('is_blocked')
-        login_name = request.POST.get('login_name')
-        area_code = request.POST.get('area_code')
-        city_id = request.POST.get('city_id')
-        route_code = request.POST.get('route_code')
-        parent_code = request.POST.get('parent_code')
-
-        try:
-            with connection.cursor() as cursor:
-                # Execute the update query
-                cursor.execute("""
-                    UPDATE users
-                    SET UserName = %s,
-                        PhoneNumber = %s,
-                        Grouping = %s,
-                        IsBlocked = %s,
-                        LoginName = %s,
-                        AreaCode = %s,
-                        CityID = %s,
-                        RouteCode = %s,
-                        ParentCode = %s
-                    WHERE UserCode = %s
-                """, [
-                    user_name, phone_number, grouping, is_blocked,
-                    login_name, area_code, city_id, route_code,
-                    parent_code, user_code
-                ])
-
-            # If no exceptions were raised, display a success message
-            messages.success(request, 'User updated successfully.')
-        except Exception as e:
-            # Log the error if needed and display an error message
-            messages.error(request, f'Error updating user: {str(e)}')
-
-        # Redirect to the users list page
-        return redirect('users')
-
-    # If not a POST request, render the form with the current user data
-    else:
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT UserName, PhoneNumber, Grouping, IsBlocked, LoginName, AreaCode, CityID, RouteCode, ParentCode
-                FROM users
-                WHERE UserCode = %s
-            """, [user_code])
-            user = cursor.fetchone()
-
-        # Check if user exists
-        if not user:
-            messages.error(request, 'User not found.')
-            return redirect('users')
-
-        # Prepare the user data to render the form
-        user_data = {
-            'user_code': user_code,
-            'user_name': user[0],
-            'phone_number': user[1],
-            'grouping': user[2],
-            'is_blocked': user[3],
-            'login_name': user[4],
-            'area_code': user[5],
-            'city_id': user[6],
-            'route_code': user[7],
-            'parent_code': user[8],
-        }
-
-        return render(request, 'users/edit_user.html', {'user': user_data})
-
-
-def users(request):
-    # Extract query parameters from the request
-    user_code = request.GET.get('user_code', '').strip()
-    user_name = request.GET.get('user_name', '').strip()
-    phone_number = request.GET.get('phone_number', '').strip()
-    type_user = request.GET.get('type_user', '').strip()
-
-    # Initialize base query
-    query = """
-        SELECT UserCode, UserName, PhoneNumber, ug.Grouping, IsBlocked,
-               LoginName, AreaCode, CityID, RouteCode, ParentCode
-        FROM users u
-        LEFT JOIN User_Groups ug ON u.Grouping = ug.Grouping
-        WHERE 1=1
-    """
-
-    # Add conditions to the query based on the provided parameters
-    if user_code:
-        query += f" AND UserCode LIKE '%{user_code}%'"
-
-    if user_name:
-        query += f" AND UserName LIKE '%{user_name}%'"
-
-    if phone_number:
-        query += f" AND PhoneNumber LIKE '%{phone_number}%'"
-
-    if type_user:
-        query += f" AND Grouping = '{type_user}'"
-
-    # Execute the query
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        users_data = cursor.fetchall()
-
-    # Prepare the users list
-    users_list = [{
-        'UserCode': row[0],
-        'UserName': row[1],
-        'PhoneNumber': row[2],
-        'Grouping': row[3],
-        'IsBlocked': row[4],
-        'LoginName': row[5],
-        'AreaCode': row[6],
-        'CityID': row[7],
-        'RouteCode': row[8],
-        'ParentCode': row[9],
-    } for row in users_data]
-
-    # Render the template with the filtered users
-    return render(request, 'users/home.html', {'users': users_list})
-
-
-
-def user_parameters(request, user_code):
-    try:
-        print(f"Fetching parameters for user code: {user_code}")
-
-        # Query to fetch all parameters with default values
-        sql_query_all_params = """
-            SELECT ID, ParameterName, DefaultValue
-            FROM Parameters
-        """
-
-        with connection.cursor() as cursor:
-            cursor.execute(sql_query_all_params)
-            all_parameters_data = cursor.fetchall()
-
-        # Create a dictionary for all parameters with default values
-        all_parameters = {row[1]: {'ParameterName': row[1], 'ParameterValue': row[2], 'DefaultValue': row[2]} for row in all_parameters_data}
-
-        # Query to fetch user-specific parameters
-        sql_query_user_params = """
-            SELECT up.ParameterName, up.ParameterValue
-            FROM User_Parameters up
-            WHERE up.UserCode = %s
-        """
-
-        with connection.cursor() as cursor:
-            cursor.execute(sql_query_user_params, [user_code])
-            user_parameters_data = cursor.fetchall()
-
-        # Update the parameters with user-specific values
-        for param_name, param_value in user_parameters_data:
-            if param_name in all_parameters:
-                all_parameters[param_name]['ParameterValue'] = param_value
-
-        # Convert dictionary back to list for JSON response
-        user_parameters = list(all_parameters.values())
-
-        return JsonResponse(user_parameters, safe=False)
-    except Exception as e:
-        print(f"Error fetching user parameters: {e}")
-        return JsonResponse({'error': str(e)}, status=500)
-def user_parameters(request, user_code):
-    try:
-        # Query to fetch all parameters with default values
-        sql_query_all_params = """
-            SELECT ID, ParameterName, DefaultValue
-            FROM Parameters
-        """
-
-        with connection.cursor() as cursor:
-            cursor.execute(sql_query_all_params)
-            all_parameters_data = cursor.fetchall()
-
-        # Create a dictionary for all parameters with default values
-        all_parameters = {row[1]: {'ParameterName': row[1], 'ParameterValue': row[2], 'DefaultValue': row[2]} for row in all_parameters_data}
-
-        # Query to fetch user-specific parameters
-        sql_query_user_params = """
-            SELECT up.ParameterName, up.ParameterValue
-            FROM User_Parameters up
-            WHERE up.UserCode = %s
-        """
-
-        with connection.cursor() as cursor:
-            cursor.execute(sql_query_user_params, [user_code])
-            user_parameters_data = cursor.fetchall()
-
-        # Update the parameters with user-specific values
-        for param_name, param_value in user_parameters_data:
-            if param_name in all_parameters:
-                all_parameters[param_name]['ParameterValue'] = param_value
-
-        # Convert dictionary back to list for JSON response
-        user_parameters = list(all_parameters.values())
-
-        return JsonResponse(user_parameters, safe=False)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-
-# View to save user details'''
-'''@csrf_exempt
-def save_user(request):
-    if request.method == 'POST':
-        user_code = request.POST.get('UserCode')
-        user_name = request.POST.get('UserName')
-        phone_number = request.POST.get('PhoneNumber')
-        grouping = request.POST.get('Grouping')
-        is_blocked = request.POST.get('IsBlocked')
-        login_name = request.POST.get('LoginName')
-        area_code = request.POST.get('AreaCode')
-        city_id = request.POST.get('CityID')
-        route_code = request.POST.get('RouteCode')
-        parent_code = request.POST.get('ParentCode')
-
-        user, created = InternalUser.objects.update_or_create(
-            UserCode=user_code,
-            defaults={
-                'UserName': user_name,
-                'PhoneNumber': phone_number,
-                'Grouping': grouping,
-                'IsBlocked': is_blocked,
-                'LoginName': login_name,
-                'AreaCode': area_code,
-                'CityID': city_id,
-                'RouteCode': route_code,
-                'ParentCode': parent_code,
-            }
-        )
-
-        return JsonResponse({'status': 'success', 'created': created})
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
-
-
-def list_users(request):
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT UserCode, UserName, PhoneNumber, Grouping, IsBlocked,
-                   LoginName, AreaCode, CityID, RouteCode, ParentCode
-            FROM users
-        """)
-        users_data = cursor.fetchall()
-
-    users_list = []
-    for row in users_data:
-        user = {
-            'UserCode': row[0],
-            'UserName': row[1],
-            'PhoneNumber': row[2],
-            'Grouping': row[3],
-            'IsBlocked': row[4],
-            'LoginName': row[5],
-            'AreaCode': row[6],
-            'CityID': row[7],
-            'RouteCode': row[8],
-            'ParentCode': row[9],
-        }
-        users_list.append(user)
-
-    return render(request, 'list_users.html', {'users': users_list})
-
-def fetch_users():
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT UserCode, UserName FROM Users")
-        rows = cursor.fetchall()
-    users = [{'UserCode': row[0], 'UserName': row[1]} for row in rows]
-    return users'''
 
 def get_users(request):
     users = InternalUser.objects.all().values('UserCode', 'UserName', 'CityID')
@@ -446,10 +168,6 @@ def create_promotion(request):
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
-
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.db import connection
 
 def assign_promotions(request):
     form = AssignPromotionSearchForm(request.GET or None)
@@ -619,13 +337,19 @@ def assign_entity(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+
+# basket + product
 def define_basket(request):
     baskets = PromoItemBasketHeaders.objects.all()
-    form = BasketForm()  # Assuming you have a form defined for adding new baskets
-
+    all_products = Produit.objects.all()
+    form = ProduitForm()
+    basket_form = BasketForm()
     context = {
         'baskets': baskets,
+        'all_products': all_products,
         'form': form,
+        'basket_form': basket_form
+
     }
     return render(request, 'promotions/define_basket.html', context)
 
@@ -635,126 +359,154 @@ def add_basket(request):
         form = BasketForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('define_basket')  # Redirect back to the define_basket page after adding
+            return redirect('define_basket')
     else:
         form = BasketForm()
+    return render(request, 'promotions/define_basket.html', {'form': form})
 
-
-def get_promotion(request, promotion_id):
-    query = """
-        SELECT * FROM Promo_Headers WHERE Promotion_ID = %s
-    """
-    with connection.cursor() as cursor:
-        cursor.execute(query, [promotion_id])
-        row = cursor.fetchone()
-
-    if row:
-        promotion = {
-            'Promotion_ID': row[1],
-            'Promotion_Description': row[5],
-            'Promotion_Type': row[2],
-            'Start_Date': row[3],
-            'End_Date': row[4],
-            'Is_Forced': row[8],
-            'Is_Active': row[9],
-            'Priority': row[13],
-            'Promotion_Apply': row[14]
-            # Include all fields
-        }
-        return JsonResponse({'success': True, 'promotion': promotion})
+def add_product(request):
+    if request.method == "POST":
+        form = ProduitForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('define_basket')  
     else:
-        return JsonResponse({'success': False, 'error': 'Promotion not found'})
+        form = ProduitForm()
+    return render(request, 'promotions/define_basket.html', {'form': form})
 
-# View for editing a promotion
-def edit_promotion(request):
+def view_products(request, basket_id):
+    basket = get_object_or_404(PromoItemBasketHeaders, item_basket_id=basket_id)
+    products = Produit.objects.all()
+    if request.method == "POST":
+        form = ProduitForm(request.POST)
+        if form.is_valid():
+            product = form.save()
+            basket.products.add(product)
+            return redirect('define_basket')
+    else:
+        form = ProduitForm()
+    return render(request, 'view_products.html', {'basket': basket, 'products': products, 'form': form})
+
+
+def add_product_to_basket(request, basket_id):
+    basket = get_object_or_404(PromoItemBasketHeaders, item_basket_id=basket_id)
+    if request.method == "POST":
+        form = ProduitForm(request.POST)
+        if form.is_valid():
+            product = form.save()
+            basket.products.add(product)
+            return redirect('define_basket')
+    else:
+        form = ProduitForm()
+    return redirect('define_basket')
+
+def add_existing_product_to_basket(request, item_basket_id):
+    item_basket_id = request.POST.get('item_basket_id')
+    basket = get_object_or_404(PromoItemBasketHeaders, item_basket_id=item_basket_id)
+    if request.method == "POST":
+        product_id = request.POST.get('existing_product')
+        product = get_object_or_404(Produit, CodeProduit=product_id)
+        basket.products.add(product)
+    return redirect('define_basket')
+
+
+#promo
+def promotions_list(request):
+    promotions = PromoHeaders.objects.all()
+    form = PromoHeadersForm()
+    return render(request, 'promotions/home.html', {'promotions': promotions, 'form':form})
+
+def promotions(request):
     if request.method == 'POST':
-        promotion_id = request.POST.get('promotion_id')
-        promotion_description = request.POST.get('promotion_description')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
-        priority = request.POST.get('priority')
-        is_active = request.POST.get('is_active')
-        is_forced = request.POST.get('is_forced')
-        promotion_type = request.POST.get('promotion_type')
-        promotion_apply = request.POST.get('promotion_apply')
+        form = PromoHeadersForm(request.POST)
+        detail_form = PromoDetailsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('promotions')
+        else:
+            print(form.errors)
+    else:
+        form = PromoHeadersForm()
+        detail_form = PromoDetailsForm()
+    context = {
+        'form': form,
+        'promotions': PromoHeaders.objects.all(),
+        'detail_form': detail_form
+    }
+    return render(request, 'promotions/home.html', context)
 
-        query = """
-            UPDATE Promo_Headers
-            SET Promotion_Description = %s,
-                Start_Date = %s,
-                End_Date = %s,
-                Priority = %s,
-                Is_Active = %s,
-                Is_Forced = %s,
-                Promotion_Type = %s,
-                Promotion_Apply = %s
-            WHERE Promotion_ID = %s
-        """
-        params = [
-            promotion_description,
-            start_date,
-            end_date,
-            priority,
-            is_active,
-            is_forced,
-            promotion_type,
-            promotion_apply,
-            promotion_id
-        ]
-        with connection.cursor() as cursor:
-            cursor.execute(query, params)
-            return JsonResponse({'success': True})
-
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
-
-# View for deleting a promotion
-def delete_promotion(request):
+def create_promotion(request):
     if request.method == 'POST':
-        promotion_id = request.POST.get('promotion_id')
+        form = PromoHeadersForm(request.POST)
+        detail_form = PromoDetailsForm(request.POST)
+        
+        if form.is_valid() and detail_form.is_valid():
+            promo = form.save()
+            detail = detail_form.save(commit=False)
+            detail.promotion_id = promo
+            detail.save()
+            
+            messages.success(request, 'Promotion added successfully!')
+            return redirect('promotions_list')
+        else:
+            messages.error(request, 'Error adding promotion.')
+    else:
+        form = PromoHeadersForm()
+        detail_form = PromoDetailsForm()
 
-        query = """
-            DELETE FROM Promo_Headers WHERE Promotion_ID = %s
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(query, [promotion_id])
-            return JsonResponse({'success': True})
+    promotions = PromoHeaders.objects.all()
+    return render(request, 'promotions/home.html', {'form': form, 'promotions': promotions, 'detail_form': detail_form})
 
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
-
-
-@require_GET
-def search_baskets(request):
-    query = request.GET.get('query', '')
-    baskets = PromoItemBasketHeaders.objects.filter(item_basket_description__icontains=query)
-    basket_data = [{'item_basket_id': basket.item_basket_id, 'item_basket_description': basket.item_basket_description} for basket in baskets]
-    return JsonResponse({'success': True, 'results': basket_data})
-
-def get_basket(request, basket_id):
-    basket = get_object_or_404(PromoItemBasketHeaders, pk=basket_id)
-    return JsonResponse({'success': True, 'basket': {'item_basket_id': basket.item_basket_id, 'item_basket_description': basket.item_basket_description}})
-@csrf_exempt
-def update_checkbox(request):
+def edit_promotion(request, promotion_id):
+    promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
+    promo_detail = get_object_or_404(PromoDetails, promotion_id=promotion_id)
+    baskets = PromoItemBasketHeaders.objects.all()
     if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            promotion_id = data.get('promotion_id')
-            field = data.get('field')
-            value = data.get('value')
-
-            # Use raw SQL to update the database
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    f"UPDATE Promo_Headers SET {field} = %s WHERE Promotion_ID = %s",
-                    [value, promotion_id]
-                )
-
-            return JsonResponse({'success': True})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+        form = PromoHeadersForm(request.POST, instance=promotion)
+        if form.is_valid():
+            form.save()
+            return redirect('promotions_list')
+    else:
+        form = PromoHeadersForm(instance=promotion)
+    promotions = PromoHeaders.objects.all()
+    return render(request, 'promotions/home.html', {'form': form, 'promotion': promotion, 'promotions': promotions, 'promo_detail': promo_detail, 'baskets': baskets})
 
 
+
+def delete_promotion(request, promotion_id):
+    promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
+
+    if request.method == 'POST':
+        promotion.delete()
+        return redirect('promotions_list')
+
+    return render(request, 'promotions/delete.html', {'promotion': promotion})
+
+def get_promotion_data(request, promotion_id):
+    promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
+    promo_detail = get_object_or_404(PromoDetails, promotion_id=promotion_id)
+
+    data = {
+        'promotion_id': promotion.promotion_id,
+        'promotion_description': promotion.promotion_description,
+        'promotion_type': promotion.promotion_type,
+        'start_date': promotion.start_date,
+        'end_date': promotion.end_date,
+        'is_forced': promotion.is_forced,
+        'is_active': promotion.is_active,
+        'priority': promotion.priority,
+        'promotion_apply': promotion.promotion_apply,
+        'basket_id': promo_detail.basket_id,
+        'quantity_buy': promo_detail.quantity_buy,
+        'types_buy': promo_detail.types_buy,
+        'quantity_get': promo_detail.quantity_get,
+        'types_get': promo_detail.types_get
+    }
+
+    return JsonResponse(data)
+
+
+##### region
 def get_regions():
     with connection.cursor() as cursor:
         cursor.execute("SELECT Region_Code, Region_Description FROM Regions")

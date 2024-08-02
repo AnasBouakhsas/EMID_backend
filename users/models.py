@@ -167,25 +167,35 @@ class Clients(models.Model):
 
 
 class PromoHeaders(models.Model):
-        promotion_id = models.AutoField(primary_key=True)
-        promotion_type = models.CharField(max_length=3)
-        start_date = models.DateTimeField()
-        end_date = models.DateTimeField()
-        promotion_description = models.CharField(max_length=100)
-        achievement = models.DecimalField(max_digits=18, decimal_places=6)
-        target_value = models.DecimalField(max_digits=18, decimal_places=6)
-        is_active = models.BooleanField(default=False)
-        is_forced = models.BooleanField(default=False)
-        parent_id = models.CharField(max_length=14, null=True, blank=True)
-        priority = models.IntegerField()
-        promotion_apply = models.IntegerField()
+    promotion_id = models.AutoField(primary_key=True)
+    promotion_description = models.CharField(max_length=255)
+    promotion_type = models.CharField(max_length=50, choices=[('Trade Sales', 'Trade Sales'), ('Consumer Sales', 'Consumer Sales')])
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_forced = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    priority = models.IntegerField()
+    promotion_apply = models.CharField(max_length=50, choices=[('ISELL', 'ISELL'), ('E-Ordering', 'E-Ordering'), ('Retail', 'Retail')])
+    basket = models.ForeignKey('PromoItemBasketHeaders', on_delete=models.CASCADE, related_name='promo_headers', null=True, blank=True)
 
-        def __str__(self):
+
+
+    def __str__(self):
             return f'{self.promotion_description} ({self.promotion_id})'
 
-        class Meta:
+    class Meta:
             db_table = 'Promo_Headers'
 
+class PromoDetails(models.Model):
+    promotion_id = models.ForeignKey('PromoHeaders', on_delete=models.CASCADE, related_name='promo', null=True, blank=True)
+    basket = models.ForeignKey('PromoItemBasketHeaders', on_delete=models.CASCADE, related_name='promo_details', null=True, blank=True)
+    quantity_buy = models.IntegerField()
+    types_buy = models.CharField(max_length=50, choices=[('Amount', 'Amount'), ('Caisse', 'Caisse'), ('Cartouche', 'Cartouche'), ('Paquet', 'Paquet')])
+    quantity_get = models.IntegerField()
+    types_get = models.CharField(max_length=50, choices=[('Pourcentage', 'Pourcentage'), ('Cutoff Price', 'Cutoff Price')])
+
+    class Meta:
+            db_table = 'Promo_Details'
 
 
 class PromoAssignments(models.Model):
@@ -203,7 +213,9 @@ class PromoItemBasketHeaders(models.Model):
     item_basket_id = models.AutoField(primary_key=True)
     item_basket_description = models.CharField(max_length=100)
     creation_date = models.DateTimeField(default=timezone.now)
-    last_updated_date = models.DateTimeField()
+    last_updated_date = models.DateTimeField(default=timezone.now)
+    products = models.ManyToManyField('Produit', related_name='baskets', blank=True)
+
 
     class Meta:
         db_table = 'Promo_Item_Basket_Headers'
@@ -255,3 +267,13 @@ class Device(models.Model):
 
     def __str__(self):
         return self.device_name
+
+
+class Produit(models.Model):
+    CodeProduit = models.CharField(max_length=100, unique=True)
+    ProduitDescription = models.CharField(max_length=100)
+    AltProduitDescription = models.CharField(max_length=100, blank=True, null=True)
+    typeProduit = models.CharField(max_length=100, default = 'Item')
+
+    def __str__(self):
+        return self.ProduitDescription

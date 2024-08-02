@@ -1,5 +1,5 @@
 from django import forms
-from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, Device, InternalUser, PromoHeaders, PromoItemBasketHeaders, Routes, UserGroupe
+from .models import Channels, Client_Discounts, Client_Statut, Client_Target, Clients, Device, InternalUser, Produit, PromoDetails, PromoHeaders, PromoItemBasketHeaders, Routes, UserGroupe
 from django.db import connection
 
 
@@ -74,8 +74,13 @@ class AssignPromotionSearchForm(forms.Form):
 class BasketForm(forms.ModelForm):
     class Meta:
         model = PromoItemBasketHeaders
-        fields = ['item_basket_id'
-            ,'item_basket_description']
+        fields = [
+            'item_basket_id',
+            'item_basket_description'
+        ]
+        
+
+
 class PromotionSearchForm(forms.Form):
     promotion_id = forms.IntegerField(required=False, label='Promotion ID')
     promotion_description = forms.CharField(max_length=100, required=False, label='Description')
@@ -125,6 +130,52 @@ class NewPromotionForm(forms.Form):
         choices=[('ISELL', 'ISELL'), ('E-Ordering', 'E-Ordering'), ('Other', 'Other')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+class PromoHeadersForm(forms.ModelForm):
+    class Meta:
+        model = PromoHeaders
+        fields = [
+            'promotion_description', 
+            'promotion_type', 
+            'start_date', 
+            'end_date',
+            'is_forced', 
+            'is_active',  
+            'priority', 
+            'promotion_apply', 
+            'basket'
+        ]
+        widgets = {
+            'promotion_description': forms.TextInput(attrs={'class': 'form-control'}),
+            'promotion_type': forms.Select(attrs={'class': 'form-control'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'is_forced': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'priority': forms.NumberInput(attrs={'class': 'form-control'}),            
+            'promotion_apply': forms.Select(attrs={'class': 'form-control'}),
+            'basket': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+
+
+class PromoDetailsForm(forms.ModelForm):
+    class Meta:
+        model = PromoDetails
+        fields = [
+
+            'basket',
+            'quantity_buy',
+            'types_buy',
+            'quantity_get',
+            'types_get'
+
+        ]
+
+
+
+
+
 
 class clientForm(forms.ModelForm):
     status_choices = [(status.Client_Statut_ID, status.Statut_Description) for status in Client_Statut.objects.all()]
@@ -254,3 +305,15 @@ class DeviceForm(forms.ModelForm):
             'device_status': forms.TextInput(attrs={'class': 'form-control'}),
             'type': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+
+class ProduitForm(forms.ModelForm):
+    class Meta:
+        model = Produit
+        fields = [
+        'CodeProduit',
+        'ProduitDescription',
+        'AltProduitDescription',
+        'typeProduit'
+        ]

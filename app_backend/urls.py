@@ -1,10 +1,10 @@
 from django.urls import path, include
 from django.contrib import admin
 from users import views
-from users.views import add_user, delete_user, edit_user, get_client_data, get_client_statut_data, get_routes_data, get_user_data, home, search_user, users, routes, promotions
+from users.views import add_existing_product_to_basket, add_user, delete_user, edit_user, get_client_data, get_client_statut_data, get_routes_data, get_user_data, home, search_user, users, routes, promotions
 from users.views import( home, users, routes, promotions, get_target,
     add_route, edit_route, delete_route, affectation_routes_users, assign_user_to_route, assign_client_to_route,
-    get_routes, get_route_clients, affectation_clients_routes, search_baskets, assign_promotions,add_basket, define_basket, load_entities,assign_entity)
+    get_routes, get_route_clients, affectation_clients_routes, assign_promotions,add_basket, define_basket, load_entities,assign_entity)
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
@@ -18,8 +18,6 @@ urlpatterns = [
     path('routes/delete/<int:route_id>/', delete_route, name='delete_route'),
     path('routes/affectation-routes-users/', affectation_routes_users, name='affectation_routes_users'),
     path('routes/assign_user_to_route/', assign_user_to_route, name='assign_user_to_route'),
-    path('promotions/search_baskets/', views.search_baskets, name='search_baskets'),
-    path('promotions/get_basket/<int:basket_id>/', views.get_basket, name='get_basket'),
     path('routes/get-routes/', views.get_routes, name='get_routes'),
     path('routes/get-route-clients/', views.get_route_clients, name='get_route_clients'),
     path('routes/assign-client-to-route/', views.assign_client_to_route, name='assign_client_to_route'),
@@ -32,14 +30,19 @@ urlpatterns = [
     path('promotions/assign_promotions', assign_promotions, name='assign_promotions'),
     path('promotions/load_entities/', views.load_entities, name='load_entities'),
     path('promotions/assign_entity/', views.assign_entity, name='assign_entity'),
+
     path('promotions/define_basket/', views.define_basket, name='define_basket'),
     path('promotions/add_basket/', views.add_basket, name='add_basket'),
+    path('add_product/', views.add_product, name='add_product'),
+    path('add_product_to_basket/<int:basket_id>/', views.add_product_to_basket, name='add_product_to_basket'),
+    path('view_products/<int:basket_id>/', views.view_products, name='view_products'),
+    path('add_existing_product_to_basket/<int:item_basket_id>/', add_existing_product_to_basket, name='add_existing_product_to_basket'),
 
-    path('promotions/create/', views.create_promotion, name='create_promotion'),
-    path('promotions/get/<int:promotion_id>/', views.get_promotion, name='get_promotion'),
-    path('promotions/edit/', views.edit_promotion, name='edit_promotion'),
-    path('promotions/delete/', views.delete_promotion, name='delete_promotion'),
-    path('promotions/update_checkbox/', views.update_checkbox, name='update_checkbox'),
+    path('promotions/', views.promotions_list, name='promotions_list'),
+    path('promotions/<int:promotion_id>/edit/', views.edit_promotion, name='edit_promotion'),
+    path('promotions/delete/<int:promotion_id>/', views.delete_promotion, name='delete_promotion'),
+    path('promotions/<int:promotion_id>/data/', views.get_promotion_data, name='get_promotion_data'),
+    path('create_promotion/', views.create_promotion, name='create_promotion'),
 
 
     path('devices/home_device/', views.home_device, name='devices'),

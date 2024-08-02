@@ -1,207 +1,194 @@
+{% load static %}
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>define basket</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+ 
+ <style>
+     .navbar {
+         background-color: #f8f9fa;
+     }
 
-    <style>
-        .navbar {
-            background-color: #f8f9fa;
-        }
+     .navbar-brand {
+         font-weight: bold;
+     }
 
-        .navbar-brand {
-            font-weight: bold;
-        }
+     .navbar-nav .nav-link {
+         color: #007bff;
+     }
 
-        .navbar-nav .nav-link {
-            color: #007bff;
-        }
+    
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+     .btn-primary {
+         background-color: #81bae7;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         color: white;
+         cursor: pointer;
+         align-self: center;
+     }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #a2a2a2;
-        }
+     .btn-primary:hover {
+         background-color: #0056b3;
+     }
 
-        th {
-            background-color: #2262c6;
-        }
+     .form-inline .form-control {
+         width: auto;
+     }
+     .auto-width-select {
+        width: auto;
+        min-width: 150px; 
+        max-width: 100%;
+        white-space: nowrap;
+     }
+     h1, h2 {
+         color: #0056b3;
+         font-family: 'Poppins', sans-serif;
+         font-weight: 600;
+         font-size: 200%;
+         text-align: center;
+        
+     }
 
-        .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+     
 
-        .styled-table thead tr {
-            background-color: #009879;
-            color: #ffffff;
-            text-align: left;
-            font-weight: bold;
-        }
+     .btn-sm {
+         padding: 5px 10px;
+     }
 
-        .styled-table th,
-        .styled-table td {
-            padding: 12px 15px;
-            border: 1px solid #dddddd;
-        }
+     .btn-danger {
+         background-color: #dc3545;
+         border-color: #dc3545;
+     }
 
-        .styled-table tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
+     .btn-danger:hover {
+         background-color: #c82333;
+         border-color: #bd2130;
+     }
 
-        .styled-table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
+     .btn-warning {
+         background-color: #ffc107;
+         border-color: #ffc107;
+         color: #212529;
+     }
 
-        .styled-table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
+     .btn-warning:hover {
+         background-color: #e0a800;
+         border-color: #d39e00;
+         color: #212529;
+     }
 
-        .styled-table tbody tr.active-row {
-            font-weight: bold;
-            color: #009879;
-        }
+     .mt-4 {
+         margin-top: 1.5rem;
+     }
 
-        h1 {
-            color: #0056b3;
-            font-family: 'Poppins', sans-serif; /* Appliquer la nouvelle police */
-            font-weight: 600; /* Utiliser un poids de police approprié */
-            font-size: 200%;
-            margin-left: 1%;
-        }
-
-        .btn-custom {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-custom:hover {
-            background-color: #218838;
-        }
-
-        .btn-container {
-            display: flex;
-            align-items: center;
-            margin-top: 90px;
-        }
-
-        .btn-basket {
-            margin-left: 80%; /* Space between h1 and button */
-            background-color: #007bff; /* Primary color */
-            color: white; /* Text color */
-            border: none; /* Remove border */
-            border-radius: 50%; /* Make the button rounded */
-            width: 50px;
-            height: 50px; /* Set the width and height for a circular button */
-            padding: 10px; /* Add some padding */
-            cursor: pointer; /* Pointer cursor on hover */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-            transition: background-color 0.3s ease; /* Smooth background color transition */
-        }
-
-        .btn-basket:hover {
-            background-color: #0056b3; /* Darker shade on hover */
-        }
-
-        #newBasketPopup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+     .float-right {
+         float: right;
+     }
+     .table{
+        --bs-table-bg:none;
+     }
+     th {
+        background-color: #2262c6;
+        color: #fff;
+        
+    }
+ </style>
 </head>
+
+
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
-        <img src="bg.png" alt="My Project" style="height: 80px;">
+        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'users' %}">Users</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'users' %}">Clients</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'devices' %}">Devices</a>
+                <a class="nav-link text-dark" href="{% url 'home' %}">Home</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'routes' %}" aria-expanded="false">Routes</a>
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Users</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'users' %}">Info Users</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_groupe' %}">User Groupe</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Clients</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home_client' %}">Info Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_client_status' %}">Statut des Client</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_target' %}">Client target</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_discounts' %}">Client discount</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'home_channel' %}">Channels</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'devices' %}">Devices</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Routes</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{% url 'routes' %}">Routes</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Users</a></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_routes_users' %}">Affectation Routes-Users</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'routes' %}">Affectation Routes-Clients</a></li>
+                    <li><a class="dropdown-item" href="{% url 'affectation_clients_routes' %}">Affectation Routes-Clients</a></li>
                 </ul>
             </li>
-            <li class="nav-item active dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'promotions' %}">Promotions</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Promotions</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{% url 'promotions' %}">Promotions</a></li>
+
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'assign_promotions' %}">Assign Promotions</a></li>
+
                     <li><hr class="dropdown-divider"></li>
+
                     <li><a class="dropdown-item" href="{% url 'define_basket' %}">Define Basket</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
             </li>
         </ul>
     </div>
 </nav>
-
-<div class="btn-container">
-    <h1>Define Baskets</h1>
-    <button class="btn-basket" onclick="showNewBasketPopup()">
-        <i class="fas fa-plus"></i>
-    </button>
+<h1>Define Baskets</h1>
+<div class="d-flex justify-content-right mb-4">     
+    <a href="#" data-bs-toggle="modal" data-bs-target="#newBasketModal"  class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>Add Basket
+    </a>
 </div>
 
-<!-- Popup form for adding new basket -->
-<div id="newBasketPopup">
-    <form method="post" action="{% url 'add_basket' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add Basket</button>
-    </form>
-</div>
-
-<table class="styled-table">
+<table class="table">
     <thead>
-    <tr>
-        <th>Item Basket ID</th>
-        <th>Item Basket Description</th>
+    <tr style="background-color:#2262c6;">
+        <th class="text-white">Item Basket ID</th>
+        <th class="text-white">Item Basket Description</th>
+        <th class="text-white">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -209,7 +196,13 @@
     <tr>
         <td>{{ basket.item_basket_id }}</td>
         <td>{{ basket.item_basket_description }}</td>
+        <td>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#viewProductsModal-{{ basket.item_basket_id }}" class="btn btn-info">
+                <i class="fas fa-eye"></i>
+            </a>
+        </td>
     </tr>
+    
     {% empty %}
     <tr>
         <td colspan="2">No baskets found.</td>
@@ -218,10 +211,97 @@
     </tbody>
 </table>
 
-<script>
-    function showNewBasketPopup() {
-        document.getElementById('newBasketPopup').style.display = 'block';
-    }
-</script>
+<!-- Modal form for adding new basket -->
+<div class="modal fade" id="newBasketModal" tabindex="-1" role="dialog" aria-labelledby="newBasketModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newBasketModalLabel">Add Basket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addBasketForm" method="post" action="{% url 'add_basket' %}">
+                    {% csrf_token %}
+                    {{ basket_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+                <div id="form-messages"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for basket in baskets %}
+    <!-- Modal for Viewing and Adding Products -->
+    <div class="modal fade" id="viewProductsModal-{{ basket.item_basket_id }}" tabindex="-1" role="dialog" aria-labelledby="viewProductsModalLabel-{{ basket.item_basket_id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewProductsModalLabel-{{ basket.item_basket_id }}">Products in Basket: {{ basket.item_basket_description }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Buttons to Select Action -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#addNewProductForm-{{ basket.item_basket_id }}">Add New Product</button>
+                        <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#selectExistingProductForm-{{ basket.item_basket_id }}">Select Existing Product</button>
+                    </div>
+
+                    <!-- Form for Adding a New Product -->
+                    <div id="addNewProductForm-{{ basket.item_basket_id }}" class="collapse">
+                        <form method="post" action="{% url 'add_product_to_basket' basket.item_basket_id %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">Add </button>
+                        </form>
+                    </div>
+
+                    <!-- Form for Selecting an Existing Product -->
+                    <div id="selectExistingProductForm-{{ basket.item_basket_id }}" class="collapse">
+                        <form method="post" action="{% url 'add_existing_product_to_basket' basket.item_basket_id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="existingProduct">Select Product</label>
+                                <select name="existing_product" id="existingProduct" class="form-control">
+                                    {% for product in all_products %}
+                                    <option value="{{ product.id }}">{{ product.ProduitDescription }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Existing Product</button>
+                        </form>
+                    </div>
+
+                    <!-- List of Products in the Basket -->
+                    <h5 class="mt-4">Existing Products</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product Code</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in basket.products.all %}
+                            <tr>
+                                <td>{{ product.CodeProduit }}</td>
+                                <td>{{ product.ProduitDescription }}</td>
+                                <td>{{ product.typeProduit }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">No products in this basket.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
