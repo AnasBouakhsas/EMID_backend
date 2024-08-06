@@ -38,11 +38,13 @@ urlpatterns = [
     path('view_products/<int:basket_id>/', views.view_products, name='view_products'),
     path('add_existing_product_to_basket/<int:item_basket_id>/', add_existing_product_to_basket, name='add_existing_product_to_basket'),
 
-    path('promotions/', views.promotions_list, name='promotions_list'),
     path('promotions/<int:promotion_id>/edit/', views.edit_promotion, name='edit_promotion'),
     path('promotions/delete/<int:promotion_id>/', views.delete_promotion, name='delete_promotion'),
     path('promotions/<int:promotion_id>/data/', views.get_promotion_data, name='get_promotion_data'),
     path('create_promotion/', views.create_promotion, name='create_promotion'),
+    path('promotions/<int:promotion_id>/details/', views.get_promotion_details, name='get_promotion_details'),
+
+
 
 
     path('devices/home_device/', views.home_device, name='devices'),

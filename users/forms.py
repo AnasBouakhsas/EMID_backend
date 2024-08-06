@@ -164,7 +164,6 @@ class PromoDetailsForm(forms.ModelForm):
         model = PromoDetails
         fields = [
 
-            'basket',
             'quantity_buy',
             'types_buy',
             'quantity_get',

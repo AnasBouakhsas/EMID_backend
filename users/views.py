@@ -401,11 +401,11 @@ def add_product_to_basket(request, basket_id):
     return redirect('define_basket')
 
 def add_existing_product_to_basket(request, item_basket_id):
-    item_basket_id = request.POST.get('item_basket_id')
+    #item_basket_id = request.POST.get('item_basket_id')
     basket = get_object_or_404(PromoItemBasketHeaders, item_basket_id=item_basket_id)
     if request.method == "POST":
         product_id = request.POST.get('existing_product')
-        product = get_object_or_404(Produit, CodeProduit=product_id)
+        product = get_object_or_404(Produit, id=product_id)
         basket.products.add(product)
     return redirect('define_basket')
 
@@ -413,8 +413,9 @@ def add_existing_product_to_basket(request, item_basket_id):
 #promo
 def promotions_list(request):
     promotions = PromoHeaders.objects.all()
+    baskets = PromoItemBasketHeaders.objects.all()
     form = PromoHeadersForm()
-    return render(request, 'promotions/home.html', {'promotions': promotions, 'form':form})
+    return render(request, 'promotions/home.html', {'promotions': promotions, 'form':form , 'baskets': baskets})
 
 def promotions(request):
     if request.method == 'POST':
@@ -428,26 +429,33 @@ def promotions(request):
     else:
         form = PromoHeadersForm()
         detail_form = PromoDetailsForm()
+        baskets = PromoItemBasketHeaders.objects.all()
+
     context = {
         'form': form,
         'promotions': PromoHeaders.objects.all(),
-        'detail_form': detail_form
+        'detail_form': detail_form,
+        'baskets': baskets
     }
     return render(request, 'promotions/home.html', context)
 
 def create_promotion(request):
+    baskets = PromoItemBasketHeaders.objects.all()
+
     if request.method == 'POST':
         form = PromoHeadersForm(request.POST)
         detail_form = PromoDetailsForm(request.POST)
-        
+        id = request.POST.get('basket')
+        basket =PromoItemBasketHeaders.objects.get(item_basket_id = id)
         if form.is_valid() and detail_form.is_valid():
             promo = form.save()
             detail = detail_form.save(commit=False)
             detail.promotion_id = promo
+            detail.basket = basket
             detail.save()
             
             messages.success(request, 'Promotion added successfully!')
-            return redirect('promotions_list')
+            return redirect('promotions')
         else:
             messages.error(request, 'Error adding promotion.')
     else:
@@ -455,21 +463,33 @@ def create_promotion(request):
         detail_form = PromoDetailsForm()
 
     promotions = PromoHeaders.objects.all()
-    return render(request, 'promotions/home.html', {'form': form, 'promotions': promotions, 'detail_form': detail_form})
+    return render(request, 'promotions/home.html', {'form': form, 'promotions': promotions, 'detail_form': detail_form,'baskets': baskets})
 
 def edit_promotion(request, promotion_id):
     promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
     promo_detail = get_object_or_404(PromoDetails, promotion_id=promotion_id)
     baskets = PromoItemBasketHeaders.objects.all()
+    print(baskets)
     if request.method == 'POST':
         form = PromoHeadersForm(request.POST, instance=promotion)
-        if form.is_valid():
+        detail_form = PromoDetailsForm(request.POST, instance=promo_detail)
+
+        if form.is_valid() and detail_form.is_valid():
             form.save()
-            return redirect('promotions_list')
+            detail_form.save()
+            return redirect('promotions')
     else:
         form = PromoHeadersForm(instance=promotion)
+        detail_form = PromoDetailsForm(instance=promo_detail)
     promotions = PromoHeaders.objects.all()
-    return render(request, 'promotions/home.html', {'form': form, 'promotion': promotion, 'promotions': promotions, 'promo_detail': promo_detail, 'baskets': baskets})
+    return render(request, 'promotions/home.html', {
+        'form': form,
+        'detail_form': detail_form,
+        'promotion': promotion,
+        'promotions': promotions,
+        'promo_detail': promo_detail,
+        'baskets': baskets
+    })
 
 
 
@@ -478,9 +498,9 @@ def delete_promotion(request, promotion_id):
 
     if request.method == 'POST':
         promotion.delete()
-        return redirect('promotions_list')
+        return redirect('promotions')
 
-    return render(request, 'promotions/delete.html', {'promotion': promotion})
+    return render(request, 'promotions/home.html', {'promotion': promotion})
 
 def get_promotion_data(request, promotion_id):
     promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
@@ -496,7 +516,6 @@ def get_promotion_data(request, promotion_id):
         'is_active': promotion.is_active,
         'priority': promotion.priority,
         'promotion_apply': promotion.promotion_apply,
-        'basket_id': promo_detail.basket_id,
         'quantity_buy': promo_detail.quantity_buy,
         'types_buy': promo_detail.types_buy,
         'quantity_get': promo_detail.quantity_get,
@@ -504,6 +523,24 @@ def get_promotion_data(request, promotion_id):
     }
 
     return JsonResponse(data)
+
+def get_baskets(request):
+    baskets = PromoItemBasketHeaders.objects.all()
+    data = {
+        'baskets': list(baskets.values('item_basket_id', 'item_basket_description'))
+    }
+    return JsonResponse(data)
+
+
+def get_promotion_details(request, promotion_id):
+    promo_details = PromoDetails.objects.filter(promotion_id=promotion_id)
+    data = {
+        'promo_details': list(promo_details.values('basket', 'quantity_buy', 'types_buy', 'quantity_get', 'types_get'))
+    }
+    return JsonResponse(data)
+
+
+
 
 
 ##### region
