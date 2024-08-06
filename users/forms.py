@@ -143,7 +143,6 @@ class PromoHeadersForm(forms.ModelForm):
             'is_active',  
             'priority', 
             'promotion_apply', 
-            'basket'
         ]
         widgets = {
             'promotion_description': forms.TextInput(attrs={'class': 'form-control'}),
@@ -163,13 +162,16 @@ class PromoDetailsForm(forms.ModelForm):
     class Meta:
         model = PromoDetails
         fields = [
-
+            'basket',
             'quantity_buy',
             'types_buy',
             'quantity_get',
             'types_get'
 
         ]
+    widgets = {
+        'basket': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+    }
 
 
 

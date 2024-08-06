@@ -176,7 +176,6 @@ class PromoHeaders(models.Model):
     is_active = models.BooleanField(default=True)
     priority = models.IntegerField()
     promotion_apply = models.CharField(max_length=50, choices=[('ISELL', 'ISELL'), ('E-Ordering', 'E-Ordering'), ('Retail', 'Retail')])
-    basket = models.ForeignKey('PromoItemBasketHeaders', on_delete=models.CASCADE, related_name='promo_headers', null=True, blank=True)
 
 
 

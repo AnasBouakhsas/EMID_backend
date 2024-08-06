@@ -377,8 +377,8 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="basket" class="form-label">Basket</label>
-                                <input type="hidden" class="form-control" id="basket_id" name="basket2">
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#findBasketModal">
+                                <input type="hidden" class="form-control" id="basket_idEdit" name="basket2"> <!-- Assurez-vous que le nom correspond à ce que vous utilisez pour le traitement -->
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#findBasketEditModal">
                                     Find
                                 </button>
                             </div>
@@ -434,6 +434,7 @@
     </div>
 </div>
 
+
 <!-- Find Basket Modal -->
 <div class="modal fade" id="findBasketModal" tabindex="-1" aria-labelledby="findBasketModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -447,19 +448,19 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Select</th>
                             <th>Basket ID</th>
                             <th>Basket Name</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for basket in baskets %}
                         <tr>
+                            <td>
+                                <input type="checkbox" name="selected_baskets" value="{{ basket.item_basket_id }}" data-id="{{ basket.item_basket_id }}" data-name="{{ basket.item_basket_description }}">
+                            </td>
                             <td>{{ basket.item_basket_id }}</td>
                             <td>{{ basket.item_basket_description }}</td>
-                            <td>
-                                <input type="radio" name="selected_basket" value="{{ basket.item_basket_id }}" data-id="{{ basket.item_basket_id }}" data-name="{{ basket.item_basket_description }}">
-                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -469,6 +470,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Promotion Details Modal -->
 <div class="modal fade" id="promoDetailsModal" tabindex="-1" aria-labelledby="promoDetailsModalLabel" aria-hidden="true">
@@ -502,20 +504,69 @@
 </div>
 
 
+
+
+<!-- Find Basket Edit Modal -->
+<div class="modal fade" id="findBasketEditModal" tabindex="-1" aria-labelledby="findBasketEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="findBasketEditModalLabel">Select Basket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Display existing baskets in a table -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Basket ID</th>
+                            <th>Basket Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for basket in baskets %}
+                        <tr>
+                            <td>
+                                <input type="radio" name="selected_baskets" value="{{ basket.item_basket_id }}" data-name="{{ basket.item_basket_description }}">
+                            </td>
+                            <td>{{ basket.item_basket_id }}</td>
+                            <td>{{ basket.item_basket_description }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary" id="selectBasketEditButton">Select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
             var modal = document.getElementById('editPromotionModal');
-            
+            const basket_button = document.getElementById('basket_idEdit');
+            var basketInput = document.getElementById('basket_id'); // Assurez-vous que l'ID correspond à votre champ
+           
+            basket_button.value= basketInput.value
             modal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
                 var promotionId = button.getAttribute('data-promotion-id');
                 var form = modal.querySelector('#editPromotionForm');
-                
+               
                 if (promotionId) {
                     fetch(`/promotions/${promotionId}/data/`)
                         .then(response => response.json())
                         .then(data => {
+                            if(basketInput.value === ''){
+                                basket_button.value= data.id
+                            }else{
+                                basket_button.value= basketInput.value
+                            }
+                         
                             console.log('Promotion data received:', data);
+                           
                             if (form) {
                                 const fields = {
                                     'promotion_id': 'input',
@@ -532,7 +583,7 @@
                                     'quantity_get': 'input',
                                     'types_get': 'select'
                                 };
-                                
+                               
                                 for (const [field, selector] of Object.entries(fields)) {
                                     const element = form.querySelector(`${selector}[name="${field}"]`);
                                     if (element) {
@@ -551,7 +602,7 @@
                             }
                         })
                         .catch(error => console.error('Error fetching promotion data:', error));
-                        
+                       
                     // Update the form action URL for editing the promotion
                     if (form) {
                         form.action = `/promotions/${promotionId}/edit/`;
@@ -561,28 +612,8 @@
                 }
             });
         });
-        document.addEventListener('DOMContentLoaded', function () {
-    var deletePromotionModal = document.getElementById('deletePromotionModal');
-    
-    deletePromotionModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var promotionId = button.getAttribute('data-promotion-id');
-        
-        var deleteInput = document.getElementById('deletePromotionId');
-        if (deleteInput) {
-            deleteInput.value = promotionId;
-        } else {
-            console.error('Delete input field not found');
-        }
 
-        var form = document.getElementById('deletePromotionForm');
-        if (form) {
-            form.action = `/promotions/delete/${promotionId}/`;
-        } else {
-            console.error('Delete form not found');
-        }
-    });
-});
+
 
 document.addEventListener('DOMContentLoaded', function () {
     var promoDetailsModal = document.getElementById('promoDetailsModal');
@@ -616,24 +647,99 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     var findBasketModal = document.getElementById('findBasketModal');
+    var addPromotionModal = new bootstrap.Modal(document.getElementById('addPromotionModal'));
     var selectBasketButton = document.getElementById('selectBasketButton');
     var basketInput = document.getElementById('basket_id'); // Assurez-vous que l'ID correspond à votre champ
     var basketNameDisplay = document.getElementById('selectedBasketName');
     
-    
     selectBasketButton.addEventListener('click', function () {
-        var selectedBaskets = Array.from(findBasketModal.querySelectorAll('input[name="selected_basket"]:checked'));
+        var selectedBaskets = Array.from(findBasketModal.querySelectorAll('input[name="selected_baskets"]:checked'));
+        
         if (selectedBaskets.length > 0) {
-            var selectedBasket = selectedBaskets[0];
-            basketInput.value = selectedBasket.value; // Mise à jour de la valeur de l'input
-            console.log( basketInput.value);           
-            var bootstrapModal = bootstrap.Modal.getInstance(findBasketModal);
-            bootstrapModal.hide();
+            var basketIds = selectedBaskets.map(function (checkbox) {
+                return checkbox.value;
+            });
+
+            var basketNames = selectedBaskets.map(function (checkbox) {
+                return checkbox.getAttribute('data-name');
+            });
+
+            basketInput.value = basketIds.join(', '); // Mise à jour de la valeur de l'input avec les IDs sélectionnés
+            if (basketNameDisplay) {
+                basketNameDisplay.textContent = basketNames.join(', '); // Mise à jour du texte affiché avec les noms sélectionnés
+            }
+
+            var bootstrapFindBasketModal = bootstrap.Modal.getInstance(findBasketModal);
+            bootstrapFindBasketModal.hide();
+            
+            // Réouverture du modal addPromotionModal
+            addPromotionModal.show();
+        } else {
+            alert('Please select at least one basket.');
+        }
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var deletePromotionModal = document.getElementById('deletePromotionModal');
+    
+    deletePromotionModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var promotionId = button.getAttribute('data-promotion-id');
+        
+        var deleteInput = document.getElementById('deletePromotionId');
+        if (deleteInput) {
+            deleteInput.value = promotionId;
+        } else {
+            console.error('Delete input field not found');
+        }
+
+        var form = document.getElementById('deletePromotionForm');
+        if (form) {
+            form.action = `/promotions/delete/${promotionId}/`;
+        } else {
+            console.error('Delete form not found');
+        }
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var findBasketEditModal = document.getElementById('findBasketEditModal');
+    var editPromotionModal = new bootstrap.Modal(document.getElementById('editPromotionModal'));
+    var selectBasketEditButton = document.getElementById('selectBasketEditButton'); // ID du bouton dans findBasketEditModal
+    var basketInputEdit = document.getElementById('basket_idEdit'); // Champ caché dans editPromotionModal
+    var basketNameDisplayEdit = document.getElementById('selectedBasketNameEdit'); // Affichage du nom du panier dans editPromotionModal
+
+    selectBasketEditButton.addEventListener('click', function () {
+        var selectedBasket = findBasketEditModal.querySelector('input[name="selected_baskets"]:checked');
+        
+        if (selectedBasket) {
+            var basketId = selectedBasket.value;
+            var basketName = selectedBasket.getAttribute('data-name');
+            
+            // Mise à jour du champ dans le formulaire d'édition
+            if (basketInputEdit) {
+                basketInputEdit.value = basketId;
+            }
+            if (basketNameDisplayEdit) {
+                basketNameDisplayEdit.textContent = basketName;
+            }
+
+            var bootstrapFindBasketEditModal = bootstrap.Modal.getInstance(findBasketEditModal);
+            bootstrapFindBasketEditModal.hide();
+            
+            // Réouverture du modal editPromotionModal
+            editPromotionModal.show();
         } else {
             alert('Please select a basket.');
         }
     });
 });
+
 
     </script>
     

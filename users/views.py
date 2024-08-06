@@ -70,272 +70,70 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
-
-def promotions(request):
-    form = PromotionSearchForm(request.GET or None)
-    params = {}
-    query = """
-        SELECT 
-            Promotion_ID, 
-            Promotion_Description, 
-            Promotion_Type, 
-            Start_Date, 
-            End_Date, 
-            Is_Forced, 
-            Is_Active, 
-            Priority, 
-            Promotion_Apply
-        FROM 
-            Promo_Headers
-        WHERE 1=1
-    """
-
-    if request.GET:
-        if form.is_valid():
-            promotion_id = form.cleaned_data.get('promotion_id')
-            promotion_description = form.cleaned_data.get('promotion_description')
-            start_date = form.cleaned_data.get('start_date')
-            end_date = form.cleaned_data.get('end_date')
-
-            if promotion_id:
-                query += " AND Promotion_ID = %(promotion_id)s"
-                params['promotion_id'] = promotion_id
-
-            if promotion_description:
-                query += " AND Promotion_Description LIKE %(promotion_description)s"
-                params['promotion_description'] = f"%{promotion_description}%"
-
-            if start_date:
-                query += " AND Start_Date >= %(start_date)s"
-                params['start_date'] = start_date
-
-            if end_date:
-                query += " AND End_Date <= %(end_date)s"
-                params['end_date'] = end_date
-
-    with connection.cursor() as cursor:
-        cursor.execute(query, params)
-        columns = [col[0] for col in cursor.description]
-        promotions = [dict(zip(columns, row)) for row in cursor.fetchall()]
-
-    context = {
-        'form': form,
-        'promotions': promotions
-    }
-
-    return render(request, 'promotions/home.html', context)
-def create_promotion(request):
-    if request.method == 'POST':
-        form = NewPromotionForm(request.POST)
-        if form.is_valid():
-            promotion_description = form.cleaned_data['promotion_description']
-            start_date = form.cleaned_data['start_date']
-            end_date = form.cleaned_data['end_date']
-            priority = form.cleaned_data['priority']
-            max_applied = form.cleaned_data['max_applied']
-            is_active = form.cleaned_data['is_active']
-            is_forced = form.cleaned_data['is_forced']
-            promotion_type = form.cleaned_data['promotion_type']
-            promotion_apply = form.cleaned_data['promotion_apply']
-
-            query = """
-                INSERT INTO Promo_Headers (
-                    Promotion_Description,
-                    Start_Date,
-                    End_Date,
-                    Priority,
-                    Is_Active,
-                    Is_Forced,
-                    Promotion_Type,
-                    Promotion_Apply
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            """
-            params = [
-                promotion_description,
-                start_date,
-                end_date,
-                priority,
-                is_active,
-                is_forced,
-                promotion_type,
-                promotion_apply
-            ]
-            with connection.cursor() as cursor:
-                cursor.execute(query, params)
-                return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'error': form.errors})
-
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+#assign promo
 
 
-def assign_promotions(request):
-    form = AssignPromotionSearchForm(request.GET or None)
-    params = {}
-    query = """
-        SELECT 
-            Promotion_ID, 
-            Promotion_Description, 
-            Start_Date, 
-            End_Date
-        FROM 
-            Promo_Headers
-        WHERE 1=1
-    """
 
-    if request.GET:
-        if form.is_valid():
-            promotion_type = form.cleaned_data.get('promotion_type')
-            search_date = form.cleaned_data.get('search_date')
+def promo_list(request):
+    promotions = PromoHeaders.objects.all()
+    
+    # Annoter chaque promotion avec un champ `has_assignments`
+    for promotion in promotions:
+        promotion.has_assignments = promotion.user_set.exists() or promotion.client_set.exists()
+    
+    return render(request, 'assign_promotions.html', {'promotions': promotions})
 
-            if promotion_type:
-                query += " AND Promotion_Type = %(promotion_type)s"
-                params['promotion_type'] = promotion_type
-
-            if search_date:
-                query += " AND %(search_date)s BETWEEN Start_Date AND End_Date"
-                params['search_date'] = search_date
-
-    with connection.cursor() as cursor:
-        cursor.execute(query, params)
-        columns = [col[0] for col in cursor.description]
-        promotions = [dict(zip(columns, row)) for row in cursor.fetchall()]
-
-    context = {
-        'form': form,
-        'promotions': promotions,
-    }
-    return render(request, 'promotions/assign_promotions.html', context)
-
-def load_entities(request):
-    promotion_id = request.GET.get('promotion_id')
-    filter_type = request.GET.get('filter_type')
-    available_entities = []
-    assigned_entities = []
-
-    if filter_type == 'users':
-        available_query = """
-            SELECT UserCode, UserName
-            FROM Users
-            WHERE UserCode NOT IN (
-                SELECT UserCode
-                FROM Promo_Assignments
-                WHERE Promotion_ID = %s
-            )
-        """
-        assigned_query = """
-            SELECT u.UserCode, u.UserName
-            FROM Users u
-            JOIN Promo_Assignments up ON u.UserCode = up.UserCode
-            WHERE up.Promotion_ID = %s
-        """
-    elif filter_type == 'clients':
-        available_query = """
-            SELECT Client_Code, Client_Description
-            FROM Clients
-            WHERE Client_Code NOT IN (
-                SELECT Client_Code
-                FROM Promo_Assignments
-                WHERE Promotion_ID = %s
-            )
-        """
-        assigned_query = """
-            SELECT c.Client_Code, c.Client_Description
-            FROM Clients c
-            JOIN Promo_Assignments cp ON c.Client_Code = cp.Client_Code
-            WHERE cp.Promotion_ID = %s
-        """
-
-    with connection.cursor() as cursor:
-        cursor.execute(available_query, [promotion_id])
-        available_entities = cursor.fetchall()
-
-        cursor.execute(assigned_query, [promotion_id])
-        assigned_entities = cursor.fetchall()
-
-    available_html = ""
-    assigned_html = ""
-
-    if filter_type == 'users':
-        available_html += """
-            <tr>
-                <th>User Code</th>
-                <th>User Name</th>
-            </tr>
-        """
-        assigned_html += """
-            <tr>
-                <th>User Code</th>
-                <th>User Name</th>
-            </tr>
-        """
-    elif filter_type == 'clients':
-        available_html += """
-            <tr>
-                <th>Client Code</th>
-                <th>Client Description</th>
-            </tr>
-        """
-        assigned_html += """
-            <tr>
-                <th>Client Code</th>
-                <th>Client Description</th>
-            </tr>
-        """
-
-    for entity in available_entities:
-        available_html += f"<tr><td>{entity[0]}</td><td>{entity[1]}</td></tr>"
-
-    for entity in assigned_entities:
-        assigned_html += f"<tr><td>{entity[0]}</td><td>{entity[1]}</td></tr>"
-
+def get_promotion_clients(request, promotion_id):
+    promotion = PromoHeaders.objects.get(id=promotion_id)
+    
+    # Récupérer les clients déjà assignés à la promotion
+    assigned_clients = promotion.client_set.all()
+    
+    # Récupérer les clients disponibles (non assignés à cette promotion)
+    available_clients = Clients.objects.exclude(id__in=assigned_clients.values_list('id', flat=True))
+    
+    assigned_clients_data = [{'Client_Code': client.Client_Code, 'Client_Description': client.Client_Description} for client in assigned_clients]
+    available_clients_data = [{'Client_Code': client.Client_Code, 'Client_Description': client.Client_Description} for client in available_clients]
+    
     return JsonResponse({
-        'available': available_html,
-        'assigned': assigned_html
+        'available_clients': available_clients_data,
+        'assigned_clients': assigned_clients_data
     })
 
-@csrf_exempt
-def assign_entity(request):
+
+def assign_client_to_promotion(request):
     if request.method == 'POST':
+        action = request.POST.get('action')
+        client_code = request.POST.get('client_code')
+        promotion_id = request.POST.get('promotion_id')
+        
         try:
-            entity_id = request.POST.get('entity_id')
-            promotion_id = request.POST.get('promotion_id')
-            filter_type = request.POST.get('filter_type')
-            action = request.POST.get('action')
+            client = Clients.objects.get(Client_Code=client_code)
+            promotion = PromoHeaders.objects.get(id=promotion_id)
+            
+            if action == 'assign':
+                promotion.client_set.add(client)
+                success_message = 'Client assigned successfully'
+            elif action == 'remove':
+                promotion.client_set.remove(client)
+                success_message = 'Client removed successfully'
+            else:
+                return JsonResponse({'success': False, 'error': 'Invalid action'})
+            
+            return JsonResponse({'success': True, 'message': success_message})
+        
+        except Clients.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Client not found'})
+        except PromoHeaders.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Promotion not found'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
-            if not entity_id or not promotion_id or not filter_type or not action:
-                return JsonResponse({'error': 'Missing parameters'}, status=400)
 
-            with connection.cursor() as cursor:
-                if filter_type == 'users' and action == 'assign':
-                    cursor.execute("""
-                        INSERT INTO Promo_Assignments (Promotion_ID, UserCode)
-                        VALUES (%s, %s)
-                    """, [promotion_id, entity_id])
-                elif filter_type == 'users' and action == 'unassign':
-                    cursor.execute("""
-                        DELETE FROM Promo_Assignments 
-                        WHERE Promotion_ID = %s AND UserCode = %s
-                    """, [promotion_id, entity_id])
-                elif filter_type == 'clients' and action == 'assign':
-                    cursor.execute("""
-                        INSERT INTO Promo_Assignments (Promotion_ID, Client_Code)
-                        VALUES (%s, %s)
-                    """, [promotion_id, entity_id])
-                elif filter_type == 'clients' and action == 'unassign':
-                    cursor.execute("""
-                        DELETE FROM Promo_Assignments 
-                        WHERE Promotion_ID = %s AND Client_Code = %s
-                    """, [promotion_id, entity_id])
-                else:
-                    return JsonResponse({'error': 'Invalid action or filter type'}, status=400)
 
-            return JsonResponse({'success': True})
-        except Exception as e:
-            logger.error(f"Error assigning entity: {str(e)}")
-            return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
 
 
 # basket + product
@@ -409,6 +207,11 @@ def add_existing_product_to_basket(request, item_basket_id):
         basket.products.add(product)
     return redirect('define_basket')
 
+def delete_existing_product(request,item_basket_id , product_id):
+    basket = get_object_or_404(PromoItemBasketHeaders, item_basket_id=item_basket_id)
+    basket.products.remove(product_id)
+   
+    return JsonResponse({'message' : 'success'})
 
 #promo
 def promotions_list(request):
@@ -465,18 +268,22 @@ def create_promotion(request):
     promotions = PromoHeaders.objects.all()
     return render(request, 'promotions/home.html', {'form': form, 'promotions': promotions, 'detail_form': detail_form,'baskets': baskets})
 
+
 def edit_promotion(request, promotion_id):
     promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
     promo_detail = get_object_or_404(PromoDetails, promotion_id=promotion_id)
     baskets = PromoItemBasketHeaders.objects.all()
-    print(baskets)
+
     if request.method == 'POST':
         form = PromoHeadersForm(request.POST, instance=promotion)
         detail_form = PromoDetailsForm(request.POST, instance=promo_detail)
-
+        id = request.POST.get('basket2')
+        basket =PromoItemBasketHeaders.objects.get(item_basket_id = id)
         if form.is_valid() and detail_form.is_valid():
             form.save()
-            detail_form.save()
+            detail = detail_form.save(commit=False)
+            detail.basket = basket
+            detail.save()
             return redirect('promotions')
     else:
         form = PromoHeadersForm(instance=promotion)
@@ -505,7 +312,7 @@ def delete_promotion(request, promotion_id):
 def get_promotion_data(request, promotion_id):
     promotion = get_object_or_404(PromoHeaders, promotion_id=promotion_id)
     promo_detail = get_object_or_404(PromoDetails, promotion_id=promotion_id)
-
+    id = promo_detail.basket.item_basket_id
     data = {
         'promotion_id': promotion.promotion_id,
         'promotion_description': promotion.promotion_description,
@@ -519,10 +326,13 @@ def get_promotion_data(request, promotion_id):
         'quantity_buy': promo_detail.quantity_buy,
         'types_buy': promo_detail.types_buy,
         'quantity_get': promo_detail.quantity_get,
-        'types_get': promo_detail.types_get
+        'types_get': promo_detail.types_get,
+        'id':id
     }
-
     return JsonResponse(data)
+
+
+
 
 def get_baskets(request):
     baskets = PromoItemBasketHeaders.objects.all()

@@ -170,88 +170,97 @@
         </div>
     </nav>
 <body>
-    <h1>Assign Promotions</h1>
-
-    <div class="form-container">
-        <form method="get">
-            <input type="text" placeholder="Search..." name="search">
-            <button type="submit">Search</button>
-        </form>
-    </div>
-
-    <div class="promotion-list">
-        <h2>Promotions</h2>
-        <table class="styled-table">
+    <div class="container mt-5">
+        <h1>Promotions List</h1>
+        <table class="table table-bordered">
             <thead>
-            <tr>
-                <th>Promotion Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-            </tr>
+                <tr>
+                    <th>Promotion Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Having Assignments</th>
+                    <th>Action</th>
+                </tr>
             </thead>
             <tbody>
-            {% for promo in promotions %}
-            <tr class="clickable-row" onclick="selectPromotion('{{ promo.Promotion_ID }}')">
-                <td>{{ promo.Promotion_Description }}</td>
-                <td>{{ promo.Start_Date }}</td>
-                <td>{{ promo.End_Date }}</td>
-            </tr>
-            <tbody>
-            {% endfor %}
+                {% for promotion in promotions %}
+                    <tr>
+                        <td>{{ promotion.promotion_description }}</td>
+                        <td>{{ promotion.start_date }}</td>
+                        <td>{{ promotion.end_date }}</td>
+                        <td>
+                            {% if promotion.has_assignments %}
+                                Yes
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                        <td>
+                           <!-- <button class="btn btn-primary" onclick="loadPromotionClients({{ promotion.id }})" data-bs-toggle="modal" data-bs-target="#promotionListModal">Assign</button>
+                        --></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
-
-    <input type="hidden" id="selected-promotion" value="">
-
-    <div id="filter-section" style="display: none;">
-        <h2>Filter By</h2>
-        <div class="form-container">
-            <label>
-                <input type="radio" name="filter_type" value="users" onchange="applyFilter()"> Users
-            </label>
-            <label>
-                <input type="radio" name="filter_type" value="clients" onchange="applyFilter()"> Clients
-            </label>
-        </div>
-
-        <div class="entity-container">
-            <div class="entity-list">
-                <h3>Available</h3>
-                <table id="available-entities">
-                    <!-- Content will be loaded via AJAX -->
-                </table>
-            </div>
-
-            <div class="entity-list">
-                <h3>Assigned</h3>
-                <table id="assigned-entities">
-                    <!-- Content will be loaded via AJAX -->
-                </table>
+    
+    <!-- Modal for displaying clients assigned to the promotion -->
+    <div class="modal fade" id="promotionListModal" tabindex="-1" role="dialog" aria-labelledby="promotionListModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="promotionListModalLabel">Assign Clients to Promotion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="section table-responsive" id="availableClientsSection">
+                        <h3>Available Clients</h3>
+                        <table id="availableClients" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Client Code</th>
+                                    <th>Client Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Available clients will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+    
+                    <!-- Separator -->
+                    <div class="section-separator"></div>
+    
+                    <div class="section table-responsive" id="assignedClientsSection">
+                        <h3>Assigned Clients</h3>
+                        <table id="assignedClients" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Client Code</th>
+                                    <th>Client Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Assigned clients will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-<script>
-        $(document).ready(function() {
-            $('#promotion-table').on('click', 'tr', function() {
-                let promotionId = $(this).data('promotion-id');
-                loadEntities(promotionId);
-            });
+    
 
 
 
-            $('#available-entities').on('dblclick', 'tr', function() {
-                let row = $(this).clone();
-                row.appendTo('#assigned-entities');
-                $(this).remove();
-            });
 
-            $('#assigned-entities').on('dblclick', 'tr', function() {
-                let row = $(this).clone();
-                row.appendTo('#available-entities');
-                $(this).remove();
-            });
-        });
-    </script>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>

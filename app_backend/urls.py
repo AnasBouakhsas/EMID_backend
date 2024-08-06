@@ -4,7 +4,7 @@ from users import views
 from users.views import add_existing_product_to_basket, add_user, delete_user, edit_user, get_client_data, get_client_statut_data, get_routes_data, get_user_data, home, search_user, users, routes, promotions
 from users.views import( home, users, routes, promotions, get_target,
     add_route, edit_route, delete_route, affectation_routes_users, assign_user_to_route, assign_client_to_route,
-    get_routes, get_route_clients, affectation_clients_routes, assign_promotions,add_basket, define_basket, load_entities,assign_entity)
+    get_routes, get_route_clients, affectation_clients_routes,add_basket, define_basket)
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
@@ -27,9 +27,7 @@ urlpatterns = [
     
     
     path('promotions/', promotions, name='promotions'),
-    path('promotions/assign_promotions', assign_promotions, name='assign_promotions'),
-    path('promotions/load_entities/', views.load_entities, name='load_entities'),
-    path('promotions/assign_entity/', views.assign_entity, name='assign_entity'),
+
 
     path('promotions/define_basket/', views.define_basket, name='define_basket'),
     path('promotions/add_basket/', views.add_basket, name='add_basket'),
@@ -37,7 +35,10 @@ urlpatterns = [
     path('add_product_to_basket/<int:basket_id>/', views.add_product_to_basket, name='add_product_to_basket'),
     path('view_products/<int:basket_id>/', views.view_products, name='view_products'),
     path('add_existing_product_to_basket/<int:item_basket_id>/', add_existing_product_to_basket, name='add_existing_product_to_basket'),
-
+    path('delete_product/<int:item_basket_id>/<int:product_id>/', views.delete_existing_product , name="deleteProduct"),
+    
+    
+    
     path('promotions/<int:promotion_id>/edit/', views.edit_promotion, name='edit_promotion'),
     path('promotions/delete/<int:promotion_id>/', views.delete_promotion, name='delete_promotion'),
     path('promotions/<int:promotion_id>/data/', views.get_promotion_data, name='get_promotion_data'),
@@ -45,6 +46,11 @@ urlpatterns = [
     path('promotions/<int:promotion_id>/details/', views.get_promotion_details, name='get_promotion_details'),
 
 
+
+
+    path('promotions/', views.promotions_list, name='promotions_list'),
+    path('promotions/<int:promotion_id>/clients/', views.get_promotion_clients, name='get_promotion_clients'),
+    path('promotions/assign_client/', views.assign_client_to_promotion, name='assign_client_to_promotion'),
 
 
     path('devices/home_device/', views.home_device, name='devices'),
