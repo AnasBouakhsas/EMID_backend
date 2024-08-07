@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <meta charset="UTF-8">
     <title>Promo</title>
 
@@ -169,102 +170,181 @@
             </ul>
         </div>
     </nav>
-<body>
-    <div class="container mt-5">
-        <h1>Promotions List</h1>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Promotion Description</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Having Assignments</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for promotion in promotions %}
-                    <tr>
-                        <td>{{ promotion.promotion_description }}</td>
-                        <td>{{ promotion.start_date }}</td>
-                        <td>{{ promotion.end_date }}</td>
-                        <td>
-                            {% if promotion.has_assignments %}
-                                Yes
-                            {% else %}
-                                No
-                            {% endif %}
-                        </td>
-                        <td>
-                           <!-- <button class="btn btn-primary" onclick="loadPromotionClients({{ promotion.id }})" data-bs-toggle="modal" data-bs-target="#promotionListModal">Assign</button>
-                        --></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    
-    <!-- Modal for displaying clients assigned to the promotion -->
-    <div class="modal fade" id="promotionListModal" tabindex="-1" role="dialog" aria-labelledby="promotionListModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="promotionListModalLabel">Assign Clients to Promotion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="section table-responsive" id="availableClientsSection">
-                        <h3>Available Clients</h3>
-                        <table id="availableClients" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Client Code</th>
-                                    <th>Client Description</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Available clients will be dynamically inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
-    
-                    <!-- Separator -->
-                    <div class="section-separator"></div>
-    
-                    <div class="section table-responsive" id="assignedClientsSection">
-                        <h3>Assigned Clients</h3>
-                        <table id="assignedClients" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Client Code</th>
-                                    <th>Client Description</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Assigned clients will be dynamically inserted here -->
-                            </tbody>
-                        </table>
+    <body>
+        <div class="container mt-4">
+            <!-- Button to open the modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#promoModal">
+                Select Promotion
+            </button>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="promoModalLabel">Select Promotion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for promo in promotions %}
+                                        <tr>
+                                            <td>{{ promo.promotion_description }}</td>
+                                            <td>{{ promo.start_date }}</td>
+                                            <td>{{ promo.end_date }}</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" onclick="selectPromotion('{{ promo.promotion_id }}')">Select</button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <input type="hidden" id="promoIdInput" name="promo_id">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        
+            <!-- Selection Type -->
+            <div class="form-group mt-4">
+                <label for="selectionType">Select Type:</label>
+                <select id="selectionType" class="form-control">
+                    <option >choice</option>
+                    <option value="clients">Clients</option>
+                    <option value="users">Users</option>
+                </select>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h2>Unassigned Clients</h2>
+                    <div id="unassignedTableContainer"></div>
+                </div>
+                <div class="col-md-6">
+                    <h2>Assigned Clients</h2>
+                    <div id="assignedTableContainer"></div>
                 </div>
             </div>
         </div>
-    </div>
-    
+        
+        <script>
+           let selectedPromoId = null;
 
+function selectPromotion(promoId) {
+    selectedPromoId = promoId;
+    $('#promoModal').modal('hide');
+    console.log(promoId)
+    // Do not call applySelection here; wait for user to select type
+}
 
+function applySelection() {
+    const selectionType = document.getElementById('selectionType').value;
+    if (selectedPromoId) {
+        if (selectionType === 'clients') {
+            loadClients(selectedPromoId);
+        } else if (selectionType === 'users') {
+            loadUsers(selectedPromoId);
+        } else {
+            console.error('No type selected');
+        }
+    } else {
+        console.error('No promotion selected');
+    }
+}
 
+function loadClients(promoId) {
+    $.ajax({
+        url: "{% url 'get_promo_client' %}",
+        method: 'GET',
+        data: { promo_id: promoId },
+        success: function(data) {
+            $('#unassignedTableContainer').html(generateTable(data.unassigned_clients, 'Assign', 'client'));
+            $('#assignedTableContainer').html(generateTable(data.assigned_clients, 'Remove', 'client'));
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to fetch clients:', error);
+        }
+    });
+}
 
+function loadUsers(promoId) {
+    $.ajax({
+        url: "{% url 'get_promo_user' %}",
+        method: 'GET',
+        data: { promo_id: promoId },
+        success: function(data) {
+            $('#unassignedTableContainer').html(generateTable(data.unassigned_users, 'Assign', 'user'));
+            $('#assignedTableContainer').html(generateTable(data.assigned_users, 'Remove', 'user'));
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to fetch users:', error);
+        }
+    });
+}
 
+function generateTable(items, action, type) {
+    let tableHtml = '<table class="table table-striped">';
+    tableHtml += '<thead><tr><th>ID</th><th>Description</th><th>Action</th></tr></thead>';
+    tableHtml += '<tbody>';
+    items.forEach(item => {
+        tableHtml += `<tr>
+                        <td>${item.Client_Code || item.UserCode}</td>
+                        <td>${item.Client_Description || item.UserName}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="${action.toLowerCase()}${type === 'client' ? 'Item' : 'User'}('${item.Client_Code || item.UserCode}', '${type}')">${action}</button>
+                        </td>
+                    </tr>`;
+    });
+    tableHtml += '</tbody></table>';
+    return tableHtml;
+}
+
+function assignItem(itemId, type) {
+    $.post("{% url 'assign_client_to_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+        applySelection(); // Reload the lists
+    });
+}
+
+function removeItem(itemId, type) {
+    $.post("{% url 'remove_client_from_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+        applySelection(); // Reload the lists
+    });
+}
+
+function assignUser(itemId, type) {
+    $.post("{% url 'assign_user_to_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+        applySelection(); // Reload the lists
+    }).fail(function(xhr, status, error) {
+        console.error('Failed to assign user:', error);
+    });
+}
+
+function removeUser(itemId, type) {
+    $.post("{% url 'remove_user_from_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+        applySelection(); // Reload the lists
+    }).fail(function(xhr, status, error) {
+        console.error('Failed to remove user:', error);
+    });
+}
+
+// Add an event listener to apply selection when the type is changed
+document.getElementById('selectionType').addEventListener('change', applySelection);
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

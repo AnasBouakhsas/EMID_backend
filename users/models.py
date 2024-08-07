@@ -80,6 +80,7 @@ class InternalUser(models.Model):
     RouteCode = models.CharField(max_length=10, null=True, blank=True)
     ParentCode = models.CharField(max_length=50, null=True, blank=True)
     ParentDescription = models.CharField(max_length=50, null=True, blank=True)
+    promotions = models.ManyToManyField('PromoHeaders', blank=True, related_name='users')
 
 
 
@@ -157,7 +158,7 @@ class Clients(models.Model):
     Barcode = models.CharField(max_length=50, blank=True, default='')
     Client_Status_ID = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(2)])
     Channel_description = models.ForeignKey('Channels', on_delete=models.SET_NULL, null=True, blank=True)
-
+    promotions = models.ManyToManyField('PromoHeaders', blank=True, related_name='clients')
 
     class Meta:
         

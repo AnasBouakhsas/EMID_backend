@@ -47,10 +47,13 @@ urlpatterns = [
 
 
 
-
-    path('promotions/', views.promotions_list, name='promotions_list'),
-    path('promotions/<int:promotion_id>/clients/', views.get_promotion_clients, name='get_promotion_clients'),
-    path('promotions/assign_client/', views.assign_client_to_promotion, name='assign_client_to_promotion'),
+    path('promotions/assign/', views.assign_promotions, name='assign_promotions'),
+    path('get_promo_user/', views.get_promo_user, name='get_promo_user'),
+    path('get_promo_client/', views.get_promo_client, name='get_promo_client'),
+    path('assign_client_to_promo/', views.assign_client_to_promo, name='assign_client_to_promo'),
+    path('remove_client_from_promo/', views.remove_client_from_promo, name='remove_client_from_promo'),
+    path('assign_user_to_promo/', views.assign_user_to_promo, name='assign_user_to_promo'),
+    path('remove_user_from_promo/', views.remove_user_from_promo, name='remove_user_from_promo'),
 
 
     path('devices/home_device/', views.home_device, name='devices'),

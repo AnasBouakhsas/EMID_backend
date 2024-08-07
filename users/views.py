@@ -74,67 +74,106 @@ def user_logout(request):
 
 
 
-def promo_list(request):
+def assign_promotions(request):
     promotions = PromoHeaders.objects.all()
-    
-    # Annoter chaque promotion avec un champ `has_assignments`
-    for promotion in promotions:
-        promotion.has_assignments = promotion.user_set.exists() or promotion.client_set.exists()
-    
-    return render(request, 'assign_promotions.html', {'promotions': promotions})
+    return render(request, 'promotions/assign_promotions.html', {'promotions': promotions})
 
-def get_promotion_clients(request, promotion_id):
-    promotion = PromoHeaders.objects.get(id=promotion_id)
-    
-    # Récupérer les clients déjà assignés à la promotion
-    assigned_clients = promotion.client_set.all()
-    
-    # Récupérer les clients disponibles (non assignés à cette promotion)
-    available_clients = Clients.objects.exclude(id__in=assigned_clients.values_list('id', flat=True))
-    
-    assigned_clients_data = [{'Client_Code': client.Client_Code, 'Client_Description': client.Client_Description} for client in assigned_clients]
-    available_clients_data = [{'Client_Code': client.Client_Code, 'Client_Description': client.Client_Description} for client in available_clients]
-    
+
+
+def get_promo_client(request):
+    promo_id = request.GET.get('promo_id')
+    if not promo_id:
+        return JsonResponse({'error': 'promo_id is required'}, status=400)
+
+    try:
+        promotion = PromoHeaders.objects.get(pk=promo_id)
+    except PromoHeaders.DoesNotExist:
+        return JsonResponse({'error': 'Promotion not found'}, status=404)
+
+    assigned_clients = promotion.clients.all()
+    unassigned_clients = Clients.objects.exclude(pk__in=assigned_clients)
+
     return JsonResponse({
-        'available_clients': available_clients_data,
-        'assigned_clients': assigned_clients_data
+        'unassigned_clients': list(unassigned_clients.values('Client_Code', 'Client_Description')),
+        'assigned_clients': list(assigned_clients.values('Client_Code', 'Client_Description'))
     })
-
-
-def assign_client_to_promotion(request):
+@csrf_exempt
+def assign_client_to_promo(request):
     if request.method == 'POST':
-        action = request.POST.get('action')
+        promo_id = request.POST.get('promo_id')
         client_code = request.POST.get('client_code')
-        promotion_id = request.POST.get('promotion_id')
-        
+
         try:
+            promotion = PromoHeaders.objects.get(pk=promo_id)
             client = Clients.objects.get(Client_Code=client_code)
-            promotion = PromoHeaders.objects.get(id=promotion_id)
-            
-            if action == 'assign':
-                promotion.client_set.add(client)
-                success_message = 'Client assigned successfully'
-            elif action == 'remove':
-                promotion.client_set.remove(client)
-                success_message = 'Client removed successfully'
-            else:
-                return JsonResponse({'success': False, 'error': 'Invalid action'})
-            
-            return JsonResponse({'success': True, 'message': success_message})
-        
-        except Clients.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Client not found'})
+        except (PromoHeaders.DoesNotExist, Clients.DoesNotExist):
+            return JsonResponse({'error': 'Invalid promo or client'}, status=400)
+
+        promotion.clients.add(client)
+        return JsonResponse({'success': True})
+    
+@csrf_exempt
+def remove_client_from_promo(request):
+    if request.method == 'POST':
+        promo_id = request.POST.get('promo_id')
+        client_code = request.POST.get('client_code')
+
+        try:
+            promotion = PromoHeaders.objects.get(pk=promo_id)
+            client = Clients.objects.get(Client_Code=client_code)
+        except (PromoHeaders.DoesNotExist, Clients.DoesNotExist):
+            return JsonResponse({'error': 'Invalid promo or client'}, status=400)
+
+        promotion.clients.remove(client)
+        return JsonResponse({'success': True})
+
+
+def get_promo_user(request):
+    promo_id = request.GET.get('promo_id')
+    if promo_id:
+        try:
+            promo = PromoHeaders.objects.get(pk=promo_id)
+            unassigned_users = InternalUser.objects.exclude(promotions=promo)
+            assigned_users = InternalUser.objects.filter(promotions=promo)
+            return JsonResponse({
+                'unassigned_users': list(unassigned_users.values('UserCode', 'UserName')),
+                'assigned_users': list(assigned_users.values('UserCode', 'UserName'))
+            })
         except PromoHeaders.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Promotion not found'})
-    else:
-        return JsonResponse({'success': False, 'error': 'Invalid request method'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
 
+@csrf_exempt
+def assign_user_to_promo(request):
+    if request.method == 'POST':
+        promo_id = request.POST.get('promo_id')
+        user_code = request.POST.get('user_code')
 
+        try:
+            promotion = PromoHeaders.objects.get(pk=promo_id)
+            user = InternalUser.objects.get(UserCode=user_code)
+        except (PromoHeaders.DoesNotExist, InternalUser.DoesNotExist):
+            return JsonResponse({'error': 'Invalid promo or user'}, status=400)
 
+        promotion.users.add(user)
+        return JsonResponse({'success': True})
+    
+    
+@csrf_exempt
+def remove_user_from_promo(request):
+    if request.method == 'POST':
+        promo_id = request.POST.get('promo_id')
+        user_code = request.POST.get('user_code')
 
+        try:
+            promotion = PromoHeaders.objects.get(pk=promo_id)
+            user = InternalUser.objects.get(UserCode=user_code)
+        except (PromoHeaders.DoesNotExist, InternalUser.DoesNotExist):
+            return JsonResponse({'error': 'Invalid promo or user'}, status=400)
 
-
+        promotion.users.remove(user)
+        return JsonResponse({'success': True})
 
 # basket + product
 def define_basket(request):
