@@ -46,8 +46,6 @@ def get_users(request):
     users = InternalUser.objects.all().values('UserCode', 'UserName', 'CityID')
     return JsonResponse({'users': list(users)})
 
-
-
 # User login view for customers (authentication)
 def user_login(request):
     if request.method == 'POST':
@@ -62,13 +60,13 @@ def user_login(request):
         else:
             messages.error(request, 'Invalid username or password.')
 
-    return render(request, 'login.html')
+    return render(request, 'authentication/login.html')
 
 
 # User logout view
 def user_logout(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 #assign promo
 
@@ -474,24 +472,6 @@ def get_routes_data(request, route_id):
     }
      
     return JsonResponse(data)
-
-
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    return render(request, 'authentication/login.html')
-
-def user_logout(request):
-    logout(request)
-    return redirect('home')
 
 
 def affectation_clients_routes(request):
@@ -1192,3 +1172,24 @@ def get_group_data(request, Code_groupe):
     }
 
     return JsonResponse(data)
+
+
+
+
+def search_promotions(request):
+    if request.method == 'GET':
+        search_query = request.GET.get('query', '')
+        promotions = PromoHeaders.objects.filter(promotion_description__icontains=search_query)
+        promo_list = [
+            {
+                'promotion_id': promo.promotion_id,
+                'promotion_description': promo.promotion_description,
+                'start_date': promo.start_date,
+                'end_date': promo.end_date,
+            }
+            for promo in promotions
+        ]
+        return JsonResponse({'promotions': promo_list})
+
+
+

@@ -29,6 +29,10 @@ urlpatterns = [
     path('promotions/', promotions, name='promotions'),
 
 
+
+    path('search/promotions/', views.search_promotions, name='search_promotions'),
+
+
     path('promotions/define_basket/', views.define_basket, name='define_basket'),
     path('promotions/add_basket/', views.add_basket, name='add_basket'),
     path('add_product/', views.add_product, name='add_product'),
@@ -125,6 +129,9 @@ urlpatterns = [
     path('groupes/<str:Code_groupe>/edit/', views.edit_groupe, name='edit_groupe'),
     path('groupes/<str:Code_groupe>/delete/', views.delete_groupe, name='delete_groupe'),
     path('groupes/<str:Code_groupe>/data/', views.get_group_data, name='get_group_data'),
+
+
+
 
 
 

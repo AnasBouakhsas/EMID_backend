@@ -1,108 +1,107 @@
-{% load static %}
-{% load widget_tweaks %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <meta charset="UTF-8">
-    <title>Promo</title>
+    {% load static %}
+    {% load widget_tweaks %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Home</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
- 
-    <style>
-        .navbar {
-            background-color: #f8f9fa;
-        }
-   
-        .navbar-brand {
-            font-weight: bold;
-        }
-   
-        .navbar-nav .nav-link {
-            color: #007bff;
-        }
-   
-       
-   
-        .btn-primary {
-            background-color: #81bae7;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            align-self: center;
-        }
-   
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-   
-        .form-inline .form-control {
-            width: auto;
-        }
-        .auto-width-select {
-           width: auto;
-           min-width: 150px; 
-           max-width: 100%;
-           white-space: nowrap;
-        }
-        h1, h2 {
-            color: #0056b3;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 200%;
-            text-align: center;
-           
-        }
-   
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
         
-   
-        .btn-sm {
-            padding: 5px 10px;
-        }
-   
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-   
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-   
-        .btn-warning {
-            background-color: #ffc107;
-            border-color: #ffc107;
-            color: #212529;
-        }
-   
-        .btn-warning:hover {
-            background-color: #e0a800;
-            border-color: #d39e00;
-            color: #212529;
-        }
-   
-        .mt-4 {
-            margin-top: 1.5rem;
-        }
-   
-        .float-right {
-            float: right;
-        }
-        .table{
-           --bs-table-bg:none;
-        }
-        th {
-           background-color: #2262c6;
-           color: #fff;
-           
-       }
-    </style>
-</head>
+        <style>
+            .navbar {
+                background-color: #f8f9fa;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+            }
+
+            .navbar-nav .nav-link {
+                color: #007bff;
+            }
+
+            .btn-primary {
+                background-color: #81bae7;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+                align-self: center;
+            }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+            .form-inline .form-control {
+                width: auto;
+            }
+
+            .auto-width-select {
+                width: auto;
+                min-width: 150px;
+                max-width: 100%;
+                white-space: nowrap;
+            }
+
+            h1, h2 {
+                color: #0056b3;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 600;
+                font-size: 200%;
+                text-align: center;
+            }
+
+            .btn-sm {
+                padding: 5px 10px;
+            }
+
+            .btn-danger {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+            .btn-warning {
+                background-color: #ffc107;
+                border-color: #ffc107;
+                color: #212529;
+            }
+
+            .btn-warning:hover {
+                background-color: #e0a800;
+                border-color: #d39e00;
+                color: #212529;
+            }
+
+            .mt-4 {
+                margin-top: 1.5rem;
+            }
+
+            .float-right {
+                float: right;
+            }
+
+            .table {
+                --bs-table-bg: none;
+            }
+
+            th {
+                background-color: #2262c6;
+                color: #fff;
+            }
+        </style>
+    </head>
+
+    <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">
@@ -155,145 +154,218 @@
                     <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Promotions</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'promotions' %}">Promotions</a></li>
-    
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'assign_promotions' %}">Assign Promotions</a></li>
-    
                         <li><hr class="dropdown-divider"></li>
-    
                         <li><a class="dropdown-item" href="{% url 'define_basket' %}">Define Basket</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-expanded="false">Bonjour, {{ user.username }}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
-    <body>
-        <div class="container mt-4">
-            <!-- Button to open the modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#promoModal">
-                Select Promotion
-            </button>
-            
-            <!-- Modal -->
-            <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="promoModalLabel">Select Promotion</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Description</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for promo in promotions %}
-                                        <tr>
-                                            <td>{{ promo.promotion_description }}</td>
-                                            <td>{{ promo.start_date }}</td>
-                                            <td>{{ promo.end_date }}</td>
-                                            <td>
-                                                <button class="btn btn-primary btn-sm" onclick="selectPromotion('{{ promo.promotion_id }}')">Select</button>
-                                            </td>
+        <body>
+
+            <h2>Assign Promotions</h2>
+
+            <div class="container mt-4">
+                <!-- Button to open the modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#promoModal">
+                    Select Promotion
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="promoModalLabel">Select Promotion</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="text" id="promoSearchInput" class="form-control" placeholder="Search Promotion..." onkeyup="searchPromotion()">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr style="background-color:#2262c6;">
+                                            <th class="text-white">Description</th>
+                                            <th class="text-white">Start Date</th>
+                                            <th class="text-white">End Date</th>
+                                            <th class="text-white">Action</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody id="promoTableBody">
+                                        {% for promo in promotions %}
+                                            <tr>
+                                                <td>{{ promo.promotion_description }}</td>
+                                                <td>{{ promo.start_date }}</td>
+                                                <td>{{ promo.end_date }}</td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm" onclick="selectPromotion('{{ promo.promotion_id }}')">Select</button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <input type="hidden" id="promoIdInput" name="promo_id">
                         </div>
-                        <input type="hidden" id="promoIdInput" name="promo_id">
+                    </div>
+                </div>
+            
+                <!-- Selection Type -->
+                <div class="form-group mt-4">
+                    <label for="selectionType">Select Type:</label>
+                    <select id="selectionType" class="form-select">
+                        <option>Select Choice</option>
+                        <option value="clients">Clients</option>
+                        <option value="users">Users</option>
+                    </select>
+                </div>
+                
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h2>Unassigned</h2>
+                        <div id="unassignedTableContainer"></div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h2>Assigned</h2>
+                        <div id="assignedTableContainer"></div>
                     </div>
                 </div>
             </div>
-        
-            <!-- Selection Type -->
-            <div class="form-group mt-4">
-                <label for="selectionType">Select Type:</label>
-                <select id="selectionType" class="form-control">
-                    <option >choice</option>
-                    <option value="clients">Clients</option>
-                    <option value="users">Users</option>
-                </select>
-            </div>
             
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <h2>Unassigned Clients</h2>
-                    <div id="unassignedTableContainer"></div>
-                </div>
-                <div class="col-md-6">
-                    <h2>Assigned Clients</h2>
-                    <div id="assignedTableContainer"></div>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-           let selectedPromoId = null;
+            <script>
+            let selectedPromoId = null;
 
-function selectPromotion(promoId) {
-    selectedPromoId = promoId;
-    $('#promoModal').modal('hide');
-    console.log(promoId)
-    // Do not call applySelection here; wait for user to select type
-}
-
-function applySelection() {
-    const selectionType = document.getElementById('selectionType').value;
-    if (selectedPromoId) {
-        if (selectionType === 'clients') {
-            loadClients(selectedPromoId);
-        } else if (selectionType === 'users') {
-            loadUsers(selectedPromoId);
-        } else {
-            console.error('No type selected');
-        }
-    } else {
-        console.error('No promotion selected');
+    function selectPromotion(promoId) {
+        selectedPromoId = promoId;
+        $('#promoModal').modal('hide');
+        console.log(promoId)
+        // Do not call applySelection here; wait for user to select type
     }
-}
 
-function loadClients(promoId) {
-    $.ajax({
-        url: "{% url 'get_promo_client' %}",
-        method: 'GET',
-        data: { promo_id: promoId },
-        success: function(data) {
-            $('#unassignedTableContainer').html(generateTable(data.unassigned_clients, 'Assign', 'client'));
-            $('#assignedTableContainer').html(generateTable(data.assigned_clients, 'Remove', 'client'));
-        },
-        error: function(xhr, status, error) {
-            console.error('Failed to fetch clients:', error);
+    function applySelection() {
+        const selectionType = document.getElementById('selectionType').value;
+        if (selectedPromoId) {
+            if (selectionType === 'clients') {
+                loadClients(selectedPromoId);
+            } else if (selectionType === 'users') {
+                loadUsers(selectedPromoId);
+            } else {
+                console.error('No type selected');
+            }
+        } else {
+            console.error('No promotion selected');
         }
-    });
-}
+    }
 
-function loadUsers(promoId) {
-    $.ajax({
-        url: "{% url 'get_promo_user' %}",
-        method: 'GET',
-        data: { promo_id: promoId },
-        success: function(data) {
-            $('#unassignedTableContainer').html(generateTable(data.unassigned_users, 'Assign', 'user'));
-            $('#assignedTableContainer').html(generateTable(data.assigned_users, 'Remove', 'user'));
-        },
-        error: function(xhr, status, error) {
-            console.error('Failed to fetch users:', error);
-        }
-    });
-}
+    function loadClients(promoId) {
+        $.ajax({
+            url: "{% url 'get_promo_client' %}",
+            method: 'GET',
+            data: { promo_id: promoId },
+            success: function(data) {
+                $('#unassignedTableContainer').html(generateTable(data.unassigned_clients, 'Assign', 'client'));
+                $('#assignedTableContainer').html(generateTable(data.assigned_clients, 'Remove', 'client'));
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to fetch clients:', error);
+            }
+        });
+    }
+
+    function loadUsers(promoId) {
+        $.ajax({
+            url: "{% url 'get_promo_user' %}",
+            method: 'GET',
+            data: { promo_id: promoId },
+            success: function(data) {
+                $('#unassignedTableContainer').html(generateTable(data.unassigned_users, 'Assign', 'user'));
+                $('#assignedTableContainer').html(generateTable(data.assigned_users, 'Remove', 'user'));
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to fetch users:', error);
+            }
+        });
+    }
+
+
+    function assignItem(itemId, type) {
+        $.post("{% url 'assign_client_to_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+            applySelection(); // Reload the lists
+        });
+    }
+
+    function removeItem(itemId, type) {
+        $.post("{% url 'remove_client_from_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+            applySelection(); // Reload the lists
+        });
+    }
+
+    function assignUser(itemId, type) {
+        $.post("{% url 'assign_user_to_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+            applySelection(); // Reload the lists
+        }).fail(function(xhr, status, error) {
+            console.error('Failed to assign user:', error);
+        });
+    }
+
+    function removeUser(itemId, type) {
+        $.post("{% url 'remove_user_from_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
+            applySelection(); // Reload the lists
+        }).fail(function(xhr, status, error) {
+            console.error('Failed to remove user:', error);
+        });
+    }
+
+    // Add an event listener to apply selection when the type is changed
+    document.getElementById('selectionType').addEventListener('change', applySelection);
+
+
+
+
+    function searchPromotion() {
+        const query = document.getElementById('promoSearchInput').value;
+        $.ajax({
+            url: '{% url "search_promotions" %}',
+            data: {
+                'query': query
+            },
+            success: function(data) {
+                const tableBody = document.getElementById('promoTableBody');
+                tableBody.innerHTML = '';
+                data.promotions.forEach(promo => {
+                    const row = `<tr>
+                                    <td>${promo.promotion_description}</td>
+                                    <td>${promo.start_date}</td>
+                                    <td>${promo.end_date}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="selectPromotion('${promo.promotion_id}')">Select</button>
+                                    </td>
+                                </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            }
+        });
+    }
+
 
 function generateTable(items, action, type) {
-    let tableHtml = '<table class="table table-striped">';
-    tableHtml += '<thead><tr><th>ID</th><th>Description</th><th>Action</th></tr></thead>';
+    let tableHtml = '<table class="table table-bordered">';
+    tableHtml += '<thead><tr style="background-color:#2262c6;"><th class="text-white">ID</th><th class="text-white">Description</th><th class="text-white">Action</th></tr></thead>';
     tableHtml += '<tbody>';
     items.forEach(item => {
         tableHtml += `<tr>
@@ -308,43 +380,15 @@ function generateTable(items, action, type) {
     return tableHtml;
 }
 
-function assignItem(itemId, type) {
-    $.post("{% url 'assign_client_to_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
-        applySelection(); // Reload the lists
-    });
-}
 
-function removeItem(itemId, type) {
-    $.post("{% url 'remove_client_from_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
-        applySelection(); // Reload the lists
-    });
-}
 
-function assignUser(itemId, type) {
-    $.post("{% url 'assign_user_to_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
-        applySelection(); // Reload the lists
-    }).fail(function(xhr, status, error) {
-        console.error('Failed to assign user:', error);
-    });
-}
+    </script>
 
-function removeUser(itemId, type) {
-    $.post("{% url 'remove_user_from_promo' %}", { promo_id: selectedPromoId, [type + '_code']: itemId }, function() {
-        applySelection(); // Reload the lists
-    }).fail(function(xhr, status, error) {
-        console.error('Failed to remove user:', error);
-    });
-}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-// Add an event listener to apply selection when the type is changed
-document.getElementById('selectionType').addEventListener('change', applySelection);
-</script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-</body>
-</html>
+    </body>
+    </html>
