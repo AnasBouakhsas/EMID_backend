@@ -732,14 +732,13 @@ def search_client(request):
 def upload_excel(request):
     if request.method == 'POST' and request.FILES['xlxfile']:
         excel_file = request.FILES['xlxfile']
-        
         wb = openpyxl.load_workbook(excel_file)
         sheet = wb.active
 
         for row in sheet.iter_rows(min_row=3, values_only=True):
             client_code = row[0]
             route = get_object_or_404(Routes, pk=row[12])
-
+            
             if Clients.objects.filter(Client_Code=client_code).exists():
                 messages.error(request, f"Client avec le code {client_code} existe déjà.")
             else:
@@ -766,7 +765,7 @@ def upload_excel(request):
             print(row)
             
         return redirect('home_client')
-    return render(request, 'client/upload_excel.html')
+    return render(request, 'client/home_client.html')
 
 
 #statut client
