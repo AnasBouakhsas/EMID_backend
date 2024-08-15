@@ -1057,7 +1057,7 @@ def add_user(request):
             return redirect('users')
     else:
         form = UserForm()
-    return render(request, 'users/list_users.html', {'form': form})
+    return render(request, 'users/home.html', {'form': form})
 
 
 
@@ -1077,10 +1077,6 @@ def get_user_data(request, UserCode):
     }
 
     return JsonResponse(data)
-
-
-
-
 
 
 def edit_user(request, UserCode):

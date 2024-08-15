@@ -5,11 +5,8 @@ from django.db import connection
 
 class UserForm(forms.ModelForm):
     grouping_choices = [(groupe.Code_groupe, groupe.Groupe_description) for groupe in UserGroupe.objects.all()]
-
-    # Utiliser les choix pour le champ Grouping
+    print(grouping_choices) 
     Grouping = forms.ChoiceField(choices=grouping_choices, widget=forms.Select(attrs={'class': 'form-control'}))
-
-
 
     class Meta:
 

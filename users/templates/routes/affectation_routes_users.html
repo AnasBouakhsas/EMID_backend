@@ -104,8 +104,8 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
-        <img src="{% static 'images/download.jpeg' %}" alt="Logo" style="width: 200px; height: 60px;">
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'images/download.png' %}" alt="Logo" style="width: 130px; height: 60px;">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -207,10 +207,9 @@
             <table id="availableRoutes" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>user code</th>
-                        <th>user Description</th>
-                        <th>city code</th>
-                        <th>Action</th>
+                    <th>Route code</th>
+                    <th>user Description</th>
+                    <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -223,7 +222,7 @@
         <div class="section-separator"></div>
 
         <div class="section table-responsive" id="userRoutesSection">
-            <h3>Assigned Route</h3>
+            <h3>Assigned Routes</h3>
             <table id="userRoutes" class="table table-striped">
                 <thead>
                     <tr>
