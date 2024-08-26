@@ -246,7 +246,7 @@ class Client_Target(models.Model):
     years = models.IntegerField(validators=[MinValueValidator(1990), MaxValueValidator(2030)])
     Target_value = models.DecimalField(max_digits=18,decimal_places=2)
     Targed_Achieved = models.DecimalField(max_digits=18,decimal_places=2)
-    Stamp_Date = models.DateTimeField()
+    Stamp_Date = models.DateTimeField(default=now)
 
 class Channels(models.Model):
     channel_code = models.CharField(max_length=50)

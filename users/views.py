@@ -467,7 +467,9 @@ def get_routes_data(request, route_id):
         'Branch_Code' :  route.Branch_Code,
         'Route_Description' : route.Route_Description,
         'Route_Alt_Description' : route.Route_Alt_Description,
-        'Region_Code': route.Region_Code
+        'Region_Code': route.Region_Code,
+        'RVSCode': route.RVSCode,
+        'RVSDescription': route.RVSDescription
 
     }
      
@@ -609,12 +611,23 @@ def list_devices(request):
     form = DeviceForm()
     return render(request, 'devices/home.html', {'devices': devices, 'form': form})
 
+
 def add_device(request):
     if request.method == "POST":
         form = DeviceForm(request.POST)
         if form.is_valid():
+            device_serial = form.cleaned_data['device_serial']
+            user_code = form.cleaned_data['UserCode']
+            
+            # Vérifiez si l'utilisateur a déjà un appareil
+            if Device.objects.filter(UserCode=user_code).exists():
+                messages.error(request, "This user already has a device.")
+                return redirect('devices')  # Redirige vers la page d'accueil des appareils avec un message d'erreur
+            
+            # Si l'utilisateur n'a pas encore d'appareil, ajoutez le nouvel appareil
             form.save()
-            return redirect('devices')
+            messages.success(request, "Device added successfully.")
+            return redirect('devices')  # Redirige vers la page d'accueil des appareils après l'ajout
     else:
         form = DeviceForm()
     return render(request, 'devices/home.html', {'form': form})
@@ -847,11 +860,11 @@ def client_discounts(request):
         else:
             error_message = "Aucun client ne correspond à ce code client."
             form = client_discountsForm()
-            return render(request, 'client/client_discounts.html', {'form': form, 'error_message': error_message})
+            return render(request, 'client/home_client_discount.html', {'form': form, 'error_message': error_message})
     else:
         form = client_discountsForm()
 
-    return render(request, 'client/client_discounts.html', {'form': form, 'error_message': error_message})
+    return render(request, 'client/home_client_discount.html', {'form': form, 'error_message': error_message})
 
 
 def edit_client_discounts(request, Client_Code):
@@ -964,11 +977,11 @@ def client_target(request):
         else:
             error_message = "Aucun client ne correspond à ce code client."
             form = Client_TargetForm()
-            return render(request, 'client/client_target.html', {'form': form, 'error_message': error_message})
+            return render(request, 'client/home_client_target.html', {'form': form, 'error_message': error_message})
     else:
         form = Client_TargetForm()
 
-    return render(request, 'client/client_target.html', {'form': form, 'error_message': error_message})
+    return render(request, 'client/home_client_target.html', {'form': form, 'error_message': error_message})
 
 
 def edit_client_target(request, Client_Code):
@@ -1098,12 +1111,6 @@ def delete_user(request, UserCode):
     return redirect('users') 
 
 
-def delete_groupe(request, UserCode):
-    user = get_object_or_404(UserGroupe, UserCode=UserCode)
-    if request.method == 'POST':
-        user.delete()
-        return redirect('users')
-    return render(request, 'users/home.html', {'user': user})
 
 def search_user(request):
     users = None

@@ -98,6 +98,13 @@
             background-color: #2262c6;
             color: #fff;
         }
+
+        .section-separator {
+            border-left: 1px solid #ddd;
+            height: 100%;
+            margin: 0 15px;
+        }
+
     </style>
 </head>
 
@@ -201,43 +208,54 @@
 
 <div class="container mt-4">
     <!-- USERS container -->
-    <div id="routesContainer"  class="clients-container" style="display: none;">
-        <div class="section table-responsive" id="availableRoutesSection">
-            <h3>Available Routes</h3>
-            <table id="availableRoutes" class="table table-striped">
-                <thead>
-                    <tr>
-                    <th>Route code</th>
-                    <th>user Description</th>
-                    <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Available clients will be dynamically inserted here -->
-                </tbody>
-            </table>
-        </div>
+    <div id="routesContainer" class="clients-container" style="display: none;">
+        <div class="row">
+            <!-- Available Routes Section -->
+            <div class="col-md-5">
+                <div class="section table-responsive" id="availableRoutesSection">
+                    <h3>Available Routes</h3>
+                    <table id="availableRoutes" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Route code</th>
+                                <th>User Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Available routes will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <!-- Separator -->
-        <div class="section-separator"></div>
+            <!-- Separator -->
+            <div class="col-md-1 d-flex align-items-center justify-content-center">
+                <div class="section-separator"></div>
+            </div>
 
-        <div class="section table-responsive" id="userRoutesSection">
-            <h3>Assigned Routes</h3>
-            <table id="userRoutes" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Route code</th>
-                        <th>user Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Assigned clients will be dynamically inserted here -->
-                </tbody>
-            </table>
+            <!-- Assigned Routes Section -->
+            <div class="col-md-5">
+                <div class="section table-responsive" id="userRoutesSection">
+                    <h3>Assigned Routes</h3>
+                    <table id="userRoutes" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Route code</th>
+                                <th>User Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Assigned routes will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 
 <div class="modal fade" id="userListModal" tabindex="-1" role="dialog" aria-labelledby="userListModalLabel" aria-hidden="true">
@@ -250,11 +268,11 @@
             <div class="modal-body">
                 <table class="table table-bordered" id="userListTable">
                     <thead>
-                        <tr>
-                            <th>UserCode</th>
-                            <th>UserName</th>
-                            <th>CityID</th>
-                            <th>Action</th>
+                        <tr style="background-color:#2262c6;">
+                            <th class="text-white">UserCode</th>
+                            <th class="text-white">UserName</th>
+                            <th class="text-white">CityID</th>
+                            <th class="text-white">Action</th>
                         </tr>
                     </thead>
                     <tbody id="userList">
@@ -285,7 +303,7 @@
                             '<td>' + user.UserCode + '</td>' +
                             '<td>' + user.UserName + '</td>' +
                             '<td>' + user.CityID + '</td>' +
-                            '<td><button onclick="selectUser(\'' + user.UserCode + '\', \'' + user.UserName + '\', \'' + user.CityID + '\')">Select</button></td>' +
+                            '<td><button class="btn btn-primary" onclick="selectUser(\'' + user.UserCode + '\', \'' + user.UserName + '\', \'' + user.CityID + '\')">Select</button></td>' +
                             '</tr>'
                         );
                     });
@@ -320,9 +338,9 @@
                             $('#availableRoutes').append(
                                 '<thead style="background-color:#2262c6; color: #fff;">' +
                                     '<tr>' +
-                                        '<th>Route ID</th>' +
-                                        '<th>Route Description</th>' +
-                                        '<th>Action</th>' +
+                                        '<th class="text-white">Route ID</th>' +
+                                        '<th class="text-white">Route Description</th>' +
+                                        '<th class="text-white">Action</th>' +
                                     '</tr>' +
                                 '</thead>' +
                                 '<tbody></tbody>' // Ensure there's a tbody to append rows
@@ -331,9 +349,9 @@
                             $('#userRoutes').append(
                                 '<thead style="background-color:#2262c6; color: #fff;">' +
                                     '<tr>' +
-                                        '<th>Route ID </th>' +
-                                        '<th>Route Description</th>' +
-                                        '<th>Action</th>' +
+                                        '<th class="text-white">Route ID </th>' +
+                                        '<th class="text-white">Route Description</th>' +
+                                        '<th class="text-white">Action</th>' +
                                     '</tr>' +
                                 '</thead>' +
                                 '<tbody></tbody>'  // Ensure there's a tbody to append rows
@@ -357,7 +375,7 @@
                                 '<tr>' +
                                 '<td>' + route.Route_ID + '</td>' +
                                 '<td>' + route.Route_Description + '</td>' +
-                                '<td><button class="btn btn-primary" onclick="removeRoute(\'' + route.Route_ID + '\')">Remove</button></td>' +
+                                '<td><button class="btn btn-danger" onclick="removeRoute(\'' + route.Route_ID + '\')">Remove</button></td>' +
                             '</tr>'
                             );
                         }

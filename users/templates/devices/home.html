@@ -230,9 +230,17 @@
     </tbody>
 </table>
 
+{% if messages %}
+<div class="alert alert-info">
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
 <!-- Add Device Modal -->
 <div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
-    <div class="modal-dialog" >
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addDeviceModalLabel">Add Device</h5>
@@ -241,23 +249,7 @@
             <div class="modal-body">
                 <form action="{% url 'add_device' %}" method="post">
                     {% csrf_token %}
-                    <div class="modal-body">
-                        {{ form.as_p }}
-                        {% if form.errors %}
-                            <div class="errors">
-                                <ul>
-                                    {% for field in form %}
-                                        {% for error in field.errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    {% endfor %}
-                                    {% for error in form.non_field_errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
-                    </div>
+                    {{ form.as_p }}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save</button>
@@ -267,7 +259,6 @@
         </div>
     </div>
 </div>
-
 <!-- Edit Device Modal -->
 <div class="modal fade" id="editDeviceModal" tabindex="-1" role="dialog" aria-labelledby="editDeviceModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

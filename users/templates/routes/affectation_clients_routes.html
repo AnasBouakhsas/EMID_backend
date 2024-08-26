@@ -98,6 +98,14 @@
             background-color: #2262c6;
             color: #fff;
         }
+
+        .section-separator {
+            border-left: 1px solid #ddd;
+            height: 100%;
+            margin: 0 10px; 
+            width: 1px; 
+        }
+
     </style>
 </head>
 
@@ -203,12 +211,12 @@
             <div class="modal-body">
                 <table class="table table-bordered" id="routeListTable">
                     <thead>
-                        <tr>
-                            <th>Route ID</th>
-                            <th>Route Description</th>
-                            <th>RVS Code</th>
-                            <th>RVS Description</th>
-                            <th>Action</th>
+                        <tr style="background-color:#2262c6;">
+                            <th class="text-white">Route ID</th>
+                            <th class="text-white">Route Description</th>
+                            <th class="text-white">RVS Code</th>
+                            <th class="text-white">RVS Description</th>
+                            <th class="text-white">Action</th>
                         </tr>
                     </thead>
                     <tbody id="routeList">
@@ -226,46 +234,56 @@
 
 
 
-<!-- Container for displaying clients -->
 <div class="container mt-4">
     <!-- Clients container -->
     <div id="clientsContainer" class="clients-container" style="display: none;">
-        <div class="section table-responsive" id="availableClientsSection">
-            <h3>Available Clients</h3>
-            <table id="availableClients" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Client Code</th>
-                        <th>Client Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Available clients will be dynamically inserted here -->
-                </tbody>
-            </table>
-        </div>
+        <div class="row">
+            <!-- Available Clients Section -->
+            <div class="col-md-5">
+                <div class="section table-responsive" id="availableClientsSection">
+                    <h3>Available Clients</h3>
+                    <table id="availableClients" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Client Code</th>
+                                <th>Client Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Available clients will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <!-- Separator -->
-        <div class="section-separator"></div>
+            <!-- Separator -->
+            <div class="col-md-1 d-flex align-items-center justify-content-center">
+                <div class="section-separator"></div>
+            </div>
 
-        <div class="section table-responsive" id="assignedClientsSection">
-            <h3>Assigned Clients</h3>
-            <table id="assignedClients" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Client Code</th>
-                        <th>Client Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Assigned clients will be dynamically inserted here -->
-                </tbody>
-            </table>
+            <!-- Assigned Clients Section -->
+            <div class="col-md-5">
+                <div class="section table-responsive" id="assignedClientsSection">
+                    <h3>Assigned Clients</h3>
+                    <table id="assignedClients" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Client Code</th>
+                                <th>Client Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Assigned clients will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 
 
@@ -342,9 +360,9 @@
                     $('#availableClients').append(
                         '<thead style="background-color:#2262c6; color: #fff;">' +
                             '<tr>' +
-                                '<th>Client Code</th>' +
-                                '<th>Client Description</th>' +
-                                '<th>Action</th>' +
+                                '<th class="text-white">Client Code</th>' +
+                                '<th class="text-white">Client Description</th>' +
+                                '<th class="text-white">Action</th>' +
                             '</tr>' +
                         '</thead>' +
                         '<tbody></tbody>' // Ensure there's a tbody to append rows
@@ -354,9 +372,9 @@
                     $('#assignedClients').append(
                         '<thead style="background-color:#2262c6; color: #fff;">' +
                             '<tr>' +
-                                '<th>Client Code</th>' +
-                                '<th>Client Description</th>' +
-                                '<th>Action</th>' +
+                                '<th class="text-white">Client Code</th>' +
+                                '<th class="text-white">Client Description</th>' +
+                                '<th class="text-white">Action</th>' +
                             '</tr>' +
                         '</thead>' +
                         '<tbody></tbody>' // Ensure there's a tbody to append rows

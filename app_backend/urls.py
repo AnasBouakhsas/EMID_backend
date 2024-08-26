@@ -39,8 +39,8 @@ urlpatterns = [
     path('add_product_to_basket/<int:basket_id>/', views.add_product_to_basket, name='add_product_to_basket'),
     path('view_products/<int:basket_id>/', views.view_products, name='view_products'),
     path('add_existing_product_to_basket/<int:item_basket_id>/', add_existing_product_to_basket, name='add_existing_product_to_basket'),
-    path('delete_product/<int:item_basket_id>/<int:product_id>/', views.delete_existing_product , name="deleteProduct"),
-    
+    path('delete_product/<int:item_basket_id>/<str:product_id>/', views.delete_existing_product , name="deleteProduct"),
+
     
     
     path('promotions/<int:promotion_id>/edit/', views.edit_promotion, name='edit_promotion'),
